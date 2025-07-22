@@ -179,7 +179,8 @@ export const VisaTypeSelect = () => {
         visa={visa}
         onApply={() =>
           navigate(
-            `/visa/apply/${selectedCountry.toLowerCase()}/${visa.type.toLowerCase().replace(/\s+/g, '-')}`,
+          `/visa/apply/${selectedCountry.toLowerCase()}/${visa.name.toLowerCase().replace(/\s+/g, '-')}`,
+
             {
               state: {
                 from,

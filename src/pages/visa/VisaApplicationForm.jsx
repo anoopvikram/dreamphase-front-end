@@ -69,7 +69,7 @@ export const VisaApplicationForm = () => {
       {/* Authorization Note */}
       <div className="flex justify-center items-center gap-3 text-sm text-gray-800">
         <FaShieldAlt className="text-blue-500" />
-        <span>Dreamphase is authorized by the Government of Vietnam</span>
+        <span>Dreamphase is authorized by the Government of {to?.charAt(0).toUpperCase() + to?.slice(1).toLowerCase()}.</span>
       </div>
 
       {/* Processing Time */}
@@ -81,28 +81,30 @@ export const VisaApplicationForm = () => {
         </div>
       </div>
 
-      {/* Visa Details */}
       <div className="flex flex-wrap gap-6 justify-start">
-        {[ 
-          { label: 'Visa Type', value: visa?.type },
-          { label: 'Visa Term', value: visa?.validity },
-          { label: 'Visa Time', value: visa?.duration },
-          { label: 'Visa Stage', value: visa?.processingTime }
-        ].map(({ label, value }, idx) => (
-          <div key={idx} className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-md">
-            <div className="w-6 h-6 bg-gray-400 rounded-full" />
-            <div>
-              <p className="text-sm text-gray-600">{label}:</p>
-              <p className="font-semibold">{value}</p>
-            </div>
-          </div>
-        ))}
+  {[
+    { label: 'Visa Type', value: visa?.visa_type },
+    { label: 'Visa Term', value: visa?.validity_days, unit: 'days' },
+    { label: 'Visa Time', value: visa?.duration_days, unit: 'days' },
+    { label: 'Visa Stage', value: visa?.processing_time }
+  ].map(({ label, value, unit }, idx) => (
+    value ? (
+      <div key={idx} className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-md">
+        <div className="w-6 h-6 bg-gray-400 rounded-full" />
+        <div>
+          <p className="text-sm text-gray-600">{label}:</p>
+          <p className="font-semibold">{value} {unit || ''}</p>
+        </div>
       </div>
+    ) : null
+  ))}
+</div>
+
 
       {/* Passport Upload Section Info */}
       <div>
-        <h2 className="text-3xl font-bold">Upload Traveler's Passport (Front & Back Pages)</h2>
-        <p className="text-xl">
+        <h2 className="text-2xl font-bold">Upload Traveler's Passport (Front & Back Pages)</h2>
+        <p className="text-base">
           {to?.charAt(0).toUpperCase() + to?.slice(1).toLowerCase()} requires a clear scan of your passport. Dreamphase uses OCR to autofill your info. Review before submitting.
         </p>
       </div>

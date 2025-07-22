@@ -58,7 +58,7 @@ export const VisaLanding = () => {
       <LandingHero activeTab="Visa" />
       <SearchBar />
 
-      <div className="visa-country-section">
+      <div className="visa-country-section grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 place-items-center">
         {countries.slice(0, visible).map((c) => (
           <CountryCard key={c.id} data={c} onClick={goToCountry} />
         ))}

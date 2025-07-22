@@ -15,7 +15,7 @@ export const VisaCard = ({ visa, onApply }) => {
           {/* Arrival Estimate */}
           <div className="flex items-center gap-2 text-sm text-gray-700 mb-4">
             <FaShieldAlt className="text-blue-700" />
-            Estimated visa arrival by <strong>9th Jul, 2025</strong>
+            Estimated visa arrival by <strong>28th Jul, 2025</strong>
           </div>
 
           {/* Labels */}

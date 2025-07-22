@@ -1,13 +1,53 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
-export const PhotoUpload = ({ onChange, label = 'Upload Photo', name = 'photo' }) => {
+export const PhotoUpload = ({ onChange, onPassportExtracted, label = 'Upload Photo', name = 'photo' }) => {
   const [preview, setPreview] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setPreview(URL.createObjectURL(file));
-      onChange(file);
+    if (!file) return;
+
+    console.log('📤 Selected file:', file);
+
+    setPreview(URL.createObjectURL(file));
+    onChange(file); // send file to parent
+
+    const formData = new FormData();    
+    formData.append('passport_image', file);  // ✅ backend expects this key
+
+    console.log('📦 FormData content:', formData.get('image'));
+
+
+    try {
+      setLoading(true);
+      console.log('📡 Sending to OCR API...');
+
+      const res = await axios.post(
+        'https://website-0suz.onrender.com/api/extract-passport/',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      console.log('✅ OCR success:', res.data);
+
+      if (onPassportExtracted) {
+        onPassportExtracted(res.data);
+      }
+    } catch (error) {
+      if (error.response) {
+        console.error('❌ OCR failed:', error.response.status, error.response.data);
+      } else {
+        console.error('❌ OCR failed:', error.message);
+      }
+
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -36,6 +76,8 @@ export const PhotoUpload = ({ onChange, label = 'Upload Photo', name = 'photo' }
           />
         </div>
       )}
+
+      {loading && <p className="text-sm text-blue-500 mt-2">Extracting passport data...</p>}
     </div>
   );
 };

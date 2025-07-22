@@ -46,6 +46,21 @@ export const TravelerForm = ({ index, onChange }) => {
           onChange={(file) =>
             setFormData((prev) => ({ ...prev, passportFront: file }))
           }
+          onPassportExtracted={(data) =>
+            setFormData((prev) => ({
+              ...prev,
+              passportNumber: data.passport_number || '',
+              firstName: data.first_name || '',
+              lastName: data.last_name || '',
+              nationality: data.nationality || '',
+              sex: data.sex || '',
+              dateOfBirth: data.dob || '',
+              placeOfBirth: data.place_of_birth || '',
+              placeOfIssue: '', // not extracted
+              dateOfIssue: data.date_of_issue || '',
+              dateOfExpiry: data.date_of_expiry || '',
+            }))
+          }
         />
 
         {/* Row 1 */}
