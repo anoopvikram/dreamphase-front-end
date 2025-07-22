@@ -164,40 +164,40 @@ export const VisaTypeSelect = () => {
             {/* Search Button */}
             <button
               onClick={handleSearch}
-              className="relative flex items-center gap-2 bg-[#0068A3] text-white px-3 py-3 rounded-full hover:bg-blue-700 w-full md:w-auto"
+              className="relative flex items-center gap-2 bg-[#0068A3] text-white px-3 py-3 rounded-full hover:bg-blue-700 w-auto"
             >
               <FaSearch />
             </button>
           </div>
 
           {/* Visa Cards */}
-          <div className="flex flex-col gap-6 w-full md:w-3/4 mx-auto">
-  {visaOptions.length > 0 ? (
-    visaOptions.map((visa, i) => (
-      <VisaCard
-        key={i}
-        visa={visa}
-        onApply={() =>
-          navigate(
-          `/visa/apply/${selectedCountry.toLowerCase()}/${visa.name.toLowerCase().replace(/\s+/g, '-')}`,
+          <div className="flex flex-col gap-6 w-full lg:w-3/4 mx-auto">
+            {visaOptions.length > 0 ? (
+              visaOptions.map((visa, i) => (
+                <VisaCard
+                  key={i}
+                  visa={visa}
+                  onApply={() =>
+                    navigate(
+                    `/visa/apply/${selectedCountry.toLowerCase()}/${visa.name.toLowerCase().replace(/\s+/g, '-')}`,
 
-            {
-              state: {
-                from,
-                to: selectedCountry,
-                depart: departDate,
-                return: returnDateState,
-                visa,
-              },
-            }
-          )
-        }
-      />
-    ))
-  ) : (
-    <p className="text-center text-gray-500 text-sm">No visa options found.</p>
-  )}
-</div>
+                      {
+                        state: {
+                          from,
+                          to: selectedCountry,
+                          depart: departDate,
+                          return: returnDateState,
+                          visa,
+                        },
+                      }
+                    )
+                  }
+                />
+              ))
+            ) : (
+              <p className="text-center text-gray-500 text-sm">No visa options found.</p>
+            )}
+          </div>
 
         </div>
       );

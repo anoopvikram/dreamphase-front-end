@@ -38,3 +38,55 @@ export const getVisaOptions = async (countryId) => {
 
   return await res.json();
 };
+
+
+
+export const fetchDestinations = async () => {
+  try {
+    // Replace this with API call when ready
+    const mockData = [
+      {
+        name: 'Paris',
+        image: 'https://via.placeholder.com/300x200?text=Paris',
+        categories: [
+          { name: 'Romantic', icon: 'https://via.placeholder.com/20' },
+          { name: 'Art', icon: 'https://via.placeholder.com/20' },
+        ],
+      },
+      {
+        name: 'Dubai',
+        image: 'https://via.placeholder.com/300x200?text=Dubai',
+        categories: [
+          { name: 'Luxury', icon: 'https://via.placeholder.com/20' },
+          { name: 'Adventure', icon: 'https://via.placeholder.com/20' },
+        ],
+      },
+      {
+        name: 'Maldives',
+        image: 'https://via.placeholder.com/300x200?text=Maldives',
+        categories: [
+          { name: 'Beach', icon: 'https://via.placeholder.com/20' },
+        ],
+      },
+      {
+        name: 'Tokyo',
+        image: 'https://via.placeholder.com/300x200?text=Tokyo',
+        categories: [
+          { name: 'Culture', icon: 'https://via.placeholder.com/20' },
+        ],
+      },
+      {
+        name: 'Rome',
+        image: 'https://via.placeholder.com/300x200?text=Rome',
+        categories: [
+          { name: 'History', icon: 'https://via.placeholder.com/20' },
+        ],
+      },
+    ];
+
+    return mockData;
+  } catch (err) {
+    console.error('Error fetching tour destinations:', err);
+    return []; // fallback
+  }
+};

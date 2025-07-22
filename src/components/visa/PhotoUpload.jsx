@@ -15,7 +15,7 @@ export const PhotoUpload = ({ onChange, onPassportExtracted, label = 'Upload Pho
     onChange(file); // send file to parent
 
     const formData = new FormData();    
-    formData.append('passport_image', file);  // ✅ backend expects this key
+    formData.append('passport', file);  // ✅ backend expects this key
 
     console.log('📦 FormData content:', formData.get('image'));
 

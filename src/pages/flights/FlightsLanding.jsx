@@ -3,7 +3,7 @@ import { LandingHero } from '../../components/common/LandingHero';
 import { FaExchangeAlt, FaSearch, FaPlaneDeparture, FaPlaneArrival, FaDotCircle } from 'react-icons/fa';
 import { MdOutlineRadioButtonUnchecked } from 'react-icons/md';
 
-export const FlightLanding = () => {
+export const FlightsLanding = () => {
   const [tripType, setTripType] = useState('one-way');
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
@@ -27,7 +27,7 @@ export const FlightLanding = () => {
   return (
     <div className="flight-landing flex flex-col overflow-y-auto h-screen bg-white">
       <div className="relative z-10">
-        <LandingHero activeTab="flight" />
+        <LandingHero activeTab="Flight"/>
       </div>
 
       <div className="landing-options z-20  bg-opacity-40 backdrop-blur-sm rounded-xl p-5 w-11/12 max-w-6xl mx-auto -mt-16 text-white">

@@ -8,7 +8,8 @@ import { VisaPaymentPage } from './pages/visa/VisaPaymentPage';
 import { Navbar } from './components/common/Navbar';
 import { InsuranceLanding } from './pages/insurance/InsuranceLanding';
 import {InsurancePlan} from './pages/insurance/InsurancePlan';
-import { FlightLanding } from './pages/flight/FlightLanding';
+import { FlightsLanding } from './pages/flights/FlightsLanding';
+import { TourLanding } from './pages/tour/TourLanding';
 
 
 export const App = () => {
@@ -23,8 +24,8 @@ export const App = () => {
         <Route path="/visa/payment/:id" element={<VisaPaymentPage />} />
         <Route path="/insurance" element={<InsuranceLanding />} />
         <Route path="/insurance/plan" element={<InsurancePlan/>}/>
-        <Route path="/flight" element={<FlightLanding/>}/>
-        
+        <Route path="/flight" element={<FlightsLanding/>}/>
+        <Route path="/tour" element={<TourLanding/>}/>
       </Routes>
     </Router>
   );
