@@ -78,8 +78,8 @@ h1, p {
   }
 
   .visa-tabs {
-    @apply flex justify-center gap-4 text-sm md:text-base font-medium;
-  }
+  @apply flex flex-wrap justify-center gap-4 text-sm md:text-base font-medium;
+}
 
   .visa-tabs li {
     @apply px-4 py-1 cursor-pointer rounded-xl   hover:bg-blue-100 transition;
@@ -142,7 +142,7 @@ h1, p {
 
   
   .visa-search-bar {
-  @apply relative top-0 max-w-5xl mx-auto -mt-11 px-6 py-6 rounded-2xl flex flex-col md:flex-row gap-4 items-center justify-center;
+  @apply relative top-0 w-3/4 lg:max-w-5xl mx-auto -mt-11 px-6 py-6 rounded-2xl flex flex-col lg:flex-row gap-4 items-center justify-center;
   background-image: url('/images/searchbar.jpg');
   background-size: cover;
   background-position: center;
