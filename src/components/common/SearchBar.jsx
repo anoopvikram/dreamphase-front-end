@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { FaHome, FaPlaneDeparture, FaCalendarAlt, FaSearch } from 'react-icons/fa';
 import { countryList } from '../../api/visaApi';
 import { useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 
 export const SearchBar = () => {
+  const [params] = useSearchParams();
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const [depart, setDepart] = useState('');
   const [returnDate, setReturnDate] = useState('');
+  const id = params.get('id');
 
   const [fromSuggestions, setFromSuggestions] = useState([]);
   const [toSuggestions, setToSuggestions] = useState([]);
@@ -20,7 +23,8 @@ export const SearchBar = () => {
       return;
     }
 
-    navigate(`/visa/${to.toLowerCase()}?from=${encodeURIComponent(from)}&depart=${depart}&return=${returnDate}`);
+    navigate(`/visa/${selectedCountry}?from=${from}&depart=${departDate}&return=${returnDateState}&id=${countryId}`);
+
     // navigate(`/visa/${to.toLowerCase()}`)
   };
 

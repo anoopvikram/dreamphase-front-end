@@ -45,8 +45,8 @@ export const VisaLanding = () => {
   const goToCountry = (country) => {
   console.log("Navigating to:", country.name);
   navigate(`/visa/${country.name.toLowerCase()}?id=${country.id}`, {
-    state: { countryId: country.id, countryName: country.name }
-  });
+  state: { countryId: country.id, countryName: country.name }
+});
 };
 
   return (
@@ -60,7 +60,7 @@ export const VisaLanding = () => {
 
       <div className="visa-country-section">
         {countries.slice(0, visible).map((c) => (
-          <CountryCard key={c.name} data={c} onClick={goToCountry} />
+          <CountryCard key={c.id} data={c} onClick={goToCountry} />
         ))}
       </div>
     </div>
