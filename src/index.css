@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+html,
+body {
+  width: 100%;
+  background-color: white;
+  color: white;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  font-family: 'Outfit', sans-serif;
+}
+
+h1, p {
+  @apply my-0;
+}
+
+@layer components {
+  /*NAVBAR*/
+
+.navbar {
+  @apply fixed left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-[1200px] px-6 py-4 flex items-center justify-between;
+}
+
+
+.navbar-left .logo-img {
+  @apply h-12 w-auto ;
+}
+
+.navbar-right {
+  @apply flex items-center gap-6;
+}
+
+.navbar-menu {
+  @apply hidden md:flex items-center gap-6 text-sm font-medium text-[#0E3755];
+}
+
+.menu-item {
+  @apply cursor-pointer hover:text-blue-600 transition;
+}
+
+.navbar-auth-btn {
+  @apply bg-[#0068A3] text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-blue-700 transition;
+}
+
+
+  /*VISA LANDING*/
+
+  
+  .visa-landing-wrapper {
+    @apply bg-white text-black min-h-screen;
+  }
+
+  .visa-hero {
+    @apply relative h-[65vh] bg-cover  rounded-b-4xl;
+    background-image: url('/images/plane.png');
+    background-position: center -150px;
+  }
+
+  .visa-hero-overlay {  
+    @apply absolute top-1/3 inset-0 flex flex-col gap-2 items-center justify-center  text-white;
+  }
+
+  .visa-title {
+    @apply  top-1/4 text-3xl md:text-5xl font-bold mb-2;
+  }
+
+  .visa-subtext {
+    @apply  top-1/4 text-sm md:text-lg opacity-90;
+  }
+
+  .visa-service-menu {
+    @apply  top-1/4 bg-[#11343E80]/50 py-2 w-3/5 rounded-2xl;
+  }
+
+  .visa-tabs {
+    @apply flex justify-center gap-4 text-sm md:text-base font-medium;
+  }
+
+  .visa-tabs li {
+    @apply px-4 py-1 cursor-pointer rounded-xl   hover:bg-blue-100 transition;
+  }
+
+  .visa-tabs li.active {
+    @apply bg-white text-black;
+  }
+
+  .visa-country-section {
+    @apply grid grid-cols-2 w-40/41 mx-auto sm:grid-cols-3 md:grid-cols-4 gap-4 p-6;
+  }
+
+
+
+
+  /*  COUNTRY CARD*/
+
+.country-card {
+  @apply relative w-full max-w-[500px] aspect-[6/3] bg-white rounded-[1.5rem] overflow-hidden shadow cursor-pointer transition duration-200;
+}
+
+.country-image {
+  @apply w-full h-44 object-cover;
+}
+
+.country-info {
+  @apply absolute inset-0 bg-black/90 text-white p-5 flex flex-col justify-between;
+}
+
+.apply-button {
+  @apply px-6 py-1 rounded-full bg-[#455078] text-white font-semibold text-sm shadow hover:opacity-90;
+}
+
+
+
+  .country-name {
+    @apply p-3 font-semibold text-lg;
+  }
+
+
+  .country-info button {
+    @apply mt-2 px-5 py-2 bg-[#455078] rounded-full text-white text-sm hover:bg-blue-700;
+  }
+
+  .search-container {
+    @apply w-full max-w-5xl mx-auto bg-white text-black p-4 rounded shadow flex flex-col md:flex-row gap-4 sticky top-0 z-20;
+  }
+
+  .search-input {
+    @apply flex-1 border border-gray-300 rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-400;
+  }
+
+  .search-button {
+    @apply bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700;
+  }
+
+  /*SEARCH BAR*/
+
+  
+  .visa-search-bar {
+  @apply relative top-0 max-w-5xl mx-auto -mt-11 px-6 py-6 rounded-2xl flex flex-col md:flex-row gap-4 items-center justify-center;
+  background-image: url('/images/searchbar.jpg');
+  background-size: cover;
+  background-position: center;
+  
+}
+.visa-search-bar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30%; /* how much of the right side to blur */
+  height: 100%;
+  background-image: url('/images/searchbar.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: blur(15px);
+  z-index: 0;
+}
+
+  .visa-search-group {
+    @apply z-10 flex items-center border-1 bg-[#D9D9D9] text-black rounded-xl px-4 py-2;
+  }
+
+  .visa-search-side {
+    @apply flex items-center gap-2;
+  }
+
+  .visa-search-field {
+    @apply bg-transparent outline-none border-none text-sm w-[120px] md:w-[140px];
+  }
+
+  .divider {
+    @apply mx-4 h-6 border-l border-black/30;
+  }
+
+  .visa-search-button {
+    @apply z-10 bg-[#0068A3] text-white px-5 py-3 rounded-full hover:bg-gray-200 transition;
+  }
+
+  .visa-search-button svg {
+    @apply w-5 h-5;
+  }
+
+  .autocomplete-box {
+    @apply absolute top-full left-0 mt-1 w-full bg-white border rounded shadow z-30;
+  }
+
+  .autocomplete-box div {
+    @apply px-4 py-2 hover:bg-blue-100 cursor-pointer text-sm;
+  }
+
+  .to-autocomplete {
+    @apply left-1/2 -translate-x-1/2;
+  }
+
+
+}
