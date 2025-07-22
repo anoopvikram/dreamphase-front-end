@@ -10,7 +10,7 @@ export const CountryCard = ({ data, onClick }) => {
       onMouseLeave={() => setHovered(false)}
       onClick={() => onClick(data)}
     >
-      <img src={data.image} alt={data.name} className="country-image" />
+      <img src={data.image} alt={data.name} className="country-image object-cover" />
       <p className="absolute bottom-3 right-3 bg-[#455078] text-white text-base px-3 py-1 rounded-full">
     {data.name}
   </p>
