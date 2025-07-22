@@ -27,7 +27,14 @@ export const getPopularCountries = async () => {
 };
 
 export const getVisaOptions = async (countryId) => {
+  console.log("Fetching visa options for countryId:", countryId);
+
   const res = await fetch(`https://website-0suz.onrender.com/api/countryvise_visa_options/${countryId}/`);
-  if (!res.ok) throw new Error('Failed to fetch visa options');
+
+  if (!res.ok) {
+    console.error("API failed with status:", res.status);
+    throw new Error('Failed to fetch visa options');
+  }
+
   return await res.json();
 };

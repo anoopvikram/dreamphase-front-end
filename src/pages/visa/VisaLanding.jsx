@@ -43,7 +43,8 @@ export const VisaLanding = () => {
   };
 
   const goToCountry = (country) => {
-  navigate(`/visa/${country.name.toLowerCase()}`, {
+  console.log("Navigating to:", country.name);
+  navigate(`/visa/${country.name.toLowerCase()}?id=${country.id}`, {
     state: { countryId: country.id, countryName: country.name }
   });
 };
