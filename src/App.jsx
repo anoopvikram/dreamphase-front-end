@@ -8,7 +8,8 @@ import { VisaPaymentPage } from './pages/visa/VisaPaymentPage';
 import { Navbar } from './components/common/Navbar';
 import { InsuranceLanding } from './pages/insurance/InsuranceLanding';
 import {InsurancePlan} from './pages/insurance/InsurancePlan';
-import { FlightLanding } from './pages/flight/flightLanding';
+import { FlightLanding } from './pages/flight/FlightLanding';
+
 
 export const App = () => {
   return (
