@@ -23,7 +23,7 @@ export const PhotoUpload = ({ onChange, label = 'Upload Photo', name = 'photo' }
         className="block w-full text-sm text-gray-700 bg-white file:mr-4 file:py-1 file:px-4
                    file:rounded-full file:border-0
                    file:text-sm file:font-semibold
-                   file:bg-blue-50 file:text-blue-700
+                   file:bg-blue-50 file:text-blue-600
                    hover:file:bg-blue-100"
       />
 

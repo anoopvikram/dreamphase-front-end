@@ -4,36 +4,16 @@ import { FaPlane, FaCalendarAlt, FaSearch } from 'react-icons/fa';
 import { VisaCard } from '../../components/visa/VisaCard';
 import { countryList } from '../../api/visaApi';
 import ImageCarousel from '../../components/visa/ImageCarousel';
+import { getVisaOptions } from '../../api/visaApi';
 
-const visaOptions = [
-  {
-    type: 'Tourist Visa',
-    entry: 'Single Entry',
-    validity: '30 Days',
-    duration: '14 Days',
-    documents: 'Passport, Photo, Flight Tickets',
-    processingTime: 'standard',
-    abscondingFee: '₹10,000',
-    price: '₹3,200',
-    estimatedArrival: '9th Jul, 2025',
-  },
-  {
-    type: 'Business Visa',
-    entry: 'Multiple Entry',
-    validity: '90 Days',
-    duration: '30 Days',
-    documents: 'Passport, Company Letter, Photo',
-    processingTime: 'priority',
-    abscondingFee: '₹15,000',
-    price: '₹5,400',
-    estimatedArrival: '10th Jul, 2025',
-  },
-];
 
 export const VisaTypeSelect = () => {
   const { country: paramCountry } = useParams();
   const [params] = useSearchParams();
   const navigate = useNavigate();
+   const countryId = location.state?.countryId;
+  const countryName = location.state?.countryName;
+  const [visaOptions, setVisaOptions] = useState([]);
 
   const from = params.get('from') || 'India';
   const depart = params.get('depart') || '2025-08-01';
@@ -74,6 +54,19 @@ export const VisaTypeSelect = () => {
       handleSearch();
     }
   }, [paramCountry]);
+
+   useEffect(() => {
+    if (!countryId) return;
+    const fetch = async () => {
+      try {
+        const res = await getVisaOptions(countryId);
+        setVisaOptions(res.visa_options);
+      } catch (err) {
+        console.error('Failed to load visa options:', err);
+      }
+    };
+    fetch();
+  }, [countryId]);
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-black px-6 py-8 space-y-6 pt-30">

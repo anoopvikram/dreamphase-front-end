@@ -11,6 +11,7 @@ body {
   font-family: 'Outfit', sans-serif;
 }
 
+
 h1, p {
   @apply my-0;
 }
@@ -193,5 +194,17 @@ h1, p {
     @apply left-1/2 -translate-x-1/2;
   }
 
+
+
+  /*FLIGHT*/
+  .landing-options{
+    
+    background-image: url('/images/flight.png');
+    background-size: cover;
+    background-position: center;
+  }
+
+
+  
 
 }

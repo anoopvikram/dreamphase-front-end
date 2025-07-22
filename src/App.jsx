@@ -8,6 +8,7 @@ import { VisaPaymentPage } from './pages/visa/VisaPaymentPage';
 import { Navbar } from './components/common/Navbar';
 import { InsuranceLanding } from './pages/insurance/InsuranceLanding';
 import {InsurancePlan} from './pages/insurance/InsurancePlan';
+import { FlightLanding } from './pages/flight/flightLanding';
 
 export const App = () => {
   return (
@@ -21,6 +22,7 @@ export const App = () => {
         <Route path="/visa/payment/:id" element={<VisaPaymentPage />} />
         <Route path="/insurance" element={<InsuranceLanding />} />
         <Route path="/insurance/plan" element={<InsurancePlan/>}/>
+        <Route path="/flight" element={<FlightLanding/>}/>
         
       </Routes>
     </Router>
