@@ -7,11 +7,24 @@ import {
 } from '@hello-pangea/dnd';
 import { useLocation } from 'react-router-dom';
 import ImageCarousel from '../../components/visa/ImageCarousel';
+import { fetchDestinations } from '../../api/visaApi';
 
 export const TourDetails = () => {
   const { state } = useLocation();
-  const tripType = state?.tripType || '';
-  const destination = state?.destination || '';
+const tripType = state?.tripType || '';
+const destination = state?.destination || '';
+const allTripTypes = state?.allTripTypes || []; // all features
+const [availableCities, setAvailableCities] = useState([]);
+
+useEffect(() => {
+  async function loadCities() {
+    const data = await fetchDestinations();
+    setAvailableCities(data.map(dest => dest.name));
+  }
+
+  loadCities();
+}, []);
+  
 
   const [cities, setCities] = useState([]);
 
@@ -104,13 +117,19 @@ export const TourDetails = () => {
                     <span {...provided.dragHandleProps} className='cursor-move text-gray-400'>
                         <FaGripVertical size={20} />
                     </span>
-                    <input
-                        type='text'
-                        placeholder='Enter City'
-                        value={city.name}
-                        onChange={(e) => handleCityChange(city.id, e.target.value)}
-                        className='border px-4 py-2 rounded w-48 text-base'
-                    />
+                    <select
+                      value={city.name}
+                      onChange={(e) => handleCityChange(city.id, e.target.value)}
+                      className='border px-4 py-2 rounded w-48 text-base'
+                    >
+                      <option value=''>Select City</option>
+                      {availableCities.map((cityName, i) => (
+                        <option key={i} value={cityName}>
+                          {cityName}
+                        </option>
+                      ))}
+                    </select>
+
                     </div>
                 )}
                 </Draggable>
@@ -127,10 +146,13 @@ export const TourDetails = () => {
     </DragDropContext>
 
     <div className='tour-type flex flex-wrap gap-5 mb-6'>
-        <select className='border p-3 rounded w-44 text-base'>
-        <option>Trip Type</option>
-        <option>Leisure</option>
-        <option>Business</option>
+        <select className='border p-3 rounded w-44 text-base' value={tripType}>
+          <option disabled>Select Trip Type</option>
+          {allTripTypes.map((type, i) => (
+            <option key={i} value={type}>
+              {type}
+            </option>
+          ))}
         </select>
         <select className='border p-3 rounded w-44 text-base'>
         <option>Star rating</option>

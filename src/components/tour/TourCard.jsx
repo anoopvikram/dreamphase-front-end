@@ -4,13 +4,14 @@ export const TourCard = ({ destination, isSelected, onSelect }) => {
   const navigate = useNavigate();
 
   const handleCategoryClick = (category) => {
-    navigate('/tour-details', {
-      state: {
-        tripType: category.name,
-        destination: destination.name,
-      },
-    });
-  };
+  navigate('/tour-details', {
+    state: {
+      tripType: category.name, // selected one
+      destination: destination.name,
+      allTripTypes: destination.features.map(f => f.name), // pass all
+    },
+  });
+};
 
   return (
     <div className="relative text-black w-[280px] flex flex-col rounded-xl overflow-hidden shadow-md group">
@@ -36,15 +37,18 @@ export const TourCard = ({ destination, isSelected, onSelect }) => {
           </p>
 
           {isSelected && (
-            <div className="flex flex-wrap justify-center rounded-t-xl bg-white/80 w-full h-full gap-2 px-2 mt-2">
-              {destination.categories?.map((cat, i) => (
+            <div className="flex flex-wrap justify-center rounded-t-xl bg-white/80 w-full h-full gap-2 py-2 px-2 mt-2">
+              {destination.features?.map((feet, i) => (
                 <div
                   key={i}
-                  onClick={() => handleCategoryClick(cat)}
-                  className="cursor-pointer flex flex-row border p-2 gap-2 rounded-xl bg-white hover:bg-gray-200"
+                  onClick={() => handleCategoryClick(feet)}
+                  className="cursor-pointer flex flex-row border p-1 gap-1 rounded h-fit my-auto bg-white hover:bg-gray-200"
                 >
-                  <img src={cat.icon} alt={cat.name} className="w-4 h-4" />
-                  <p className="text-black">{cat.name}</p>
+                  <div className=' flex flex-row items-center gap-1'>
+                    <img src={feet.icon} alt={feet.name} className="w-3 h-3" />
+                    <p className="text-black text-xs">{feet.name}</p>
+                  </div>
+                  
                 </div>
               ))}
             </div>

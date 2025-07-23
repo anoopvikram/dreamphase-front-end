@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const LandingHero = ({ activeTab = 'Visa' }) => {
-  const tabs = ['Visa', 'Tour', 'Insurance', 'Travel Mart', 'Flight', 'Hotels', 'Other'];
+  const tabs = ['Tour', 'Visa', 'Insurance', 'Travel Mart', 'Flight', 'Hotels', 'Other'];
   const navigate = useNavigate();
 
   const getPath = (tab) => {
