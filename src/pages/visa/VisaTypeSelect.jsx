@@ -75,7 +75,7 @@ export const VisaTypeSelect = () => {
       }, [countryId]);
 
       return (
-        <div className="min-h-screen flex flex-col bg-white text-black px-6 py-8 space-y-6 pt-30">
+        <div className=" flex flex-col bg-white text-black px-6 py-8 space-y-6 pt-30">
           
           {/* Header: From ➝ To above Carousel */}
           <div className="flex flex-col gap-4">

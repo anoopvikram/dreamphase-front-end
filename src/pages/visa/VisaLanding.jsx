@@ -51,7 +51,7 @@ export const VisaLanding = () => {
 
   return (
     <div
-      className="visa-landing-wrapper overflow-y-auto h-screen"
+      className="visa-landing-wrapper overflow-y-auto"
       ref={containerRef}
       onScroll={handleScroll}
     >

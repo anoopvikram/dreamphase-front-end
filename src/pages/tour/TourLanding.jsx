@@ -18,7 +18,7 @@ export const TourLanding = () => {
   }, []);
 
   return (
-    <div className="tour-landing flex flex-col overflow-y-auto h-screen bg-white">
+    <div className="tour-landing flex flex-col overflow-y-auto bg-white">
       <div className="relative z-10">
         <LandingHero activeTab="Tour" />
       </div>

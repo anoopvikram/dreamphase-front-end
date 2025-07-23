@@ -100,7 +100,7 @@ export const TourDetails = () => {
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId='cities' direction='horizontal'>
             {(provided) => (
-              <div className='tour-cities flex gap-4 mb-6' ref={provided.innerRef} {...provided.droppableProps}>
+              <div className='tour-cities flex flex-wrap gap-4 mb-6' ref={provided.innerRef} {...provided.droppableProps}>
                 {cities.map((city, index) => (
                   <Draggable key={city.id} draggableId={city.id} index={index}>
                     {(provided) => (

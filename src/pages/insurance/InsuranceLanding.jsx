@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LandingHero } from '../../components/common/LandingHero';
+
 
 export const InsuranceLanding = () => {
   const [startDate, setStartDate] = useState('');
@@ -13,6 +14,7 @@ export const InsuranceLanding = () => {
   const [mobile, setMobile] = useState('');
   const [showSecondBox, setShowSecondBox] = useState(false); // 🔵 NEW
   const navigate = useNavigate(); // 🔵 NEW
+  const secondBoxRef = useRef();
 
     useEffect(() => {
   setTravelers((prev) => {
@@ -60,9 +62,12 @@ const calculateAge = (dob) => {
     }
   };
 
-    const handleContinue = () => {
-    setShowSecondBox(true);
-  };
+   const handleContinue = () => {
+      setShowSecondBox(true);
+      setTimeout(() => {
+        secondBoxRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50); // wait for the box to appear
+    };
 
   const handleSubmit = () => {
     // Optional: You can validate fields here before navigating
@@ -70,13 +75,13 @@ const calculateAge = (dob) => {
   };
 
   return (
-    <div className='insurance-landing flex flex-col overflow-y-auto h-screen bg-white'>
+    <div className='insurance-landing flex flex-col text-black overflow-y-auto bg-white pb-10'>
       <div className='relative z-10'>
         <LandingHero activeTab='Insurance' />
       </div>
 
       {/* FIRST BOX */}
-      <div className="first-box z-50 w-[90%] max-w-5xl mx-auto -mt-10 bg-white border border-[#a9c6f5] rounded-2xl p-6 shadow-sm space-y-6">
+      <div className="first-box z-20 w-[90%] max-w-5xl mx-auto -mt-10 bg-white border border-[#a9c6f5] rounded-2xl p-6 shadow-sm space-y-6">
         {/* Top row: Region and Country */}
         <div className="flex flex-row w-1/2 gap-10">
           <div className="flex flex-col w-full md:w-1/2">
@@ -177,7 +182,7 @@ const calculateAge = (dob) => {
 
       {/* SECOND BOX */}
         {showSecondBox && (
-        <div className="second-box text-black z-50 w-[90%] max-w-5xl mx-auto bg-white border border-[#a9c6f5] rounded-2xl p-6 shadow-sm space-y-6 my-10">
+        <div ref={secondBoxRef} className="second-box text-black z-20 w-[90%] max-w-5xl mx-auto bg-white border border-[#a9c6f5] rounded-2xl p-6 shadow-sm space-y-6 my-10">
           
 
         {/* Traveler Count */}

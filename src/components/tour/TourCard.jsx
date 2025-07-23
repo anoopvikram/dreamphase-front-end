@@ -19,7 +19,7 @@ export const TourCard = ({ destination, isSelected, onSelect }) => {
         <img
           src={destination.image}
           alt={destination.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transform scale-140 group-hover:scale-100 transition-transform duration-500 ease-in-out"
         />
 
         <div

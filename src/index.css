@@ -20,7 +20,7 @@ h1, p {
   /*NAVBAR*/
 
 .navbar {
-  @apply fixed left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-[1200px] px-6 py-4 flex items-center justify-between;
+  @apply fixed left-1/2 -translate-x-1/2 mt-5 z-50 w-[90%] max-w-[1200px] px-6 py-4 flex items-center justify-between;
 }
 
 
@@ -82,7 +82,7 @@ h1, p {
 }
 
   .visa-tabs li {
-    @apply px-4 py-1 cursor-pointer rounded-xl   hover:bg-blue-100 transition;
+    @apply px-4 py-1 cursor-pointer rounded-xl   hover:bg-black/50 transition;
   }
 
   .visa-tabs li.active {
