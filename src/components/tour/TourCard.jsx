@@ -1,9 +1,19 @@
-import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const TourCard = ({ destination, isSelected, onSelect }) => {
+  const navigate = useNavigate();
+
+  const handleCategoryClick = (category) => {
+    navigate('/tour-details', {
+      state: {
+        tripType: category.name,
+        destination: destination.name,
+      },
+    });
+  };
+
   return (
     <div className="relative text-black w-[280px] flex flex-col rounded-xl overflow-hidden shadow-md group">
-      {/* Fixed image area */}
       <div className="h-[200px] relative overflow-hidden">
         <img
           src={destination.image}
@@ -11,14 +21,12 @@ export const TourCard = ({ destination, isSelected, onSelect }) => {
           className="w-full h-full object-cover"
         />
 
-        {/* Container for sliding content */}
         <div
           className={`absolute inset-0 text-white transition-all duration-300 flex flex-col items-center ${
             isSelected ? 'justify-start pt-10' : 'justify-center'
           }`}
           onClick={onSelect}
         >
-          {/* Destination Name */}
           <p
             className={`text-2xl font-bold bg-black/50 p-6 rounded-xl mb-2 transition-all duration-300 ${
               isSelected ? 'text-sm' : 'text-3xl'
@@ -27,18 +35,16 @@ export const TourCard = ({ destination, isSelected, onSelect }) => {
             {destination.name}
           </p>
 
-          {/* Features shown only when selected */}
           {isSelected && (
             <div className="flex flex-wrap justify-center rounded-t-xl bg-white/80 w-full h-full gap-2 px-2 mt-2">
               {destination.categories?.map((cat, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-1 rounded text-xs bg-white/10"
-                ><div className='flex flex-row border p-2 gap-2 rounded-xl'>
-                    <img src={cat.icon} alt={cat.name} className="w-4 h-4" />
-                  <p className='text-black'>{cat.name}</p>
-                </div>
-                  
+                  onClick={() => handleCategoryClick(cat)}
+                  className="cursor-pointer flex flex-row border p-2 gap-2 rounded-xl bg-white hover:bg-gray-200"
+                >
+                  <img src={cat.icon} alt={cat.name} className="w-4 h-4" />
+                  <p className="text-black">{cat.name}</p>
                 </div>
               ))}
             </div>

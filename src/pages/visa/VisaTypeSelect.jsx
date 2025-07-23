@@ -86,7 +86,6 @@ export const VisaTypeSelect = () => {
               <span>{selectedCountry || paramCountry}</span>
             </div>
 
-            <ImageCarousel/>
           </div>
 
           {/* Filters */}

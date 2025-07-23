@@ -10,6 +10,7 @@ import { InsuranceLanding } from './pages/insurance/InsuranceLanding';
 import {InsurancePlan} from './pages/insurance/InsurancePlan';
 import { FlightsLanding } from './pages/flights/FlightsLanding';
 import { TourLanding } from './pages/tour/TourLanding';
+import {TourDetails} from './pages/tour/TourDetails';
 
 
 export const App = () => {
@@ -26,6 +27,7 @@ export const App = () => {
         <Route path="/insurance/plan" element={<InsurancePlan/>}/>
         <Route path="/flight" element={<FlightsLanding/>}/>
         <Route path="/tour" element={<TourLanding/>}/>
+        <Route path="/tour-details" element={<TourDetails />} />
       </Routes>
     </Router>
   );
