@@ -22,7 +22,7 @@ export const TravelMartLanding = () => {
   return (
     <div className="travelmart-landing flex flex-col overflow-y-auto bg-white">
       <div className="relative z-10">
-        <LandingHero activeTab="Tour" />
+        <LandingHero activeTab="Travel Mart" />
       </div>
 
       <div className='flex flex-col pb-20 w-3/4 mx-auto gap-5'>

@@ -41,98 +41,124 @@ export const getVisaOptions = async (countryId) => {
 
 
 
+const defaultFeatures = [
+  { name: 'Adventure', icon: 'https://img.icons8.com/ios-filled/50/trekking.png' },
+  { name: 'Honeymoon', icon: 'https://img.icons8.com/ios-filled/50/heart-with-arrow.png' },
+  { name: 'Family Trip', icon: 'https://img.icons8.com/ios-filled/50/family.png' },
+  { name: 'Trip with Friends', icon: 'https://img.icons8.com/ios-filled/50/conference.png' },
+  { name: 'Solo Trip', icon: 'https://img.icons8.com/ios-filled/50/user.png' },
+];
+
+const mockData = [
+  {
+    name: 'Paris',
+    image: 'https://picsum.photos/300/200?random=1',
+    top_tourist_destination: true,
+    most_visited_fixed_packages: true,
+    group_packages: false,
+  },
+  {
+    name: 'Dubai',
+    image: 'https://picsum.photos/300/200?random=2',
+    top_tourist_destination: true,
+    most_visited_fixed_packages: false,
+    group_packages: true,
+  },
+  {
+    name: 'Maldives',
+    image: 'https://picsum.photos/300/200?random=3',
+    top_tourist_destination: true,
+    most_visited_fixed_packages: true,
+    group_packages: true,
+  },
+  {
+    name: 'Tokyo',
+    image: 'https://picsum.photos/300/200?random=4',
+    top_tourist_destination: false,
+    most_visited_fixed_packages: true,
+    group_packages: false,
+  },
+  {
+    name: 'Rome',
+    image: 'https://picsum.photos/300/200?random=5',
+    top_tourist_destination: false,
+    most_visited_fixed_packages: false,
+    group_packages: true,
+  },
+  {
+    name: 'Singapore',
+    image: 'https://picsum.photos/300/200?random=6',
+    top_tourist_destination: true,
+    most_visited_fixed_packages: true,
+    group_packages: false,
+  },
+  {
+    name: 'Bali',
+    image: 'https://picsum.photos/300/200?random=7',
+    top_tourist_destination: true,
+    most_visited_fixed_packages: false,
+    group_packages: true,
+  },
+  {
+    name: 'London',
+    image: 'https://picsum.photos/300/200?random=8',
+    top_tourist_destination: false,
+    most_visited_fixed_packages: true,
+    group_packages: true,
+  },
+  {
+    name: 'New York',
+    image: 'https://picsum.photos/300/200?random=9',
+    top_tourist_destination: true,
+    most_visited_fixed_packages: true,
+    group_packages: false,
+  },
+  {
+    name: 'Barcelona',
+    image: 'https://picsum.photos/300/200?random=10',
+    top_tourist_destination: false,
+    most_visited_fixed_packages: false,
+    group_packages: true,
+  },
+];
+
+
 export const fetchDestinations = async () => {
   try {
-    const mockData = [
-      {
-        name: 'Paris',
-        image: 'https://picsum.photos/300/200',
-        categories: [
-          { name: 'Romantic', icon: '/icons/romantic.png' },
-          { name: 'Art', icon: '/icons/art.png' },
-          { name: 'culture', icon: '/icons/romantic.png' },
-          { name: 'fun', icon: '/icons/art.png' },
-          { name: 'adventure', icon: '/icons/romantic.png' },
-          { name: 'food', icon: '/icons/art.png' },
-        ],
-        features: [
-          { name: 'Food Tour', icon: '/icons/food.png' },
-          { name: 'Couples Trip', icon: '/icons/couple.png' },
-        ],
-      },
-      {
-        name: 'Dubai',
-        image: 'https://picsum.photos/300/200',
-        categories: [
-          { name: 'Luxury', icon: '/icons/luxury.png' },
-          { name: 'Adventure', icon: '/icons/adventure.png' },
-        ],
-        features: [
-          { name: 'Family Trip', icon: '/icons/family.png' },
-          { name: 'Desert Safari', icon: '/icons/safari.png' },
-        ],
-      },
-      {
-        name: 'Maldives',
-        image: 'https://picsum.photos/300/200',
-        categories: [
-          { name: 'Beach', icon: '/icons/beach.png' },
-        ],
-        features: [
-          { name: 'Honeymoon', icon: '/icons/honeymoon.png' },
-          { name: 'Resort Stay', icon: '/icons/resort.png' },
-        ],
-      },
-      {
-        name: 'Tokyo',
-        image: 'https://picsum.photos/300/200',
-        categories: [
-          { name: 'Culture', icon: '/icons/culture.png' },
-        ],
-        features: [
-          { name: 'Food Adventure', icon: '/icons/food.png' },
-          { name: 'Tech Tour', icon: '/icons/tech.png' },
-        ],
-      },
-      {
-        name: 'Rome',
-        image: 'https://picsum.photos/300/200',
-        categories: [
-          { name: 'History', icon: '/icons/history.png' },
-        ],
-        features: [
-          { name: 'Heritage Walk', icon: '/icons/walk.png' },
-          { name: 'Solo Trip', icon: '/icons/solo.png' },
-        ],
-      },
-    ];
+    const response = await fetch('https://website-0suz.onrender.com/api/destinations/');
+    const data = await response.json();
 
-    return mockData;
+    return data.map(dest => ({
+      ...dest,
+      features: defaultFeatures,
+    }));
   } catch (err) {
-    console.error('Error fetching tour destinations:', err);
-    return [];
+    console.error('API failed. Using mock data.');
+    return mockData.map(dest => ({
+      ...dest,
+      features: defaultFeatures,
+    }));
   }
 };
 
 
+
+
 export const tourSections = [
   {
-    id: 'top-destinations',
+    id: 'top',
     title: 'Top Tourist Destinations',
     description: 'Our most popular country-level destinations, loved by travelers worldwide.',
-    // fetchData: fetchTopDestinations
   },
   {
-    id: 'fixed-packages',
+    id: 'most',
     title: 'Most Visited Fixed Packages',
-    description: 'Our most popular country-level destinations, loved by travelers worldwide.',
-    // fetchData: fetchFixedPackages
+    description: 'Hand-picked packages based on popularity and traveler feedback.',
   },
   {
-    id: 'group-packages',
+    id: 'group',
     title: 'Group Packages',
-    description: 'Our most popular country-level destinations, loved by travelers worldwide.',
-    // fetchData: fetchGroupPackages
+    description: 'Specially curated packages for group travelers and families.',
   }
 ];
 
@@ -156,3 +182,4 @@ export const fetchTravelMartData = () => {
     ]
   };
 };
+
