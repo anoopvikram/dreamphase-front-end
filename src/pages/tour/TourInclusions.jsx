@@ -10,7 +10,8 @@ export const TourInclusions = () => {
   const [travelerCount, setTravelerCount] = useState(1); // initialize safely
 
   // Dynamic pricing
-  const totalPrice = selectedVehicle?.price ? selectedVehicle.price * travelerCount : data?.total_price || 0;
+  const totalPrice = selectedVehicle ? (selectedVehicle.price + (data?.total_price || 0)) : (data?.total_price || 0);
+
   const perPersonPrice = Math.round(totalPrice / travelerCount);
 
   useEffect(() => {
@@ -60,18 +61,20 @@ export const TourInclusions = () => {
     <div className='tour-inclusion flex flex-row w-4/5 mx-auto py-30 text-black gap-10'>
       <div className='inclusion-left flex flex-col gap-8 w-2/3'>
 
-        {add_transport && (
-          <div className='flight border rounded p-4 bg-gray-50'>
-            <h2 className='text-xl font-semibold mb-3'>Flight</h2>
-            <div className='flex flex-row justify-between items-center'>
+        {add_transport && (<>
+            <h2 className='text-xl font-semibold mb-4'>Flight</h2>
+          <div className='flight  rounded-xl p-4 bg-[#0E375533]'>
+            <h2 className='text-xl font-semibold mb-3'>Add flight details.</h2>
+            <div className='flex flex-row border-t pt-3 justify-between items-center'>
               <p className='text-sm text-gray-600'>No Flight included</p>
-              <button className='bg-blue-700 text-white px-4 py-2 rounded text-sm'>Add Flight</button>
+              <button className='bg-[#164B71] text-white px-4 py-2 rounded text-sm'>Add Flight</button>
             </div>
-          </div>
+          </div></>
         )}
 
-        {add_transport && (
-          <div className='road border rounded p-4 bg-gray-50'>
+        {add_transport && (<>
+            <h2 className='text-xl font-semibold mb-4'>Road Transport</h2>
+          <div className='road  rounded-xl p-4 bg-[#0E375533]'>
             <div className='flex flex-row items-center border-b pb-3 gap-3 mb-3'>
               <h2 className='text-xl font-semibold'>Need a car:</h2>
               <select className='border p-1 rounded text-sm'>
@@ -120,14 +123,14 @@ export const TourInclusions = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </div></>
         )}
 
-        {!land_only && (
-          <div className='hotel border rounded p-4 bg-gray-50'>
+        {!land_only && (<>
             <h2 className='text-xl font-semibold mb-4'>Hotels</h2>
-            <div className='flex gap-4'>
-              <div className='bg-gray-300 w-32 h-24 flex items-center justify-center text-sm text-white'>Hotel Image</div>
+          <div className='hotel  rounded-xl p-4 bg-[#0E375533]'>
+            <div className='flex gap-4 items-end'>
+              <div className='bg-[#404040] w-32 h-24 flex items-center justify-center text-sm text-white'>Hotel Image</div>
               <div className='flex flex-col'>
                 <h3 className='font-semibold text-lg'>{data.hotel?.name}</h3>
                 <p className='text-sm'>{data.hotel?.location}</p>
@@ -136,10 +139,10 @@ export const TourInclusions = () => {
                 <p className='text-sm'>Star Rating: {data.hotel?.star_rating}</p>
                 <div className='text-yellow-500'>{'⭐'.repeat(data.hotel?.star_rating || 0)}</div>
               </div>
-              <button className='ml-auto bg-blue-600 text-white text-sm px-4 py-1 rounded h-fit'>Change Hotel</button>
+              <button className='ml-auto bg-[#164B71] text-white text-sm px-4 py-1 rounded h-fit'>Change Hotel</button>
             </div>
 
-            <div className='mt-4 flex justify-between border-t pt-4 text-sm'>
+            <div className='mt-4 flex justify-between  pt-4 text-sm'>
               <div>
                 <p className='font-medium'>Check-in</p>
                 <p>{data.hotel?.check_in}</p>
@@ -169,13 +172,13 @@ export const TourInclusions = () => {
             <button className='mt-4 text-sm bg-gray-700 text-white px-3 py-2 rounded flex items-center gap-2'>
               ℹ️ <span>Know more about hotel</span>
             </button>
-          </div>
+          </div></>
         )}
       </div>
 
       <div className='inclusion-right w-1/3'>
         <div className='price-summary border rounded p-4 shadow-md bg-white flex flex-col gap-4'>
-          <h2 className='text-xl font-semibold bg-blue-700 text-white px-3 py-2 rounded'>
+          <h2 className='text-xl font-semibold bg-[#164B71] text-white px-3 py-2 rounded'>
             Price Summary
           </h2>
 
@@ -200,7 +203,7 @@ export const TourInclusions = () => {
             <p>₹{totalPrice}</p>
           </div>
 
-          <button className='bg-blue-600 text-white p-2 rounded mt-3 text-sm'>
+          <button className='bg-[#0068A3] text-white p-2 rounded mt-3 text-sm'>
             Get Your Visa Or Full Refund
           </button>
         </div>
