@@ -14,6 +14,7 @@ import { FlightsLanding } from './pages/flights/FlightsLanding';
 import { TourLanding } from './pages/tour/TourLanding';
 import { TourDetails } from './pages/tour/TourDetails';
 import {TravelMartLanding} from './pages/travelmart/TravelMartLanding';
+import { TourInclusions } from './pages/tour/TourInclusions';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -35,6 +36,8 @@ export const App = () => {
           <Route path="/" element={<TourLanding />} />
           <Route path="/tour-details" element={<TourDetails />} />
           <Route path="/travel-mart" element={<TravelMartLanding />} />
+          <Route path="/tourinclusion" element={<TourInclusions />} />
+
         </Routes>
       
     </Router>

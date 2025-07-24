@@ -130,6 +130,9 @@ export const fetchDestinations = async () => {
 
     return data.map(dest => ({
       ...dest,
+      image: dest.image.includes('/media') && !dest.image.startsWith('http')
+      ? `${BASE_URL}${dest.image}`
+      : dest.image,
       features: defaultFeatures,
     }));
   } catch (err) {

@@ -43,7 +43,7 @@ export const Navbar = () => {
   return (
     <nav
       ref={navRef}
-      className="navbar rounded-full transition-all duration-300 ease-in-out"
+      className="navbar  transition-all duration-300 ease-in-out"
     >
       {/* Left: Logo */}
       <div className="navbar-left">

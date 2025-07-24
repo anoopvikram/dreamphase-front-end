@@ -20,7 +20,7 @@ h1, p {
   /*NAVBAR*/
 
 .navbar {
-  @apply fixed left-1/2 -translate-x-1/2 mt-5 z-50 w-[90%] max-w-[1200px] px-6 py-4 flex items-center justify-between;
+  @apply fixed  mt-5 z-50 w-full px-6 py-4 flex gap-25 items-center justify-evenly;
 }
 
 

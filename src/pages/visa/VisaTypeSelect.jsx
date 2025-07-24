@@ -3,7 +3,6 @@
     import { FaPlane, FaCalendarAlt, FaSearch } from 'react-icons/fa';
     import { VisaCard } from '../../components/visa/VisaCard';
     import { countryList } from '../../api/visaApi';
-    import ImageCarousel from '../../components/visa/ImageCarousel';
     import { getVisaOptions } from '../../api/visaApi';
 import { useLocation } from 'react-router-dom';
 
@@ -17,8 +16,8 @@ export const VisaTypeSelect = () => {
       const [visaOptions, setVisaOptions] = useState([]);
 
         console.log("➡️ location.state:", location.state);
-  console.log("➡️ paramCountry:", paramCountry);
-  console.log("➡️ final countryId used:", countryId);
+        console.log("➡️ paramCountry:", paramCountry);
+        console.log("➡️ final countryId used:", countryId);
 
 
       const from = params.get('from') || 'India';
