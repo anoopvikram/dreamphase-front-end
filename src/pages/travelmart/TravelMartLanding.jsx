@@ -30,7 +30,7 @@ export const TravelMartLanding = () => {
         {/* Ad Banner */}
         <div className='ad z-20 -mt-15 bg-gradient-to-r mx-auto  from-blue-400 to-blue-700 text-center w-5/6 items-center flex flex-col justify-center   min-h-[250px] text-white p-10 rounded-2xl shadow-md'>
           <h2 className='text-3xl font-bold mb-4'>PACK YOUR BAGS.....</h2>
-          <button className='bg-blue-900 px-6 py-2 rounded-full font-semibold'>Shop Now</button>
+          <button className='bg-[#164B71] px-6 py-2 rounded-full font-semibold'>Shop Now</button>
         </div>
 
         {/* Filter Buttons */}

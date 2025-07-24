@@ -44,15 +44,15 @@ export const InsurancePlan = () => {
         <div key={i} className="relative flex-1 flex items-center justify-center">
         {/* Line Before */}
         {i !== 0 && (
-            <div className={`absolute -translate-x-1/2 top-1/2 transform -translate-y-1/2 h-1 ${i <= 1 ? 'bg-blue-600' : 'bg-gray-300'} w-full z-0`}></div>
+            <div className={`absolute -translate-x-1/2 top-1/2 transform -translate-y-1/2 h-1 ${i <= 1 ? 'bg-[#164B71]' : 'bg-gray-300'} w-full z-0`}></div>
         )}
         
         {/* Circle */}
-        <div className={`relative z-10 w-5 h-5 rounded-full border-2 ${i === 0 ? 'bg-blue-600 border-blue-600' : i === 1 ? 'bg-white border-blue-600' : 'bg-gray-300 border-gray-300'}`}></div>
+        <div className={`relative z-10 w-5 h-5 rounded-full border-2 ${i === 0 ? 'bg-[#164B71] border-[#164B71]' : i === 1 ? 'bg-white border-[#164B71]' : 'bg-gray-300 border-gray-300'}`}></div>
 
         {/* Label */}
         <div className="absolute top-8 text-[13px] font-semibold text-center w-max -translate-x-1/2 left-1/2">
-            <p className={`${i <= 1 ? 'text-blue-800' : 'text-gray-500'}`}>{step}</p>
+            <p className={`${i <= 1 ? 'text-[#164B71]' : 'text-gray-500'}`}>{step}</p>
         </div>
         </div>
     ))}
@@ -86,10 +86,10 @@ export const InsurancePlan = () => {
         {plans.map((plan, index) => (
           <div key={index} className="border border-blue-300 rounded-xl p-6 flex justify-between">
             <div className="flex flex-col">
-              <h2 className="text-xl font-bold text-blue-700 mb-1">{plan.name}</h2>
+              <h2 className="text-xl font-bold text-[#164B71] mb-1">{plan.name}</h2>
               <p className="text-sm mb-3">{plan.details}</p>
 
-              <div className="flex flex-wrap gap-4 mb-3 text-sm text-blue-600">
+              <div className="flex flex-wrap gap-4 mb-3 text-sm text-[#164B71]">
                 {plan.features.map((feature, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <span>📌</span> <p>{feature}</p>
@@ -110,7 +110,7 @@ export const InsurancePlan = () => {
               </div>
               <button
                 onClick={() => console.log('Selected:', plan.name)}
-                className="mt-4 border border-blue-600 text-blue-600 px-6 py-1 rounded hover:bg-blue-50"
+                className="mt-4 border border-[#164B71] text-[#164B71] px-6 py-1 rounded hover:bg-blue-50"
               >
                 Apply
               </button>
@@ -120,7 +120,7 @@ export const InsurancePlan = () => {
       </div>
 
       <div className="text-center mt-10">
-        <button onClick={() => navigate('/insurance')} className="px-6 py-2 border rounded text-sm border-blue-600 text-blue-600 hover:bg-blue-100">
+        <button onClick={() => navigate('/insurance')} className="px-6 py-2 border rounded text-sm border-[#164B71] text-[#164B71] hover:bg-blue-100">
           Go Back
         </button>
       </div>

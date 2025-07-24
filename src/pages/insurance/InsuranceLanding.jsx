@@ -88,7 +88,7 @@ const calculateAge = (dob) => {
             <label className="text-sm font-semibold text-[#4b4b4b] mb-1">
               Travel Region<span className="text-red-500">*</span>
             </label>
-            <select className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm focus:outline-blue-400">
+            <select className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm focus:outline-[#164B71]">
               <option value="">Select Travel Region</option>
               <option value="Asia">Asia</option>
               <option value="Europe">Europe</option>
@@ -98,7 +98,7 @@ const calculateAge = (dob) => {
             <label className="text-sm font-semibold text-[#4b4b4b] mb-1">
               Country of Visit<span className="text-red-500">*</span>
             </label>
-            <select className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm focus:outline-blue-400">
+            <select className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm focus:outline-[#164B71]">
               <option value="">Select Country</option>
               <option value="Germany">Germany</option>
               <option value="USA">USA</option>
@@ -113,7 +113,7 @@ const calculateAge = (dob) => {
             <button
               onClick={() => setIsMultiTrip((prev) => !prev)}
               className={`w-12 h-6 flex items-center rounded-full p-1 transition duration-300 ${
-                isMultiTrip ? 'bg-blue-600' : 'bg-gray-300'
+                isMultiTrip ? 'bg-[#164B71]' : 'bg-gray-300'
               }`}
             >
               <div
@@ -168,7 +168,7 @@ const calculateAge = (dob) => {
           <div className="mt-6 md:mt-0">
             <button
               onClick={handleContinue}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+              className="bg-[#164B71] text-white px-6 py-2 rounded-lg hover:bg-blue-700"
             >
               CONTINUE
             </button>
@@ -239,7 +239,7 @@ const calculateAge = (dob) => {
         </div>
 
         <div className="flex justify-center">
-            <button className="bg-blue-600 text-white px-12 py-2 rounded-lg hover:bg-blue-700" onClick={handleSubmit}>
+            <button className="bg-[#164B71] text-white px-12 py-2 rounded-lg hover:bg-blue-700" onClick={handleSubmit}>
                 Submit
             </button>   
         </div>

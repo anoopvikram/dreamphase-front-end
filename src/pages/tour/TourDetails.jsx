@@ -129,17 +129,17 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
 //   return;
 // }
 
-// const payload = {
-//   destination_id: matched.id,
-//   nights: Number(nights) || 1,
-//   hotel_star_rating: Number(starRating) || 3,
-//   add_transport: addTransport,
-//   land_only: landOnly,
-//   need_tour_guid: needGuide,
-//   number_of_adults: Number(adults) || 1,
-//   number_of_children: Number(children) || 0,
-//   number_of_rooms: Number(rooms) || 1
-// };
+//       const payload = {
+//         destination_id: matched.id,
+//         nights: Number(nights),
+//         hotel_star_rating: Number(starRating),
+//         add_transport: addTransport,
+//         land_only: landOnly,
+//         need_tour_guid: needGuide,
+//         number_of_adults: Number(adults),
+//         number_of_children: Number(children),
+//         number_of_rooms: Number(rooms),
+//       };
 
 
 //   console.log('Payload being sent:', payload);
@@ -183,11 +183,11 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
           {['Trip Details', 'Trip Customization', 'Save Proposal', 'AI Suggestions', 'Review and Payment'].map((step, i, arr) => (
             <div key={i} className="relative flex-1 flex items-center justify-center">
               {i !== 0 && (
-                <div className={`absolute -translate-x-1/2 top-1/2 transform -translate-y-1/2 h-1 ${i <= 1 ? 'bg-blue-600' : 'bg-gray-300'} w-full z-0`}></div>
+                <div className={`absolute -translate-x-1/2 top-1/2 transform -translate-y-1/2 h-1 ${i <= 1 ? 'bg-[#164B71]' : 'bg-gray-300'} w-full z-0`}></div>
               )}
-              <div className={`relative z-10 w-5 h-5 rounded-full border-2 ${i === 0 ? 'bg-blue-600 border-blue-600' : i === 1 ? 'bg-white border-blue-600' : 'bg-gray-300 border-gray-300'}`}></div>
+              <div className={`relative z-10 w-5 h-5 rounded-full border-2 ${i === 0 ? 'bg-[#164B71] border-[#164B71]' : i === 1 ? 'bg-white border-[#164B71]' : 'bg-gray-300 border-gray-300'}`}></div>
               <div className="absolute top-8 text-[13px] font-semibold text-center w-max -translate-x-1/2 left-1/2">
-                <p className={`${i <= 1 ? 'text-blue-800' : 'text-gray-500'}`}>{step}</p>
+                <p className={`${i <= 1 ? 'text-[#164B71]' : 'text-gray-500'}`}>{step}</p>
               </div>
             </div>
           ))}
@@ -230,7 +230,7 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
                   ))}
                   {provided.placeholder}
                   {cities.length < 5 && (
-                    <button onClick={handleAddCity} className='text-blue-600 text-base self-center'>
+                    <button onClick={handleAddCity} className='text-[#164B71] text-base self-center'>
                       + Add Another City
                     </button>
                   )}
@@ -316,7 +316,7 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
             </div>
 
             <p className='text-base text-gray-600'>
-              For more than 6 rooms <a href='#' className='text-blue-600'>click here</a>
+              For more than 6 rooms <a href='#' className='text-[#164B71]'>click here</a>
             </p>
           </div>
           
@@ -333,7 +333,7 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
             </label>
           </div>
 
-          <button onClick={handleContinue} className='py-1 px-3 w-fit h-fit rounded  bg-blue-800 text-white'>
+          <button onClick={handleContinue} className='py-1 px-3 w-fit h-fit rounded  bg-[#164B71] text-white'>
             Continue
           </button>
 

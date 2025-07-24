@@ -14,7 +14,7 @@ export const VisaCard = ({ visa, onApply }) => {
         <div className="flex-1">
           {/* Arrival Estimate */}
           <div className="flex items-center gap-2 text-sm text-gray-700 mb-4">
-            <FaShieldAlt className="text-blue-700" />
+            <FaShieldAlt className="text-[#164B71]" />
             Estimated visa arrival by <strong>28th Jul, 2025</strong>
           </div>
 
@@ -34,7 +34,7 @@ export const VisaCard = ({ visa, onApply }) => {
             <div>{visa.validity_days} days</div>
             <div>{visa.duration_days} days</div>
             <div>
-              <a href="#" className="text-blue-600 underline text-sm">View Here</a>
+              <a href="#" className="text-[#164B71] underline text-sm">View Here</a>
             </div>
             <div>{visa.processing_time}</div>
             <div>—</div>
@@ -46,7 +46,7 @@ export const VisaCard = ({ visa, onApply }) => {
           <p className="text-xl font-bold mb-2">₹{visa.total_chaerges}</p>
           <button
             onClick={onApply}
-            className="px-5 py-2 rounded-md border border-blue-900 text-blue-900 font-semibold hover:bg-blue-50"
+            className="px-5 py-2 rounded-md border border-[#164B71] text-[#164B71] font-semibold hover:bg-blue-50"
           >
             Apply Now
           </button>

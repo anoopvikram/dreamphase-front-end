@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const TourInclusions = () => {
+    const navigate = useNavigate();
   const { state } = useLocation();
   const payload = state?.payload;
 
   const [data, setData] = useState(null);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
-  const [travelerCount, setTravelerCount] = useState(1); // initialize safely
+ const location = useLocation();
+  const [travelerCount, setTravelerCount] = useState(payload?.number_of_adults);
+
 
   // Dynamic pricing
   const totalPrice = selectedVehicle ? (selectedVehicle.price + (data?.total_price || 0)) : (data?.total_price || 0);
@@ -58,12 +62,12 @@ export const TourInclusions = () => {
   const { add_transport, land_only } = payload;
 
   return (
-    <div className='tour-inclusion flex flex-row w-4/5 mx-auto py-30 text-black gap-10'>
-      <div className='inclusion-left flex flex-col gap-8 w-2/3'>
+    <div className='tour-inclusion flex flex-row w-4/5 mx-auto py-30 text-black gap-15'>
+      <div className='inclusion-left flex flex-col gap-2 w-2/3'>
 
         {add_transport && (<>
-            <h2 className='text-xl font-semibold mb-4'>Flight</h2>
-          <div className='flight  rounded-xl p-4 bg-[#0E375533]'>
+            <h2 className='text-xl font-semibold mb-0'>Flight</h2>
+          <div className='flight mb-5 rounded-xl p-4 bg-[#0E375533]'>
             <h2 className='text-xl font-semibold mb-3'>Add flight details.</h2>
             <div className='flex flex-row border-t pt-3 justify-between items-center'>
               <p className='text-sm text-gray-600'>No Flight included</p>
@@ -73,15 +77,15 @@ export const TourInclusions = () => {
         )}
 
         {add_transport && (<>
-            <h2 className='text-xl font-semibold mb-4'>Road Transport</h2>
-          <div className='road  rounded-xl p-4 bg-[#0E375533]'>
+            <h2 className='text-xl font-semibold mb-0'>Road Transport</h2>
+          <div className='road mb-5 rounded-xl p-4 bg-[#0E375533]'>
             <div className='flex flex-row items-center border-b pb-3 gap-3 mb-3'>
               <h2 className='text-xl font-semibold'>Need a car:</h2>
               <select className='border p-1 rounded text-sm'>
-                <option>Kochi</option>
+                <option>Delhi</option>
               </select>
               <select className='border p-1 rounded text-sm'>
-                <option>Drop at Kochi</option>
+                <option>Drop at Delhi</option>
               </select>
             </div>
 
@@ -127,26 +131,27 @@ export const TourInclusions = () => {
         )}
 
         {!land_only && (<>
-            <h2 className='text-xl font-semibold mb-4'>Hotels</h2>
-          <div className='hotel  rounded-xl p-4 bg-[#0E375533]'>
+            <h2 className='text-xl font-semibold mb-0'>Hotels</h2>
+          <div className='hotel flex mb-5 flex-col xl:w-3/4  rounded-xl p-4 bg-[#0E375533]'>
             <div className='flex gap-4 items-end'>
-              <div className='bg-[#404040] w-32 h-24 flex items-center justify-center text-sm text-white'>Hotel Image</div>
+              <div className='bg-[#404040] w-32 h-24 flex items-center rounded-lg justify-center text-sm text-white'>Hotel Image</div>
               <div className='flex flex-col'>
                 <h3 className='font-semibold text-lg'>{data.hotel?.name}</h3>
                 <p className='text-sm'>{data.hotel?.location}</p>
                 <p className='text-sm'>{data.hotel?.pincode}</p>
                 <p className='text-sm'>Price: ₹{data.hotel_price}</p>
                 <p className='text-sm'>Star Rating: {data.hotel?.star_rating}</p>
-                <div className='text-yellow-500'>{'⭐'.repeat(data.hotel?.star_rating || 0)}</div>
+                <div className='text-[#164B71]'>{'⭐'.repeat(data.hotel?.star_rating || 0)}</div>
               </div>
               <button className='ml-auto bg-[#164B71] text-white text-sm px-4 py-1 rounded h-fit'>Change Hotel</button>
             </div>
 
-            <div className='mt-4 flex justify-between  pt-4 text-sm'>
+            <div className='mt-4 flex justify-between gap-4 pt-4 text-sm w-fit'>
               <div>
                 <p className='font-medium'>Check-in</p>
                 <p>{data.hotel?.check_in}</p>
               </div>
+              <span className='text-3xl font-extralight'>|</span>
               <div>
                 <p className='font-medium'>Check-out</p>
                 <p>{data.hotel?.check_out}</p>
@@ -168,24 +173,41 @@ export const TourInclusions = () => {
               </ul>
               <p className='text-gray-600 mt-1'>We have included all charges provided by the property.</p>
             </div>
-
+            
             <button className='mt-4 text-sm bg-gray-700 text-white px-3 py-2 rounded flex items-center gap-2'>
               ℹ️ <span>Know more about hotel</span>
             </button>
           </div></>
         )}
+        <div className='flex xl:w-3/4 justify-end'>
+            <button
+  className='py-1 px-3 w-fit h-fit rounded bg-[#164B71] text-white'
+  onClick={() => {
+    navigate('/touritinerary', {
+      state: {
+        number_of_adults: travelerCount,
+        num_nights: payload?.nights || 4
+      }
+    });
+  }}
+>
+  Set itinerary
+</button>
+
+        </div>
+        
       </div>
 
-      <div className='inclusion-right w-1/3'>
-        <div className='price-summary border rounded p-4 shadow-md bg-white flex flex-col gap-4'>
-          <h2 className='text-xl font-semibold bg-[#164B71] text-white px-3 py-2 rounded'>
+      <div className='inclusion-right mt-20 w-full md:w-1/2 xl:w-1/3'>
+        <div className='price-summary border rounded-xl p-4 shadow-md bg-white flex flex-col gap-4'>
+          <h2 className='text-2xl -mx-10 text-center font-semibold bg-[#164B71] text-white px-3 py-2 rounded-xl'>
             Price Summary
           </h2>
 
           <div className='text-sm'>
             <div className='flex justify-between items-center mb-2'>
               <p>👤 Traveler</p>
-              <div className='flex items-center gap-2 border px-3 py-1 rounded'>
+              <div className='flex items-center gap-2  px-3 py-1 rounded'>
                 <button onClick={() => setTravelerCount(Math.max(1, travelerCount - 1))}>-</button>
                 <span>{travelerCount}</span>
                 <button onClick={() => setTravelerCount(travelerCount + 1)}>+</button>
@@ -203,7 +225,7 @@ export const TourInclusions = () => {
             <p>₹{totalPrice}</p>
           </div>
 
-          <button className='bg-[#0068A3] text-white p-2 rounded mt-3 text-sm'>
+          <button className='bg-[#0068A3] text-white p-2 rounded-lg mx-auto px-5 mt-3 text-sm'>
             Get Your Visa Or Full Refund
           </button>
         </div>

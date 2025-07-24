@@ -63,7 +63,7 @@ export const PhotoUpload = ({ onChange, onPassportExtracted, label = 'Upload Pho
         className="block w-full text-sm text-gray-700 bg-white file:mr-4 file:py-1 file:px-4
                    file:rounded-full file:border-0
                    file:text-sm file:font-semibold
-                   file:bg-blue-50 file:text-blue-600
+                   file:bg-blue-50 file:text-[#164B71]
                    hover:file:bg-blue-100"
       />
 
@@ -77,7 +77,7 @@ export const PhotoUpload = ({ onChange, onPassportExtracted, label = 'Upload Pho
         </div>
       )}
 
-      {loading && <p className="text-sm text-blue-500 mt-2">Extracting passport data...</p>}
+      {loading && <p className="text-sm text-[#164B71] mt-2">Extracting passport data...</p>}
     </div>
   );
 };

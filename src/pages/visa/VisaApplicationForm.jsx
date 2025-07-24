@@ -68,16 +68,16 @@ export const VisaApplicationForm = () => {
 
       {/* Authorization Note */}
       <div className="flex justify-center items-center gap-3 text-sm text-gray-800">
-        <FaShieldAlt className="text-blue-500" />
+        <FaShieldAlt className="text-[#164B71]" />
         <span>Dreamphase is authorized by the Government of {to?.charAt(0).toUpperCase() + to?.slice(1).toLowerCase()}.</span>
       </div>
 
       {/* Processing Time */}
       <div className="flex flex-col items-center space-y-1">
         <p className="font-semibold">Processing Time</p>
-        <p className="bg-blue-600 text-white px-4 py-1 rounded-full text-xs">5–7 Business Days</p>
+        <p className="bg-[#164B71] text-white px-4 py-1 rounded-full text-xs">5–7 Business Days</p>
         <div className="w-3/4 bg-gray-300 h-2 rounded-full mt-2">
-          <div className="bg-blue-500 h-2 rounded-full w-3/4" />
+          <div className="bg-[#164B71] h-2 rounded-full w-3/4" />
         </div>
       </div>
 
@@ -154,7 +154,7 @@ export const VisaApplicationForm = () => {
 
             navigate(`/visa/review/temp-id`, { state: fullData });
           }}
-          className="bg-blue-600 text-white px-6 py-2 rounded-full"
+          className="bg-[#164B71] text-white px-6 py-2 rounded-full"
         >
           Continue to Review
         </button>
@@ -164,7 +164,7 @@ export const VisaApplicationForm = () => {
       <div className="px-6 md:px-16 space-y-12">
         {/* General Information Section */}
         <div>
-          <h2 className="text-xl font-bold text-blue-800 mb-2">General Information</h2>
+          <h2 className="text-xl font-bold text-[#164B71] mb-2">General Information</h2>
           <p className="text-sm text-gray-800 mb-4">
             Lorem ipsum dolor sit amet, consectetur
           </p>
@@ -192,7 +192,7 @@ export const VisaApplicationForm = () => {
             <li>Recent passport-sized photograph as per visa photo rules.</li>
             <li>Valid passport with at least 2 blank pages, valid for 3+ months beyond departure.</li>
             <li>Previous passports (if any).</li>
-            <li><span className="underline text-blue-600">Cover letter</span> outlining personal info, trip purpose, financial proof, return intent.</li>
+            <li><span className="underline text-[#164B71]">Cover letter</span> outlining personal info, trip purpose, financial proof, return intent.</li>
             <li>Employer letter with a <strong>‘No Objection Statement’</strong>.</li>
             <li>Travel insurance with minimum €30,000 coverage.</li>
             <li>Roundtrip tickets (if applicable).</li>

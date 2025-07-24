@@ -38,7 +38,7 @@ export const FlightsLanding = () => {
               key={type}
               onClick={() => setTripType(type)}
               className={`text-sm px-4 py-2 rounded-full border flex items-center gap-2 ${
-                tripType === type ? 'bg-blue-600 border-blue-600' : 'border-gray-400'
+                tripType === type ? 'bg-[#164B71] border-[#164B71]' : 'border-gray-400'
               }`}
             >
               <span>{tripType === type ? <FaDotCircle /> : <MdOutlineRadioButtonUnchecked />}</span>
@@ -50,7 +50,7 @@ export const FlightsLanding = () => {
         </div>
 
         {/* Selection Area */}
-        <div className="grid grid-cols-5 bg-black/60 rounded-3xl px-5 py-10 gap-4 items-center text-sm">
+        <div className="grid grid-cols-2 xl:grid-cols-5 bg-black/60 rounded-3xl px-5 py-10 gap-4 items-center text-sm">
           {/* From - To */}
           <div className="col-span-2 flex items-center gap-4">
             <div className="flex flex-col gap-5">
@@ -108,10 +108,9 @@ export const FlightsLanding = () => {
     type="date"
     value={returnDate}
     onChange={(e) => setReturnDate(e.target.value)}
-    className="bg-transparent border border-white/40 px-3 py-1 rounded-md text-white appearance-none cursor-pointer disabled:opacity-40"
-    disabled={tripType === 'one-way'}
+    className="bg-transparent border border-white/40 px-3 py-1 rounded-md text-white appearance-none cursor-pointer"
   />
-  {returnDate && tripType !== 'one-way' && <p className="text-sm">{formatDate(returnDate)}</p>}
+  {returnDate && <p className="text-sm">{formatDate(returnDate)}</p>}
 </div>
 
           {/* Travelers & Class */}
@@ -146,7 +145,7 @@ export const FlightsLanding = () => {
               </select>
             </div>
 
-            <button className="bg-blue-600 text-white p-3 rounded-full">
+            <button className="bg-[#164B71] text-white p-3 rounded-full">
               <FaSearch />
             </button>
           </div>
