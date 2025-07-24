@@ -34,7 +34,13 @@ export const LandingHero = ({ activeTab = 'Visa' }) => {
     <div className="visa-hero">
       <div className="visa-hero-overlay">
         <h1 className="visa-title">Your Journey Starts Here</h1>
-        <p className="visa-subtext">Secure Payment | 24 x 7 Customer Support</p>
+        <div className='flex flex-row gap-2 items-center'>
+          <img src="/images/icons/SecurePayment.ico" className='w-5 h-5'/>
+          <p className="visa-subtext">Secure Payment</p>
+          <span className='text-3xl'>|</span>
+          <img src="/images/icons/CustomerSupport.ico" className='w-5 h-5'/>
+          <p className="visa-subtext">24 x 7 Customer Support</p>
+        </div>
         <div className="visa-service-menu">
           <ul className="visa-tabs">
             {tabs.map((tab) => {
@@ -53,7 +59,7 @@ export const LandingHero = ({ activeTab = 'Visa' }) => {
                       />
                     );
                   case 'Visa':
-                    return <GiPassport className={commonStyle} />;
+                    return <GiPassport className={`${commonStyle}  scale-120`} />;
                   case 'Insurance':
                     return <RiShieldCheckFill className={commonStyle} />;
                   case 'Travel Mart':

@@ -135,3 +135,24 @@ export const tourSections = [
     // fetchData: fetchGroupPackages
   }
 ];
+
+// src/api/api.js
+
+export const fetchTravelMartData = () => {
+  return {
+    clothing: [
+      { id: 1, image: '/images/jacket.png' },
+      { id: 2, image: '/images/jacket2.png' },
+      { id: 3, image: '/images/kidswear.png'},
+      { id: 4, image: '/images/womenjacket.png' },
+      { id: 5, image: '/images/shorts.png' },
+    ],
+    essentials: [
+      { id: 1, image: '/images/bamboostraw.png', price: 3 },
+      { id: 2, image: '/images/bamboobrush.png', price: 3 },
+      { id: 3, image: '/images/bamboocomb.png', price: 10 },
+      { id: 4, image: '/images/essentialkit.png', price: 15 },
+      { id: 5, image: '/images/bamboospoon.jpg', price: 5 },
+    ]
+  };
+};
