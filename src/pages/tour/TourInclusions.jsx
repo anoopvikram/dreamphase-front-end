@@ -70,7 +70,7 @@ export const TourInclusions = () => {
         )}
 
         {/* ROAD TRANSPORT */}
-        {land_only && (
+        {add_transport && (
         <div className='road border rounded p-4 bg-gray-50'>
             <div className='flex flex-row items-center gap-3 mb-3'>
             <h2 className='text-xl font-semibold'>Road Transport</h2>
