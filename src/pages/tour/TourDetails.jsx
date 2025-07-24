@@ -100,19 +100,19 @@
       reordered.splice(result.destination.index, 0, moved);
       setCities(reordered);
     };
-
+const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
     const handleContinue = () => {
-  const payload = {
-    destination_id: 3,
-    nights: 4,
-    hotel_star_rating: 4,
-    add_transport: addTransport,
-    land_only: landOnly,
-    need_tour_guid: true,
-    number_of_adults: 2,
-    number_of_children: 1,
-    number_of_rooms: 1,
-  };
+      const payload = {
+        destination_id: matched.id,
+        nights: Number(nights),
+        hotel_star_rating: Number(starRating),
+        add_transport: addTransport,
+        land_only: landOnly,
+        need_tour_guid: needGuide,
+        number_of_adults: Number(adults),
+        number_of_children: Number(children),
+        number_of_rooms: Number(rooms),
+      };
 
   console.log("➡ Navigating with payload:", payload);
 
