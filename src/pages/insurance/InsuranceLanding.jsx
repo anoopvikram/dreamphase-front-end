@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LandingHero } from '../../components/common/LandingHero';
 
-
 export const InsuranceLanding = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -12,42 +11,64 @@ export const InsuranceLanding = () => {
   const [travelers, setTravelers] = useState([{ dob: '' }]);
   const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState('');
-  const [showSecondBox, setShowSecondBox] = useState(false); // 🔵 NEW
-  const navigate = useNavigate(); // 🔵 NEW
+  const [showSecondBox, setShowSecondBox] = useState(false);
+  const [regions, setRegions] = useState([]);
+  const [selectedRegion, setSelectedRegion] = useState('');
   const secondBoxRef = useRef();
+  const navigate = useNavigate();
+  const [countries, setCountries] = useState([]);
+const [selectedCountry, setSelectedCountry] = useState('');
 
-    useEffect(() => {
-  setTravelers((prev) => {
-    const updated = [...prev];
-    while (updated.length < travelerCount) updated.push({ dob: '' });
-    while (updated.length > travelerCount) updated.pop();
-    return updated;
-  });
-}, [travelerCount]);
+useEffect(() => {
+  const fetchRegions = async () => {
+    try {
+      const res = await fetch('https://website-0suz.onrender.com/api/get_category/');
+      const data = await res.json();
+      console.log('API raw response:', data);
+      setRegions(data.categories || []);
+      setCountries(data.countries || []);
 
-const handleDOBChange = (index, value) => {
-  const updated = [...travelers];
-  updated[index].dob = value;
-  setTravelers(updated);
-};
+    } catch (err) {
+      console.error('Fetch regions failed:', err);
+      setRegions([]); // fallback to empty array
+    }
+  };
 
-const calculateAge = (dob) => {
-  if (!dob) return 0;
-  const birth = new Date(dob);
-  const today = new Date();
-  let age = today.getFullYear() - birth.getFullYear();
-  const m = today.getMonth() - birth.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
-  return age;
-};
+  fetchRegions();
+}, []);
+
+
+
+  useEffect(() => {
+    setTravelers((prev) => {
+      const updated = [...prev];
+      while (updated.length < travelerCount) updated.push({ dob: '' });
+      while (updated.length > travelerCount) updated.pop();
+      return updated;
+    });
+  }, [travelerCount]);
+
+  const handleDOBChange = (index, value) => {
+    const updated = [...travelers];
+    updated[index].dob = value;
+    setTravelers(updated);
+  };
+
+  const calculateAge = (dob) => {
+    if (!dob) return 0;
+    const birth = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+    return age;
+  };
 
   const calculateDuration = (start, end) => {
     if (!start || !end) return 0;
-
     const startTime = new Date(start).getTime();
     const endTime = new Date(end).getTime();
     const diff = endTime - startTime;
-
     const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
     return days > 0 ? days : 0;
   };
@@ -62,17 +83,62 @@ const calculateAge = (dob) => {
     }
   };
 
-   const handleContinue = () => {
-      setShowSecondBox(true);
-      setTimeout(() => {
-        secondBoxRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 50); // wait for the box to appear
-    };
+  const handleContinue = () => {
+    setShowSecondBox(true);
+    setTimeout(() => {
+      secondBoxRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  };
 
   const handleSubmit = () => {
-    // Optional: You can validate fields here before navigating
-    navigate('/insurance/plan'); // Change this path as per your route setup
+  const payload = {
+    email,
+    phone: mobile,
+    region_code: selectedRegion,
+    trip_type: isMultiTrip ? 'Multi' : 'Single',
+    travelers: travelers.map(t => t.dob)
   };
+
+  // Temporarily skip API call
+  /*
+  fetch('https://webhook.site/7c86091a-e953-4e53-8ed4-15c163d9f8f9', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+    .then(res => res.json())
+    .then(data => {
+      navigate('/insurance/plan', {
+        state: {
+          startDate,
+          endDate,
+          duration,
+          isMultiTrip,
+          travelers,
+          travelerCount,
+          email,
+          mobile
+        }
+      });
+    })
+    .catch(err => console.error('Submission error:', err));
+  */
+
+  // Directly navigate for now
+  navigate('/insurance/plan', {
+    state: {
+      startDate,
+      endDate,
+      duration,
+      isMultiTrip,
+      travelers,
+      travelerCount,
+      email,
+      mobile
+    }
+  });
+};
+
 
   return (
     <div className='insurance-landing flex flex-col text-black overflow-y-auto bg-white pb-10'>
@@ -80,33 +146,48 @@ const calculateAge = (dob) => {
         <LandingHero activeTab='Insurance' />
       </div>
 
-      {/* FIRST BOX */}
+      {/* First Box */}
       <div className="first-box z-20 w-[90%] max-w-5xl mx-auto -mt-10 bg-white border border-[#a9c6f5] rounded-2xl p-6 shadow-sm space-y-6">
-        {/* Top row: Region and Country */}
         <div className="flex flex-row w-1/2 gap-10">
           <div className="flex flex-col w-full md:w-1/2">
             <label className="text-sm font-semibold text-[#4b4b4b] mb-1">
               Travel Region<span className="text-red-500">*</span>
             </label>
-            <select className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm focus:outline-[#164B71]">
+            <select
+              value={selectedRegion}
+              onChange={(e) => setSelectedRegion(e.target.value)}
+              className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm focus:outline-[#164B71]"
+            >
+              {console.log('regions:', regions)}
               <option value="">Select Travel Region</option>
-              <option value="Asia">Asia</option>
-              <option value="Europe">Europe</option>
+              {regions.map((region) => (
+                <option key={region.category_code} value={region.category_code}>
+                  {region.description}
+                </option> 
+              ))}
+
             </select>
           </div>
           <div className="flex flex-col w-full md:w-1/2">
-            <label className="text-sm font-semibold text-[#4b4b4b] mb-1">
-              Country of Visit<span className="text-red-500">*</span>
-            </label>
-            <select className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm focus:outline-[#164B71]">
-              <option value="">Select Country</option>
-              <option value="Germany">Germany</option>
-              <option value="USA">USA</option>
-            </select>
-          </div>
+  <label className="text-sm font-semibold text-[#4b4b4b] mb-1">
+    Country of Visit<span className="text-red-500">*</span>
+  </label>
+  <select
+    className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm focus:outline-[#164B71]"
+    value={selectedCountry}
+    onChange={(e) => setSelectedCountry(e.target.value)}
+  >
+    <option value="">Select Country</option>
+    {countries.map((country) => (
+      <option key={country.country_code} value={country.country_code}>
+        {country.description}
+      </option>
+    ))}
+  </select>
+</div>
+
         </div>
 
-        {/* Middle: Toggle and Note */}
         <div>
           <p className="font-semibold text-[#4b4b4b]">Do you travel multiple times a year?</p>
           <div className="flex items-center gap-4 mt-2">
@@ -122,19 +203,13 @@ const calculateAge = (dob) => {
                 }`}
               ></div>
             </button>
-            <p className="text-xs text-gray-600">
-              Note: The Multi-Trip Plan covers a maximum of 60 days per trip.
-            </p>
+            <p className="text-xs text-gray-600">Note: The Multi-Trip Plan covers a maximum of 60 days per trip.</p>
           </div>
         </div>
 
-        {/* Dates and Duration */}
         <div className="flex flex-wrap md:flex-nowrap items-end justify-between gap-6 w-full">
-          {/* Start Date */}
           <div className="flex flex-col w-full md:w-1/3">
-            <label className="text-sm font-semibold text-[#4b4b4b] mb-1">
-              Start Date<span className="text-red-500">*</span>
-            </label>
+            <label className="text-sm font-semibold text-[#4b4b4b] mb-1">Start Date<span className="text-red-500">*</span></label>
             <input
               type="date"
               value={startDate}
@@ -143,11 +218,8 @@ const calculateAge = (dob) => {
             />
           </div>
 
-          {/* End Date */}
           <div className="flex flex-col w-full md:w-1/3">
-            <label className="text-sm font-semibold text-[#4b4b4b] mb-1">
-              End Date<span className="text-red-500">*</span>
-            </label>
+            <label className="text-sm font-semibold text-[#4b4b4b] mb-1">End Date<span className="text-red-500">*</span></label>
             <input
               type="date"
               value={endDate}
@@ -156,20 +228,13 @@ const calculateAge = (dob) => {
             />
           </div>
 
-          {/* Duration */}
           <div className="flex flex-col w-full md:w-1/3">
             <label className="text-sm font-semibold text-[#4b4b4b] mb-0">Duration</label>
-            <p className="text-sm py-2 px-1 text-black rounded-lg">
-              {duration} {duration === 1 ? 'day' : 'days'}
-            </p>
+            <p className="text-sm py-2 px-1 text-black rounded-lg">{duration} {duration === 1 ? 'day' : 'days'}</p>
           </div>
 
-          {/* Continue Button */}
           <div className="mt-6 md:mt-0">
-            <button
-              onClick={handleContinue}
-              className="bg-[#164B71] text-white px-6 py-2 rounded-lg hover:bg-blue-700"
-            >
+            <button onClick={handleContinue} className="bg-[#164B71] text-white px-6 py-2 rounded-lg hover:bg-blue-700">
               CONTINUE
             </button>
           </div>
@@ -180,72 +245,66 @@ const calculateAge = (dob) => {
         </p>
       </div>
 
-      {/* SECOND BOX */}
-        {showSecondBox && (
+      {/* Second Box */}
+      {showSecondBox && (
         <div ref={secondBoxRef} className="second-box text-black z-20 w-[90%] max-w-5xl mx-auto bg-white border border-[#a9c6f5] rounded-2xl p-6 shadow-sm space-y-6 my-10">
-          
-
-        {/* Traveler Count */}
-        <div className="sb-top flex flex-col">
+          <div className="sb-top flex flex-col">
             <label className="text-sm font-semibold mb-2">Number Of Traveller</label>
             <div className="flex items-center gap-4 border border-[#a9c6f5] w-fit rounded-full px-4 py-2">
-            <button onClick={() => setTravelerCount(prev => Math.max(1, prev - 1))} className="text-lg font-bold">−</button>
-            <div className="flex items-center gap-2 text-sm">
+              <button onClick={() => setTravelerCount(prev => Math.max(1, prev - 1))} className="text-lg font-bold">−</button>
+              <div className="flex items-center gap-2 text-sm">
                 <span>👤</span>
                 <span>{travelerCount}</span>
+              </div>
+              <button onClick={() => setTravelerCount(prev => prev + 1)} className="text-lg font-bold">+</button>
             </div>
-            <button onClick={() => setTravelerCount(prev => prev + 1)} className="text-lg font-bold">+</button>
-            </div>
-        </div>
+          </div>
 
-        {/* DOB Inputs */}
-        <div className="sb-middle flex flex-wrap gap-6">
+          <div className="sb-middle flex flex-wrap gap-6">
             {travelers.map((traveler, index) => (
-            <div key={index} className="flex flex-col">
+              <div key={index} className="flex flex-col">
                 <label className="text-sm font-semibold mb-1">Traveller {index + 1} DOB</label>
                 <input
-                type="date"
-                value={traveler.dob}
-                onChange={(e) => handleDOBChange(index, e.target.value)}
-                className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm"
+                  type="date"
+                  value={traveler.dob}
+                  onChange={(e) => handleDOBChange(index, e.target.value)}
+                  className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm"
                 />
                 <p className="text-xs mt-1">Age: {calculateAge(traveler.dob)}</p>
-            </div>
+              </div>
             ))}
-        </div>
+          </div>
 
-        {/* Contact Info */}
-        <div className="sb-bottom flex justify-evenly flex-row gap-10">
+          <div className="sb-bottom flex justify-evenly flex-row gap-10">
             <div className="flex flex-col w-full md:w-1/4">
-            <label className="text-sm font-semibold mb-1">Email ID</label>
-            <input
+              <label className="text-sm font-semibold mb-1">Email ID</label>
+              <input
                 type="email"
                 placeholder="Enter Email ID"
                 className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-            />
+              />
             </div>
             <div className="flex flex-col w-full md:w-1/4">
-            <label className="text-sm font-semibold mb-1">Mobile Number</label>
-            <input
+              <label className="text-sm font-semibold mb-1">Mobile Number</label>
+              <input
                 type="tel"
                 placeholder="Enter Mobile Number"
                 className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm"
                 value={mobile}
                 onChange={(e) => setMobile(e.target.value)}
-            />
+              />
             </div>
-        </div>
+          </div>
 
-        <div className="flex justify-center">
+          <div className="flex justify-center">
             <button className="bg-[#164B71] text-white px-12 py-2 rounded-lg hover:bg-blue-700" onClick={handleSubmit}>
-                Submit
-            </button>   
+              Submit
+            </button>
+          </div>
         </div>
-        </div>
-         )}
-
+      )}
     </div>
   );
 };

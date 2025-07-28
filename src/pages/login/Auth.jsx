@@ -13,11 +13,11 @@ const [keepSignedIn, setKeepSignedIn] = useState(true);
 <div className={`absolute top-0 left-0 w-1/2 h-full z-30 transition-all duration-700 ${isActive ? 'translate-x-full opacity-100' : 'opacity-100 pointer-events-none'}`}>
   <form className="h-full flex flex-col justify-center items-start rounded-3xl  px-10 text-center bg-gradient-to-r from-[#4A83AD] to-[#01475F]">
     
-    {/* Top switch buttons */}
-    <div className="absolute top-5 left-5 flex gap-4">
+    {/* Top switch buttons*/}
+    {/* <div className="absolute top-5 left-5 flex gap-4">
       <button type="button" onClick={() => setIsActive(false)} className="text-white cursor-pointer">Sign In</button>
       <button type="button" onClick={() => setIsActive(true)} className="text-white underline cursor-pointer">Sign Up</button>
-    </div>
+    </div>  */}
 
     <Input label='FULL NAME' />
     <Input label='EMAIL' type="email" />
@@ -47,10 +47,10 @@ const [keepSignedIn, setKeepSignedIn] = useState(true);
   <form className="h-full flex flex-col justify-center rounded-3xl items-start px-10 text-center bg-gradient-to-r from-[#4A83AD] to-[#01475F]">
     
     {/* Top switch buttons */}
-    <div className="absolute top-5 left-5 flex gap-4">
+    {/* <div className="absolute top-5 left-5 flex gap-4">
       <button type="button" onClick={() => setIsActive(false)} className="text-white underline cursor-pointer">Sign In</button>
       <button type="button" onClick={() => setIsActive(true)} className="text-white cursor-pointer">Sign Up</button>
-    </div>
+    </div> */}
 
     <Input label='USERNAME' type="email" />
     <Input label='PASSWORD' type="password" />

@@ -11,6 +11,7 @@ export const InsurancePlan = () => {
     duration,
     isMultiTrip,
     travelers,
+    travelerCount,
     email,
     mobile
   } = state || {};
@@ -109,7 +110,14 @@ export const InsurancePlan = () => {
                 <h2 className="text-2xl font-semibold">₹ {plan.price}</h2>
               </div>
               <button
-                onClick={() => console.log('Selected:', plan.name)}
+                onClick={() =>
+                  navigate('/insurance/addon', {
+                    state: {
+                      travelerCount,
+                      selectedPlan: plan.name, // optional, if needed on next page
+                    }
+                  })
+                }
                 className="mt-4 border border-[#164B71] text-[#164B71] px-6 py-1 rounded hover:bg-blue-50"
               >
                 Apply
@@ -120,7 +128,7 @@ export const InsurancePlan = () => {
       </div>
 
       <div className="text-center mt-10">
-        <button onClick={() => navigate('/insurance')} className="px-6 py-2 border rounded text-sm border-[#164B71] text-[#164B71] hover:bg-blue-100">
+        <button onClick={() => navigate(-1)} className="px-6 py-2 border rounded text-sm border-[#164B71] text-[#164B71] hover:bg-blue-100">
           Go Back
         </button>
       </div>
