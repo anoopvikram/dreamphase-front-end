@@ -20,7 +20,7 @@ h1, p {
   /*NAVBAR*/
 
 .navbar {
-  @apply fixed  mt-5 z-50 w-full px-6 py-4 flex gap-25 items-center justify-evenly;
+  @apply fixed flex-col md:flex-row mt-5 z-50 w-full px-6 py-3 flex gap-3 md:gap-25 items-center justify-evenly;
 }
 
 
@@ -29,11 +29,11 @@ h1, p {
 }
 
 .navbar-right {
-  @apply flex items-center gap-6;
+  @apply flex sm:flex-row flex-col items-center gap-6;
 }
 
 .navbar-menu {
-  @apply hidden md:flex items-center gap-6 text-sm font-medium text-[#0E3755];
+  @apply flex flex-row items-center gap-6 text-sm font-medium text-[#0E3755];
 }
 
 .menu-item {
@@ -207,6 +207,7 @@ h1, p {
     background-size: cover;
     background-position: center;
   }
+
 
 
   

@@ -13,32 +13,34 @@ export const Navbar = () => {
   const navRef = useRef(null);
   const location = useLocation();
 
-  useGSAP(() => {
-    // Only run scroll animatuseGSAP(() => {
-    const navTween = gsap.timeline({
-      scrollTrigger: {
-        trigger: 'main',
-        start: "top+=1 top",
-        end: "top top",
-        toggleActions: 'play none none reverse'
-      }
-    });
+useGSAP(() => {
+  const navTween = gsap.timeline({
+    scrollTrigger: {
+      trigger: 'main',
+      start: 'top+=1 top',
+      end: 'top top',
+      toggleActions: 'play none none reverse',
+    }
+  });
 
-    navTween.fromTo('nav',
-      {
-        backgroundColor: 'transparent',
-        backdropFilter: 'blur(0px)',
-        border: '0px solid transparent'
-      },
-      {
-        backgroundColor: 'rgba(255, 255, 255, 0.4)',
-        backdropFilter: 'blur(10px)',
-        
-        duration: 0.05,
-        ease: 'power1.inOut'
-      }
-    );
-  }, []);
+  navTween.fromTo('nav',
+    {
+      backgroundColor: 'transparent',
+      backdropFilter: 'blur(0px)',
+      border: '0px solid transparent',
+      boxShadow: 'none',
+    },
+    {
+      backgroundColor: 'rgba(255, 255, 255, 0.4)',
+      backdropFilter: 'blur(12px)',
+      boxShadow: '0 -5px 10px rgba(255, 255, 255, 0.43), 0 5px 10px rgba(255, 255, 255, 0.43)',
+      duration: 0.05,
+      ease: 'power1.inOut',
+    }
+  );
+}, []);
+
+
 
   return (
     <nav

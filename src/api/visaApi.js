@@ -42,7 +42,7 @@ export const getVisaOptions = async (countryId) => {
 
 
 const defaultFeatures = [
-  { name: 'Adventure', icon: 'https://img.icons8.com/ios-filled/50/trekking.png' },
+  { name: 'Adventure', icon: '/images/icons/features/adventure.ico' },
   { name: 'Honeymoon', icon: 'https://img.icons8.com/ios-filled/50/heart-with-arrow.png' },
   { name: 'Family Trip', icon: 'https://img.icons8.com/ios-filled/50/family.png' },
   { name: 'Trip with Friends', icon: 'https://img.icons8.com/ios-filled/50/conference.png' },

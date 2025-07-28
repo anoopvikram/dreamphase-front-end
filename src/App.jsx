@@ -16,6 +16,7 @@ import { TourDetails } from './pages/tour/TourDetails';
 import {TravelMartLanding} from './pages/travelmart/TravelMartLanding';
 import { TourInclusions } from './pages/tour/TourInclusions';
 import { TourItinerary } from './pages/tour/TourItinerary';
+import {AuthPage} from './pages/login/Auth';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,6 +27,7 @@ export const App = () => {
       
         <Navbar />
         <Routes>
+          <Route path="/auth" element={<AuthPage />} />
           <Route path="/visa" element={<VisaLanding />} />
           <Route path="/visa/:country" element={<VisaTypeSelect />} />
           <Route path="/visa/apply/:country/:visaType" element={<VisaApplicationForm />} />

@@ -17,11 +17,11 @@ export const TourLanding = () => {
     const data = await fetchDestinations();
 
     const hardcodedFeatures = [
-      { name: 'Adventure', icon: 'https://img.icons8.com/ios-filled/50/trekking.png' },
-      { name: 'Honeymoon', icon: 'https://img.icons8.com/ios-filled/50/heart-with-arrow.png' },
-      { name: 'Family Trip', icon: 'https://img.icons8.com/ios-filled/50/family.png' },
-      { name: 'Trip with Friends', icon: 'https://img.icons8.com/ios-filled/50/conference.png' },
-      { name: 'Solo Trip', icon: 'https://img.icons8.com/ios-filled/50/user.png' },
+      { name: 'Adventure', icon: '/images/icons/features/adventure.ico' },
+      { name: 'Honeymoon', icon: '/images/icons/features/honeymoon.ico' },
+      { name: 'Family Trip', icon: '/images/icons/features/family.ico' },
+      { name: 'Trip with Friends', icon: '/images/icons/features/friends.ico' },
+      { name: 'Solo Trip', icon: '/images/icons/features/solo.ico' },
     ];
 
     const withFeatures = data.map((d) => ({ ...d, features: hardcodedFeatures }));
@@ -38,7 +38,7 @@ export const TourLanding = () => {
   return (
     <div className="tour-landing flex flex-col overflow-y-auto bg-white">
       <div className="relative z-10">
-        <LandingHero activeTab="Tour" />
+        <LandingHero activeTab="Tour" animateOnLoad={true} />
       </div>
 
       <div className="z-20 -mt-6">

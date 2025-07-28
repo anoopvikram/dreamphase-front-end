@@ -52,7 +52,7 @@ export const FlightsLanding = () => {
         {/* Selection Area */}
         <div className="grid grid-cols-2 xl:grid-cols-5 bg-black/60 rounded-3xl px-5 py-10 gap-4 items-center text-sm">
           {/* From - To */}
-          <div className="col-span-2 flex items-center gap-4">
+          <div className="col-span-2 flex items-center gap-10">
             <div className="flex flex-col gap-5">
               <p className="text-xl">From</p>
               <div className="flex flex-col">
@@ -62,17 +62,15 @@ export const FlightsLanding = () => {
                   placeholder="Location, Country"
                   value={from}
                   onChange={(e) => setFrom(e.target.value)}
-                  className="bg-transparent border-b border-gray-300 focus:outline-none text-white"
+                  className="bg-transparent w-40 focus:outline-0 text-white"
                 />
               </div>
             </div>
 
-            <button
-              className="bg-white text-black p-2 rounded-full"
-              onClick={handleSwap}
-            >
-              <FaExchangeAlt />
-            </button>
+            <div className='swap-button'>
+              <img src='/images/icons/swap.png' className='min-w-[50px] max-w-[50px] bg-white rounded-full p-2 -ml-4' onClick={handleSwap}/>
+            </div>
+          
 
             <div className="flex flex-col gap-5">
               <p className="text-xl">To</p>
@@ -83,7 +81,7 @@ export const FlightsLanding = () => {
                   placeholder="Location, Country"
                   value={to}
                   onChange={(e) => setTo(e.target.value)}
-                  className="bg-transparent border-b border-gray-300 focus:outline-none text-white"
+                  className="bg-transparent w-40 focus:outline-0 text-white"
                 />
               </div>
             </div>
@@ -120,14 +118,14 @@ export const FlightsLanding = () => {
               <div className="flex items-center gap-2 mb-2">
                 <button
                   onClick={() => setTravelerCount(Math.max(1, travelerCount - 1))}
-                  className="bg-white text-black px-2 rounded-full"
+                  className="text-white px-2 rounded-full"
                 >
                   -
                 </button>
-                <span>{travelerCount}</span>
+                <span className='text-xl'>{travelerCount}</span>
                 <button
                   onClick={() => setTravelerCount(travelerCount + 1)}
-                  className="bg-white text-black px-2 rounded-full"
+                  className="text-white px-2 rounded-full"
                 >
                   +
                 </button>

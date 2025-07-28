@@ -3,7 +3,9 @@ import { FaHome, FaPlaneDeparture, FaCalendarAlt, FaSearch } from 'react-icons/f
 import { countryList } from '../../api/visaApi';
 import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
-
+import { MdOutlineFlight} from "react-icons/md";
+import { FaCalendar } from "react-icons/fa6";
+import { BiHomeAlt2 } from "react-icons/bi";
 
 export const SearchBar = () => {
   const [params] = useSearchParams();
@@ -36,36 +38,36 @@ export const SearchBar = () => {
   };
 
   return (
-    <div className="visa-search-bar">
+    <div className="visa-search-bar  text-black">
       {/* FROM + TO */}
       <div className="visa-search-group relative">
         <div className="visa-search-side">
-          <FaHome />
+          <BiHomeAlt2 className='w-4 h-4' />
           <input
             type="text"
-            placeholder="From"
+            placeholder="Home"
             value={from}
             onChange={(e) => {
               setFrom(e.target.value);
               filterSuggestions(e.target.value, setFromSuggestions);
             }}
-            className="visa-search-field"
+            className="visa-search-field text-black placeholder:text-black"
           />
         </div>
 
         <span className="divider" />
 
         <div className="visa-search-side">
-          <FaPlaneDeparture />
+          <MdOutlineFlight className='w-5 h-5 rotate-90' />
           <input
             type="text"
-            placeholder="To"
+            placeholder="Going to"
             value={to}
             onChange={(e) => {
               setTo(e.target.value);
               filterSuggestions(e.target.value, setToSuggestions);
             }}
-            className="visa-search-field"
+            className="visa-search-field placeholder:text-black"
           />
         </div>
 
@@ -101,7 +103,7 @@ export const SearchBar = () => {
       {/* DATE BLOCK */}
 <div className="visa-search-group">
   <div className="visa-search-side">
-    <FaCalendarAlt />
+    <FaCalendar/>
     <input
       type="text"
       placeholder="Travel Date"
@@ -111,14 +113,14 @@ export const SearchBar = () => {
       }}
       value={depart}
       onChange={(e) => setDepart(e.target.value)}
-      className="visa-search-field"
+      className="visa-search-field placeholder:text-black"
     />
   </div>
 
   <span className="divider" />
 
   <div className="visa-search-side">
-    <FaCalendarAlt />
+    <FaCalendar />
     <input
       type="text"
       placeholder="Return Date"
@@ -128,7 +130,7 @@ export const SearchBar = () => {
       }}
       value={returnDate}
       onChange={(e) => setReturnDate(e.target.value)}
-      className="visa-search-field"
+      className="visa-search-field placeholder:text-black"
     />
   </div>
 </div>
