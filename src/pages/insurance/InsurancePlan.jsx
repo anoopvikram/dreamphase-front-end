@@ -98,6 +98,36 @@ export const InsurancePlan = () => {
   const travelers = formData?.travelers || [];
   const travelerCount = formData?.travelerCount || travelers.length;
 
+  const handleApply = async (planCode, planName) => {
+  try {
+    const response = await fetch('https://website-0suz.onrender.com/api/get_rider_details/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ plan_code: planCode }),
+    });
+
+    const data = await response.json();
+
+    if (data.riders) {
+      navigate('/insurance/addon', {
+        state: {
+          selectedPlan: planName,
+          planCode: planCode,
+          riderList: data.riders,
+          travelerCount
+        },
+      });
+    } else {
+      console.error('No riders found');
+    }
+  } catch (err) {
+    console.error('Error fetching rider details:', err);
+  }
+};
+
+
   return (
     <div className="insurance-plan text-black bg-white py-30 w-3/4 mx-auto p-6 space-y-10">
       {/* Progress Bar */}
@@ -146,7 +176,7 @@ export const InsurancePlan = () => {
       <div className="space-y-6">
         {plans.map((plan, index) => (
           <div key={index} className="border bg-[#F0F6FF] border-[#0062CC] rounded-xl p-6 flex justify-between">
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-2">
               <h2 className="text-xl font-bold text-[#0062CC] mb-1">{plan.plan_name}</h2>
               <p className="text-sm mb-3">
                 {formData?.categoryLabel || 'Region'} | {formData?.selectedCountryLabel || 'Country'}
@@ -155,17 +185,17 @@ export const InsurancePlan = () => {
           
               <div className="flex flex-wrap gap-4 mb-3 text-sm text-[#0062CC]">
                 {[
-                    { text: "Emergency Medical Assistance", icon: "🩺" },
-                    { text: "Lifestyle Assistance", icon: "💼" },
-                    { text: "Domestic Roadside Assistance", icon: "🚗" }
-                  ].map((feature, i) => (
-                    <div key={i} className="flex items-center gap-2">
-                      <span>{feature.icon}</span>
-                      <p>{feature.text}</p>
-                    </div>
-                  ))
-                  }
+                  { text: "Emergency Medical Assistance", icon: "/images/icons/health-insurance.ico" },
+                  { text: "Lifestyle Assistance", icon: "/images/icons/policy.ico" },
+                  { text: "Domestic Roadside Assistance", icon: "/images/icons/car-insurance.ico" }
+                ].map((feature, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <img src={feature.icon} alt={feature.text} className="w-5 h-5" />
+                    <p>{feature.text}</p>
+                  </div>
+                ))}
               </div>
+
 
               <p className="text-xs text-gray-500">
                 By clicking 'Buy Now', you confirm that you have read, understood, and agree to the{' '}
@@ -179,18 +209,12 @@ export const InsurancePlan = () => {
                 <h2 className="text-2xl font-semibold">₹ {plan.premium}</h2>
               </div>
               <button
-                onClick={() =>
-                  navigate('/insurance/addon', {
-                    state: {
-                      travelerCount,
-                      selectedPlan: plan.name,
-                    }
-                  })
-                }
+                onClick={() => handleApply(plan.plan_code, plan.name)}
                 className="mt-4 border border-[#0062CC] text-[#0062CC] px-6 py-1 rounded-lg hover:bg-blue-50"
               >
                 Apply
               </button>
+
             </div>
           </div>
         ))}

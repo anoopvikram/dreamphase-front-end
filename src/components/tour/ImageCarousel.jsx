@@ -51,7 +51,7 @@ const ImageCarousel = () => {
 
   return (
     <div
-      className="w-full h-[400px] flex items-center justify-center overflow-hidden"
+      className="w-full h-[480px] flex items-center justify-center overflow-hidden"
       style={{
         perspective: '550px',
         transformStyle: 'preserve-3d',

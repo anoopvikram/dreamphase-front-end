@@ -175,7 +175,7 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
 
     return (
       <div className='pt-5 flex flex-col justify-center'>
-        <div className='mt-20'>
+        <div className='mt-15'>
           <ImageCarousel images={destination.images} />
         </div>
 
