@@ -1,47 +1,46 @@
-import React, {useEffect} from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export const InsurancePlan = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const [plans, setPlans] = useState([]);
-  
-  const {
-    startDate,
-    endDate,
-    duration,
-    isMultiTrip,
-    travelers,
-    travelerCount,
-    email,
-    mobile
-  } = state || {};
+  const [formData, setFormData] = useState(null);
 
   useEffect(() => {
-  if (!state) return;
+    // Use state if available, else fallback to localStorage
+    let savedData = state;
 
-  const { selectedRegion, travelers, duration } = state;
+    if (!savedData) {
+      const local = localStorage.getItem('insuranceForm');
+      if (local) savedData = JSON.parse(local);
+    }
 
-  const age = travelers?.[0]?.age || 25; // fallback to 25 if missing
-  const category_code = selectedRegion || 1; // fallback to 1 if missing
-  const days = duration || 30;
+    if (!savedData) {
+      alert('Form data missing. Please fill the form again.');
+      navigate('/insurance');
+      return;
+    }
 
-  fetch('https://website-0suz.onrender.com/api/get_plan/', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ category_code, age, days })
-  })
-    .then(res => {
-      if (!res.ok) throw new Error(`Status: ${res.status}`);
-      return res.json();
-    })
-    .then(data => {
-      setPlans(data.matched_plans || []);
-    })
-    .catch(err => {
-      console.error('Fetch plans failed:', err);
-    });
-}, []);
+    setFormData(savedData);
+
+    const age = savedData.travelers?.[0]?.age || 25;
+    const category_code = savedData.selectedRegion || 1;
+    const days = savedData.duration || 30;
+
+    fetch(`https://website-0suz.onrender.com/api/get_plan/?category_code=${category_code}&age=${age}&days=${days}`)
+
+      .then(res => {
+        if (!res.ok) throw new Error(`Status: ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        setPlans(data.matched_plans || []);
+      })
+      .catch(err => {
+        console.error('Fetch plans failed:', err);
+      });
+  }, [state, navigate]);
 
   // const plans = [
   //   {
