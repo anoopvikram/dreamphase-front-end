@@ -91,12 +91,14 @@ useEffect(() => {
   };
 
   const handleSubmit = async () => {
+  const age = calculateAge(travelers[0]?.dob);
+  const days = calculateDuration(startDate, endDate);
+
   const payload = {
-    name: "John Doe", // TODO: Replace with actual name input if available
     email,
     phone_number: mobile,
     category_code: selectedRegion,
-    dob: travelers[0]?.dob || '', // Using the first traveler
+    dob: travelers[0]?.dob || '',
     type_of_trip: isMultiTrip ? 'multi' : 'single',
     from_date: startDate,
     to_date: endDate
@@ -110,26 +112,33 @@ useEffect(() => {
     });
 
     if (!res.ok) throw new Error(`Status: ${res.status}`);
+
     const data = await res.json();
 
-    // Navigate after successful submission
-    navigate('/insurance/plan', {
-      state: {
-        startDate,
-        endDate,
-        duration,
-        isMultiTrip,
-        travelers,
-        travelerCount,
-        email,
-        mobile
-      }
-    });
+    // 🔐 Save form data to localStorage
+    const formDataToSave = {
+      startDate,
+      endDate,
+      duration: days,
+      isMultiTrip,
+      travelers,
+      travelerCount,
+      email,
+      mobile,
+      selectedRegion,
+      age,
+      days
+    };
+    localStorage.setItem('insuranceForm', JSON.stringify(formDataToSave));
+
+    // 👉 Navigate to plan selection
+    navigate('/insurance/plan');
   } catch (err) {
     console.error('Submission error:', err);
     alert('Submission failed. Please try again.');
   }
 };
+
 
 
 
