@@ -115,24 +115,26 @@ useEffect(() => {
 
     const data = await res.json();
 
+    const selectedRegionObj = regions.find(r => r.category_code === selectedRegion);
+    const selectedCountryObj = countries.find(c => c.country_code === selectedCountry);
     // 🔐 Save form data to localStorage
     const formDataToSave = {
-  startDate,
-  endDate,
-  duration: days,
-  isMultiTrip,
-  travelers,
-  travelerCount,
-  email,
-  mobile,
-  selectedRegion: selectedRegion?.category_code,
-  selectedCountry: selectedCountry?.country_code,
-  selectedCountryLabel: selectedCountry?.description,
-  categoryLabel: selectedRegion?.description,
-  age,
-  days
-};
-
+      startDate,
+      endDate,
+      duration: days,
+      isMultiTrip,
+      travelers,
+      travelerCount,
+      email,
+      mobile,
+      selectedRegion,
+      age,
+      days,
+      selectedCountry,
+      
+      categoryLabel: selectedRegionObj?.description || '',
+      selectedCountryLabel: selectedCountryObj?.description || '',
+    };
     localStorage.setItem('insuranceForm', JSON.stringify(formDataToSave));
 
     // 👉 Navigate to plan selection
@@ -161,11 +163,7 @@ useEffect(() => {
             </label>
             <select
               value={selectedRegion}
-              oonChange={(e) => {
-  const region = regions.find(r => r.category_code === e.target.value);
-  setSelectedRegion(region); // Save full object
-}}
-
+              onChange={(e) => setSelectedRegion(e.target.value)}
               className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm focus:outline-[#164B71]"
             >
               {console.log('regions:', regions)}
@@ -185,11 +183,7 @@ useEffect(() => {
   <select
     className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm focus:outline-[#164B71]"
     value={selectedCountry}
-    onChange={(e) => {
-  const country = countries.find(c => c.country_code === e.target.value);
-  setSelectedCountry(country); // Save full object
-}}
-
+    onChange={(e) => setSelectedCountry(e.target.value)}
   >
     <option value="">Select Country</option>
     {countries.map((country) => (

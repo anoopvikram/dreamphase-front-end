@@ -149,7 +149,7 @@ export const InsurancePlan = () => {
             <div className="flex flex-col">
               <h2 className="text-xl font-bold text-[#0062CC] mb-1">{plan.plan_name}</h2>
               <p className="text-sm mb-3">
-                {formData.categoryLabel} | {formData.selectedCountryLabel}
+                {formData?.categoryLabel || 'Region'} | {formData?.selectedCountryLabel || 'Country'}
               </p>
 
           
