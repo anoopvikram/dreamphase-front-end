@@ -26,6 +26,7 @@ export const InsuranceAddon = () => {
   ];
 
   const [addons, setAddons] = useState([]);
+  const [selectedAddons, setSelectedAddons] = useState([]);
 
   useEffect(() => {
     if (riderList.length > 0) {
@@ -34,6 +35,15 @@ export const InsuranceAddon = () => {
       setAddons(fallbackAddons);
     }
   }, [riderList]);
+
+  const handleSelectAddon = (addon) => {
+  const isSelected = selectedAddons.includes(addon.rider_code);
+  if (isSelected) {
+    setSelectedAddons(selectedAddons.filter(code => code !== addon.rider_code));
+  } else {
+    setSelectedAddons([...selectedAddons, addon.rider_code]);
+  }
+};
 
   return (
     <div className='flex flex-col items-center py-50 md:py-30 w-3/4 text-black mx-auto'>
@@ -82,9 +92,17 @@ export const InsuranceAddon = () => {
             <div className="flex flex-col items-center px-4 gap-0">
               <p className="text-xs">{travelerCount} Traveler(s)</p>
               <p className="text-lg">₹{addon.amount}</p>
-              <button className="mt-2 px-4 py-1 rounded-lg bg-white border border-[#004c99] text-[#004c99] hover:text-white hover:bg-[#004c99]">
-                Select
+              <button
+                className={`mt-2 px-4 py-1 rounded-lg border ${
+                  selectedAddons.includes(addon.rider_code)
+                    ? 'bg-[#004c99] text-white border-[#004c99]'
+                    : 'bg-white text-[#004c99] border-[#004c99] hover:text-white hover:bg-[#004c99]'
+                }`}
+                onClick={() => handleSelectAddon(addon)}
+              >
+                {selectedAddons.includes(addon.rider_code) ? 'Selected' : 'Select'}
               </button>
+
             </div>
           </div>
         ))}
@@ -95,7 +113,23 @@ export const InsuranceAddon = () => {
         <button className="mt-2 px-4 py-1 rounded-lg bg-white border border-[#004c99] text-[#004c99] hover:text-white hover:bg-[#004c99]" onClick={() => navigate(-1)}>
           Go back
         </button>
-        <button className="mt-2 px-4 py-1 rounded-lg bg-white border border-[#004c99] text-[#004c99] hover:text-white hover:bg-[#004c99]" onClick={() => navigate('/insurance/details')}>
+        <button className="mt-2 px-4 py-1 rounded-lg bg-white border border-[#004c99] text-[#004c99] hover:text-white hover:bg-[#004c99]" 
+          onClick={() =>{
+            
+            console.log('Navigating with data:', {
+            travelerCount,
+            selectedRiderCodes: selectedAddons,
+          });
+
+            navigate('/insurance/details', {
+              state: {
+                travelerCount,
+                selectedRiderCodes: selectedAddons, // array of rider_code strings
+              }
+            })
+          }
+            
+          }>
           Continue
         </button>
       </div>

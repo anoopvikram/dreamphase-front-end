@@ -19,6 +19,7 @@ import { TourItinerary } from './pages/tour/TourItinerary';
 import {AuthPage} from './pages/login/Auth';
 import { InsuranceAddon } from './pages/insurance/InsuranceAddon';
 import {TravelerDetails} from './pages/insurance/TravelerDetails';
+import { InsurancePayment } from './pages/insurance/InsurancePayment';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -41,6 +42,7 @@ export const App = () => {
           <Route path="/insurance/plan" element={<InsurancePlan />} />
           <Route path="/insurance/addon" element={<InsuranceAddon/>} />
           <Route path="/insurance/details" element={<TravelerDetails/>} />
+          <Route path="/insurance/payment" element={<InsurancePayment/>} />
 
           <Route path="/flight" element={<FlightsLanding />} />
 
