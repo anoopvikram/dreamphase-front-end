@@ -90,54 +90,47 @@ useEffect(() => {
     }, 50);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
   const payload = {
+    name: "John Doe", // TODO: Replace with actual name input if available
     email,
-    phone: mobile,
-    region_code: selectedRegion,
-    trip_type: isMultiTrip ? 'Multi' : 'Single',
-    travelers: travelers.map(t => t.dob)
+    phone_number: mobile,
+    category_code: selectedRegion,
+    dob: travelers[0]?.dob || '', // Using the first traveler
+    type_of_trip: isMultiTrip ? 'multi' : 'single',
+    from_date: startDate,
+    to_date: endDate
   };
 
-  // Temporarily skip API call
-  /*
-  fetch('https://webhook.site/7c86091a-e953-4e53-8ed4-15c163d9f8f9', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  })
-    .then(res => res.json())
-    .then(data => {
-      navigate('/insurance/plan', {
-        state: {
-          startDate,
-          endDate,
-          duration,
-          isMultiTrip,
-          travelers,
-          travelerCount,
-          email,
-          mobile
-        }
-      });
-    })
-    .catch(err => console.error('Submission error:', err));
-  */
+  try {
+    const res = await fetch('https://website-0suz.onrender.com/api/add_audience/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
 
-  // Directly navigate for now
-  navigate('/insurance/plan', {
-    state: {
-      startDate,
-      endDate,
-      duration,
-      isMultiTrip,
-      travelers,
-      travelerCount,
-      email,
-      mobile
-    }
-  });
+    if (!res.ok) throw new Error(`Status: ${res.status}`);
+    const data = await res.json();
+
+    // Navigate after successful submission
+    navigate('/insurance/plan', {
+      state: {
+        startDate,
+        endDate,
+        duration,
+        isMultiTrip,
+        travelers,
+        travelerCount,
+        email,
+        mobile
+      }
+    });
+  } catch (err) {
+    console.error('Submission error:', err);
+    alert('Submission failed. Please try again.');
+  }
 };
+
 
 
   return (

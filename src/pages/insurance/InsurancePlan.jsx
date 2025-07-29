@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export const InsurancePlan = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-
+  const [plans, setPlans] = useState([]);
+  
   const {
     startDate,
     endDate,
@@ -16,26 +17,52 @@ export const InsurancePlan = () => {
     mobile
   } = state || {};
 
-  const plans = [
-    {
-      name: 'Elite Plan',
-      details: 'Overseas Travel | Including USA and CANADA',
-      price: 1578,
-      features: ['Emergency Medical Assistance', 'Lifestyle Assistance', 'Domestic Roadside Assistance']
-    },
-    {
-      name: 'Magna Plan',
-      details: 'Overseas Travel | Including USA and CANADA',
-      price: 1578,
-      features: ['Emergency Medical Assistance', 'Lifestyle Assistance', 'Domestic Roadside Assistance']
-    },
-    {
-      name: 'Icon Plan',
-      details: 'Overseas Travel | Including USA and CANADA',
-      price: 1578,
-      features: ['Emergency Medical Assistance', 'Lifestyle Assistance', 'Domestic Roadside Assistance']
-    }
-  ];
+  useEffect(() => {
+  if (!state) return;
+
+  const { selectedRegion, travelers, duration } = state;
+
+  const age = travelers?.[0]?.age || 25; // fallback to 25 if missing
+  const category_code = selectedRegion || 1; // fallback to 1 if missing
+  const days = duration || 30;
+
+  fetch('https://website-0suz.onrender.com/api/get_plan/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ category_code, age, days })
+  })
+    .then(res => {
+      if (!res.ok) throw new Error(`Status: ${res.status}`);
+      return res.json();
+    })
+    .then(data => {
+      setPlans(data.matched_plans || []);
+    })
+    .catch(err => {
+      console.error('Fetch plans failed:', err);
+    });
+}, []);
+
+  // const plans = [
+  //   {
+  //     name: 'Elite Plan',
+  //     details: 'Overseas Travel | Including USA and CANADA',
+  //     price: 1578,
+  //     features: ['Emergency Medical Assistance', 'Lifestyle Assistance', 'Domestic Roadside Assistance']
+  //   },
+  //   {
+  //     name: 'Magna Plan',
+  //     details: 'Overseas Travel | Including USA and CANADA',
+  //     price: 1578,
+  //     features: ['Emergency Medical Assistance', 'Lifestyle Assistance', 'Domestic Roadside Assistance']
+  //   },
+  //   {
+  //     name: 'Icon Plan',
+  //     details: 'Overseas Travel | Including USA and CANADA',
+  //     price: 1578,
+  //     features: ['Emergency Medical Assistance', 'Lifestyle Assistance', 'Domestic Roadside Assistance']
+  //   }
+  // ];
 
   return (
     <div className="insurance-plan text-black bg-white py-30 w-3/4 mx-auto p-6 space-y-10">
