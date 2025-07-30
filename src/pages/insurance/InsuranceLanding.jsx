@@ -17,7 +17,8 @@ export const InsuranceLanding = () => {
   const secondBoxRef = useRef();
   const navigate = useNavigate();
   const [countries, setCountries] = useState([]);
-const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [errors, setErrors] = useState({});
 
 useEffect(() => {
   const fetchRegions = async () => {
@@ -90,7 +91,26 @@ useEffect(() => {
     }, 50);
   };
 
-  const handleSubmit = async () => {
+const handleSubmit = async () => {
+  const newErrors = {};
+
+  if (!selectedRegion) newErrors.selectedRegion = true;
+  if (!selectedCountry) newErrors.selectedCountry = true;
+  if (!startDate) newErrors.startDate = true;
+  if (!endDate) newErrors.endDate = true;
+  if (!email.trim()) newErrors.email = true;
+  if (!mobile.trim()) newErrors.mobile = true;
+  travelers.forEach((trav, i) => {
+    if (!trav.dob) newErrors[`dob-${i}`] = true;
+  });
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return;
+  }
+
+  setErrors({}); // clear errors if valid
+
   const age = calculateAge(travelers[0]?.dob);
   const days = calculateDuration(startDate, endDate);
 
@@ -101,23 +121,22 @@ useEffect(() => {
     dob: travelers[0]?.dob || '',
     type_of_trip: isMultiTrip ? 'multi' : 'single',
     from_date: startDate,
-    to_date: endDate
+    to_date: endDate,
   };
 
   try {
     const res = await fetch('https://website-0suz.onrender.com/api/add_audience/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     });
 
     if (!res.ok) throw new Error(`Status: ${res.status}`);
-
     const data = await res.json();
 
     const selectedRegionObj = regions.find(r => r.category_code === selectedRegion);
     const selectedCountryObj = countries.find(c => c.country_code === selectedCountry);
-    // 🔐 Save form data to localStorage
+
     const formDataToSave = {
       startDate,
       endDate,
@@ -131,19 +150,18 @@ useEffect(() => {
       age,
       days,
       selectedCountry,
-      
       categoryLabel: selectedRegionObj?.description || '',
       selectedCountryLabel: selectedCountryObj?.description || '',
     };
-    localStorage.setItem('insuranceForm', JSON.stringify(formDataToSave));
 
-    // 👉 Navigate to plan selection
+    localStorage.setItem('insuranceForm', JSON.stringify(formDataToSave));
     navigate('/insurance/plan');
   } catch (err) {
     console.error('Submission error:', err);
     alert('Submission failed. Please try again.');
   }
 };
+
 
 
 
@@ -162,10 +180,12 @@ useEffect(() => {
               Travel Region<span className="text-red-500">*</span>
             </label>
             <select
-              value={selectedRegion}
-              onChange={(e) => setSelectedRegion(e.target.value)}
-              className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm focus:outline-[#164B71]"
-            >
+  value={selectedRegion}
+  onChange={(e) => setSelectedRegion(e.target.value)}
+  className={`border rounded-lg px-4 py-2 text-sm focus:outline-[#164B71] ${
+    errors.selectedRegion ? 'border-red-500' : 'border-[#a9c6f5]'
+  }`}
+>
               {console.log('regions:', regions)}
               <option value="">Select Travel Region</option>
               {regions.map((region) => (
@@ -181,10 +201,13 @@ useEffect(() => {
     Country of Visit<span className="text-red-500">*</span>
   </label>
   <select
-    className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm focus:outline-[#164B71]"
-    value={selectedCountry}
-    onChange={(e) => setSelectedCountry(e.target.value)}
-  >
+  value={selectedCountry}
+  onChange={(e) => setSelectedCountry(e.target.value)}
+  className={`border rounded-lg px-4 py-2 text-sm focus:outline-[#164B71] ${
+    errors.selectedCountry ? 'border-red-500' : 'border-[#a9c6f5]'
+  }`}
+>
+
     <option value="">Select Country</option>
     {countries.map((country) => (
       <option key={country.country_code} value={country.country_code}>
@@ -219,21 +242,27 @@ useEffect(() => {
           <div className="flex flex-col w-full md:w-1/3">
             <label className="text-sm font-semibold text-[#4b4b4b] mb-1">Start Date<span className="text-red-500">*</span></label>
             <input
-              type="date"
-              value={startDate}
-              onChange={(e) => handleDateChange('start', e.target.value)}
-              className="border text-black border-[#a9c6f5] rounded-lg px-4 py-2 text-sm"
-            />
+  type="date"
+  value={startDate}
+  onChange={(e) => handleDateChange('start', e.target.value)}
+  className={`border text-black rounded-lg px-4 py-2 text-sm ${
+    errors.startDate ? 'border-red-500' : 'border-[#a9c6f5]'
+  }`}
+/>
+
           </div>
 
           <div className="flex flex-col w-full md:w-1/3">
             <label className="text-sm font-semibold text-[#4b4b4b] mb-1">End Date<span className="text-red-500">*</span></label>
             <input
-              type="date"
-              value={endDate}
-              onChange={(e) => handleDateChange('end', e.target.value)}
-              className="border text-black border-[#a9c6f5] rounded-lg px-4 py-2 text-sm"
-            />
+  type="date"
+  value={endDate}
+  onChange={(e) => handleDateChange('end', e.target.value)}
+  className={`border text-black rounded-lg px-4 py-2 text-sm ${
+    errors.endDate ? 'border-red-500' : 'border-[#a9c6f5]'
+  }`}
+/>
+
           </div>
 
           <div className="flex flex-col w-full md:w-1/3">
@@ -273,11 +302,14 @@ useEffect(() => {
               <div key={index} className="flex flex-col">
                 <label className="text-sm font-semibold mb-1">Traveller {index + 1} DOB</label>
                 <input
-                  type="date"
-                  value={traveler.dob}
-                  onChange={(e) => handleDOBChange(index, e.target.value)}
-                  className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm"
-                />
+  type="date"
+  value={traveler.dob}
+  onChange={(e) => handleDOBChange(index, e.target.value)}
+  className={`border rounded-lg px-4 py-2 text-sm ${
+    errors[`dob-${index}`] ? 'border-red-500' : 'border-[#a9c6f5]'
+  }`}
+/>
+
                 <p className="text-xs mt-1">Age: {calculateAge(traveler.dob)}</p>
               </div>
             ))}
@@ -287,22 +319,26 @@ useEffect(() => {
             <div className="flex flex-col w-full md:w-1/4">
               <label className="text-sm font-semibold mb-1">Email ID</label>
               <input
-                type="email"
-                placeholder="Enter Email ID"
-                className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+  type="email"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  placeholder="Enter Email ID"
+  className={`border rounded-lg px-4 py-2 text-sm ${
+    errors.email ? 'border-red-500' : 'border-[#a9c6f5]'
+  }`}
+/>
             </div>
             <div className="flex flex-col w-full md:w-1/4">
               <label className="text-sm font-semibold mb-1">Mobile Number</label>
               <input
-                type="tel"
-                placeholder="Enter Mobile Number"
-                className="border border-[#a9c6f5] rounded-lg px-4 py-2 text-sm"
-                value={mobile}
-                onChange={(e) => setMobile(e.target.value)}
-              />
+  type="tel"
+  value={mobile}
+  onChange={(e) => setMobile(e.target.value)}
+  placeholder="Enter Mobile Number"
+  className={`border rounded-lg px-4 py-2 text-sm ${
+    errors.mobile ? 'border-red-500' : 'border-[#a9c6f5]'
+  }`}
+/>
             </div>
           </div>
 
