@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LandingHero } from '../../components/common/LandingHero';
+import { IoMdArrowDropdown } from "react-icons/io";
 
 export const InsuranceLanding = () => {
   const [startDate, setStartDate] = useState('');
@@ -175,47 +176,58 @@ const handleSubmit = async () => {
       {/* First Box */}
       <div className="first-box z-20 w-[90%] max-w-5xl mx-auto -mt-10 bg-white border border-[#a9c6f5] rounded-2xl p-6 shadow-sm space-y-6">
         <div className="flex flex-row w-1/2 gap-10">
-          <div className="flex flex-col w-full md:w-1/2">
-            <label className="text-sm font-semibold text-[#4b4b4b] mb-1">
-              Travel Region<span className="text-red-500">*</span>
-            </label>
-            <select
-  value={selectedRegion}
-  onChange={(e) => setSelectedRegion(e.target.value)}
-  className={`border rounded-lg px-4 py-2 text-sm focus:outline-[#164B71] ${
-    errors.selectedRegion ? 'border-red-500' : 'border-[#a9c6f5]'
-  }`}
->
-              {console.log('regions:', regions)}
-              <option value="">Select Travel Region</option>
-              {regions.map((region) => (
-                <option key={region.category_code} value={region.category_code}>
-                  {region.description}
-                </option> 
-              ))}
 
-            </select>
-          </div>
+
+<div className="flex flex-col w-full md:w-1/2">
+  <label className="text-sm font-semibold text-[#4b4b4b] mb-1">
+    Travel Region<span className="text-red-500">*</span>
+  </label>
+
+  <div className="relative w-full">
+    <select
+      value={selectedRegion}
+      onChange={(e) => setSelectedRegion(e.target.value)}
+      className={`appearance-none w-full border rounded-lg px-4 py-2 pr-10 text-sm text-black bg-white focus:outline-[#164B71] ${
+        errors.selectedRegion ? 'border-red-500' : 'border-[#a9c6f5]'
+      }`}
+    >
+      <option value="">Select Travel Region</option>
+      {regions.map((region) => (
+        <option key={region.category_code} value={region.category_code}>
+          {region.description}
+        </option>
+      ))}
+    </select>
+
+    <IoMdArrowDropdown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-800 pointer-events-none" />
+  </div>
+</div>
+
           <div className="flex flex-col w-full md:w-1/2">
   <label className="text-sm font-semibold text-[#4b4b4b] mb-1">
     Country of Visit<span className="text-red-500">*</span>
   </label>
-  <select
-  value={selectedCountry}
-  onChange={(e) => setSelectedCountry(e.target.value)}
-  className={`border rounded-lg px-4 py-2 text-sm focus:outline-[#164B71] ${
-    errors.selectedCountry ? 'border-red-500' : 'border-[#a9c6f5]'
-  }`}
->
 
-    <option value="">Select Country</option>
-    {countries.map((country) => (
-      <option key={country.country_code} value={country.country_code}>
-        {country.description}
-      </option>
-    ))}
-  </select>
+  <div className="relative w-full">
+    <select
+      value={selectedCountry}
+      onChange={(e) => setSelectedCountry(e.target.value)}
+      className={`appearance-none w-full border rounded-lg px-4 py-2 pr-10 text-sm text-black bg-white focus:outline-[#164B71] ${
+        errors.selectedCountry ? 'border-red-500' : 'border-[#a9c6f5]'
+      }`}
+    >
+      <option value="">Select Country</option>
+      {countries.map((country) => (
+        <option key={country.country_code} value={country.country_code}>
+          {country.description}
+        </option>
+      ))}
+    </select>
+
+    <IoMdArrowDropdown className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-white  text-gray-800 pointer-events-none" />
+  </div>
 </div>
+
 
         </div>
 
@@ -300,7 +312,7 @@ const handleSubmit = async () => {
           <div className="sb-middle flex flex-wrap gap-6">
             {travelers.map((traveler, index) => (
               <div key={index} className="flex flex-col">
-                <label className="text-sm font-semibold mb-1">Traveller {index + 1} DOB</label>
+                <label className="text-sm font-semibold mb-1">Traveller {index + 1} DOB<span className="text-red-500">*</span></label>
                 <input
   type="date"
   value={traveler.dob}
@@ -317,7 +329,7 @@ const handleSubmit = async () => {
 
           <div className="sb-bottom flex justify-evenly flex-row gap-10">
             <div className="flex flex-col w-full md:w-1/4">
-              <label className="text-sm font-semibold mb-1">Email ID</label>
+              <label className="text-sm font-semibold mb-1">Email ID<span className="text-red-500">*</span></label>
               <input
   type="email"
   value={email}
@@ -329,7 +341,7 @@ const handleSubmit = async () => {
 />
             </div>
             <div className="flex flex-col w-full md:w-1/4">
-              <label className="text-sm font-semibold mb-1">Mobile Number</label>
+              <label className="text-sm font-semibold mb-1">Mobile Number<span className="text-red-500">*</span></label>
               <input
   type="tel"
   value={mobile}

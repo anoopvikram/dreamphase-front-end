@@ -1,5 +1,6 @@
   import React, { useState, useEffect } from 'react';
   import { FaGripVertical } from 'react-icons/fa';
+  import { IoMdArrowDropdown } from "react-icons/io";
   import {
     DragDropContext,
     Droppable,
@@ -212,7 +213,7 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
                           <span {...provided.dragHandleProps} className='cursor-move text-gray-400'>
                             <FaGripVertical size={20} />
                           </span>
-                          <div className='border rounded pr-3'>
+                          <div className='relative rounded pr-3'>
                             <select
                               value={city.name}
                               onChange={(e) => handleCityChange(city.id, e.target.value)}
@@ -223,6 +224,7 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
                                 <option key={i} value={cityName}>{cityName}</option>
                               ))}
                             </select>
+                            <IoMdArrowDropdown className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-800 pointer-events-none" />
                           </div>
                         </div>
                       )}
@@ -240,7 +242,7 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
           </DragDropContext>
 
           <div className='tour-type flex flex-wrap gap-5 mb-6'>
-            <div className='border rounded pr-3'>
+            <div className='relative rounded pr-3'>
               <select
                 className='p-3 w-44 text-base'
                 value={tripType}
@@ -251,18 +253,20 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
                   <option key={i} value={type}>{type}</option>
                 ))}
               </select>
+              <IoMdArrowDropdown className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-800 pointer-events-none" />
             </div>
 
-            <div className='border rounded pr-3'>
-              <select className='p-3 w-44 text-base' value={starRating} onChange={(e) => setStarRating(e.target.value)}>
+            <div className='relative w-35 rounded pr-3'>
+              <select className='p-3   text-base' value={starRating} onChange={(e) => setStarRating(e.target.value)}>
                 <option value="">Star rating</option>
                 <option value="3">3 Star</option>
                 <option value="4">4 Star</option>
                 <option value="5">5 Star</option>
               </select>
+              <IoMdArrowDropdown className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-800 pointer-events-none" />
             </div>
 
-            <div className='border rounded pr-3'>
+            <div className='relative rounded pr-3'>
               <select className='p-3 w-44 text-base' value={nights} onChange={(e) => setNights(e.target.value)}>
                 <option value="">Nights</option>
                 <option value="1">1 Night</option>
@@ -270,13 +274,14 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
                 <option value="3">3 Nights</option>
                 <option value="4">4 Nights</option>
               </select>
+              <IoMdArrowDropdown className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-800 pointer-events-none" />
             </div>
           </div>
 
           <div className='rooms-Adults flex items-center gap-5 mb-6'>
             <div className='flex rounded border items-center gap-3'>
-              <div className='rounded pr-3'>
-                <select className='p-3 w-32 text-base' value={rooms} onChange={(e) => setRooms(e.target.value)}>
+              <div className='relative rounded pr-3'>
+                <select className='p-3 w-32 text-base border-white focus:outline-none' value={rooms} onChange={(e) => setRooms(e.target.value)}>
                   <option value="">Rooms</option>
                   <option value="1">1 Room</option>
                   <option value="2">2 Rooms</option>
@@ -284,12 +289,13 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
                   <option value="4">4 Rooms</option>
                   <option value="5">5 Rooms</option>
                 </select>
+                <IoMdArrowDropdown className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-800 pointer-events-none" />
               </div>
 
               <span className='text-gray-400'>|</span>
 
-              <div className='rounded pr-3'>
-                <select className='p-3 w-32 text-base' value={adults} onChange={(e) => setAdults(e.target.value)}>
+              <div className='relative rounded pr-3'>
+                <select className='p-3 w-32 text-base border-white focus:outline-none' value={adults} onChange={(e) => setAdults(e.target.value)}>
                   <option value="">Adults</option>
                   <option value="1">1 Adult</option>
                   <option value="2">2 Adults</option>
@@ -298,12 +304,13 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
                   <option value="5">5 Adults</option>
                   <option value="6">6 Adults</option>
                 </select>
+                <IoMdArrowDropdown className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-800 pointer-events-none" />
               </div>
 
               <span className='text-gray-400'>|</span>
 
-              <div className='rounded pr-3'>
-                <select className='p-3 w-32 text-base' value={children} onChange={(e) => setChildren(e.target.value)}>
+              <div className='relative  rounded pr-3'>
+                <select className='p-3 w-32 text-base border-white focus:outline-none' value={children} onChange={(e) => setChildren(e.target.value)}>
                   <option value="">Children</option>
                   <option value="1">1 Child</option>
                   <option value="2">2 Children</option>
@@ -312,6 +319,7 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
                   <option value="5">5 Children</option>
                   <option value="6">6 Children</option>
                 </select>
+                <IoMdArrowDropdown className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-800 pointer-events-none" />
               </div>
             </div>
 

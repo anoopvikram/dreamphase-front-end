@@ -11,6 +11,10 @@ body {
   font-family: 'Outfit', sans-serif;
 }
 
+select {
+  @apply appearance-none w-full px-4 py-2 border rounded-lg ;
+  background-image: none;
+}
 
 h1, p {
   @apply my-0;
