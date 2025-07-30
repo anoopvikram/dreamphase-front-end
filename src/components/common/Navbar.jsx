@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export const Navbar = () => {
+export const Navbar = ({ setShowPopup }) => {
   const navRef = useRef(null);
   const location = useLocation();
 
@@ -70,7 +70,12 @@ useGSAP(() => {
             <Link to="/wallet">Wallet</Link>
           </li>
         </ul>
-        <button className="navbar-auth-btn"><Link to="/auth" className="navbar-auth-btn">Sign In / Sign Up</Link></button>
+        <button
+          className="navbar-auth-btn"
+          onClick={() => setShowPopup(true)}
+        >
+          Sign In / Sign Up
+        </button>
       </div>
     </nav>
   );

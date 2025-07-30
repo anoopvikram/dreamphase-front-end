@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import gsap from 'gsap';
 import {ScrollTrigger} from "gsap/all"
@@ -24,11 +24,12 @@ import { InsurancePayment } from './pages/insurance/InsurancePayment';
 gsap.registerPlugin(ScrollTrigger);
 
 export const App = () => {
+  const [showPopup, setShowPopup] = useState(false);
   return (
     <main id='main'>
     <Router>
       
-        <Navbar />
+        <Navbar setShowPopup={setShowPopup}/>
         <Routes>
           <Route path="/auth" element={<AuthPage />} />
 
@@ -54,7 +55,15 @@ export const App = () => {
 
 
         </Routes>
-      
+
+        {/* Show popup modal */}
+        {showPopup && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 bg-opacity-50">
+            <div className="relative z-50">
+              <AuthPage onClose={() => setShowPopup(false)} />
+            </div>
+          </div>
+        )}
     </Router>
     </main>
   );

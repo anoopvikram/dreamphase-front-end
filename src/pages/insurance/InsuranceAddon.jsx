@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
+import { FaCheckCircle } from "react-icons/fa";
 
 export const InsuranceAddon = () => {
   const navigate = useNavigate();
@@ -93,14 +94,21 @@ export const InsuranceAddon = () => {
               <p className="text-xs">{travelerCount} Traveler(s)</p>
               <p className="text-lg">₹{addon.amount}</p>
               <button
-                className={`mt-2 px-4 py-1 rounded-lg border ${
+                className={`mt-2 px-3 py-1 rounded-lg border transition-all duration-300 ease-in-out ${
                   selectedAddons.includes(addon.rider_code)
-                    ? 'bg-[#004c99] text-white border-[#004c99]'
-                    : 'bg-white text-[#004c99] border-[#004c99] hover:text-white hover:bg-[#004c99]'
+                    ? 'bg-[#0E3755] text-white border-[#0E3755]'
+                    : 'bg-white text-[#0E3755] border-[#0E3755] hover:text-white hover:bg-[#0068A3]'
                 }`}
                 onClick={() => handleSelectAddon(addon)}
               >
-                {selectedAddons.includes(addon.rider_code) ? 'Selected' : 'Select'}
+                {selectedAddons.includes(addon.rider_code) ? (
+                  <span className="flex items-center gap-1">
+                    Selected
+                    <img src='/images/icons/check.png' className='w-6'/>
+                  </span>
+                ) : (
+                  'Select'
+                )}
               </button>
 
             </div>

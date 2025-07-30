@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 
-export const AuthPage = () => {
+export const AuthPage = ({ onClose }) => {
   const [isActive, setIsActive] = useState(false);
   
 const [keepSignedIn, setKeepSignedIn] = useState(true);
 
   return (
-    <div className="flex items-center justify-center min-h-screen  bg-gradient-to-r from-gray-200 to-indigo-200 text-black">
+    <div className="flex items-center flex-col justify-center min-h-screen  bg-transparent text-black">
+      {onClose && (
+        <button
+          onClick={onClose}
+          className=" text-white font-black self-end bg-[#00000090] rounded-full w-8 h-8 z-50"
+        >
+          ✕
+        </button>
+      )}
       <div className="relative w-[768px] max-w-full min-h-[480px] bg-transparent rounded-[30px] overflow-hidden">
         {/* Sign Up Form */}
         {/* Sign Up Form */}
