@@ -217,7 +217,7 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
                             <select
                               value={city.name}
                               onChange={(e) => handleCityChange(city.id, e.target.value)}
-                              className="px-4 py-2 rounded w-48 text-base pr-6"
+                              className="px-4 py-2 border rounded w-48 text-base pr-6"
                             >
                               <option value=''>Select City</option>
                               {availableCities.map((cityName, i) => (
@@ -242,9 +242,9 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
           </DragDropContext>
 
           <div className='tour-type flex flex-wrap gap-5 mb-6'>
-            <div className='relative rounded pr-3'>
+            <div className='relative  pr-3'>
               <select
-                className='p-3 w-44 text-base'
+                className='p-3 border rounded w-44 text-base'
                 value={tripType}
                 onChange={(e) => setTripType(e.target.value)}
               >
@@ -256,8 +256,8 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
               <IoMdArrowDropdown className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-800 pointer-events-none" />
             </div>
 
-            <div className='relative w-35 rounded pr-3'>
-              <select className='p-3   text-base' value={starRating} onChange={(e) => setStarRating(e.target.value)}>
+            <div className='relative   pr-3'>
+              <select className='p-3 w-35 rounded border  text-base' value={starRating} onChange={(e) => setStarRating(e.target.value)}>
                 <option value="">Star rating</option>
                 <option value="3">3 Star</option>
                 <option value="4">4 Star</option>
@@ -266,8 +266,8 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
               <IoMdArrowDropdown className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-800 pointer-events-none" />
             </div>
 
-            <div className='relative rounded pr-3'>
-              <select className='p-3 w-44 text-base' value={nights} onChange={(e) => setNights(e.target.value)}>
+            <div className='relative  pr-3'>
+              <select className='p-3 border rounded w-35 text-base' value={nights} onChange={(e) => setNights(e.target.value)}>
                 <option value="">Nights</option>
                 <option value="1">1 Night</option>
                 <option value="2">2 Nights</option>

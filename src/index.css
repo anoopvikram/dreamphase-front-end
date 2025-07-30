@@ -12,7 +12,7 @@ body {
 }
 
 select {
-  @apply appearance-none w-full px-4 py-2 border rounded-lg ;
+  @apply appearance-none  ;
   background-image: none;
 }
 

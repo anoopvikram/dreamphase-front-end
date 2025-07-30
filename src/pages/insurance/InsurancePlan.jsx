@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { IoMdArrowDropdown } from "react-icons/io";
 
 export const InsurancePlan = () => {
   const { state } = useLocation();
@@ -149,17 +150,22 @@ export const InsurancePlan = () => {
       <div className="flex gap-6">
         <div className="flex flex-col">
           <label className="text-sm font-semibold mb-1">Sum Insured</label>
-          <select 
-            className="border border-blue-300 px-4 py-2 rounded-lg text-sm"
-            value={sumInsured} onChange={(e) => setSumInsured(e.target.value)}>
-            <option value="">All</option>
-            <option value="10000">₹10,000</option>
-            <option value="50000">₹50,000</option>
-          </select>
+          <div className='relative'>
+            <select 
+              className="border border-blue-300 px-4 py-2 rounded-lg text-sm"
+              value={sumInsured} onChange={(e) => setSumInsured(e.target.value)}>
+              <option value="">All</option>
+              <option value="10000">₹10,000</option>
+              <option value="50000">₹50,000</option>
+            </select>
+            <IoMdArrowDropdown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-800 pointer-events-none" />
+          </div>
+          
         </div>
 
         <div className="flex flex-col">
           <label className="text-sm font-semibold mb-1">Sort Price</label>
+          <div className='relative'>
           <select
             className="border border-blue-300 px-4 py-2 rounded-lg text-sm"
             onChange={handleSortChange}
@@ -169,6 +175,8 @@ export const InsurancePlan = () => {
             <option value="asc">Low to High</option>
             <option value="desc">High to Low</option>
           </select>
+          <IoMdArrowDropdown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-800 pointer-events-none" />
+          </div>
         </div>
       </div>
 

@@ -104,14 +104,14 @@ export const VisaTypeSelect = () => {
                   );
                   setSuggestions(matches.slice(0, 5));
                 }}
-                className="px-4 py-2 rounded-lg bg-[white] border-[#0062CC] w-full border-1"
+                className="px-4 py-2 rounded-lg bg-[white] border-[#0062CC] w-full border-1 focus:outline-0"
               />
               {suggestions.length > 0 && (
                 <div className="absolute left-0 top-full mt-1 border w-full z-10 rounded-2xl bg-white shadow">
                   {suggestions.map((c, i) => (
                     <div
                       key={i}
-                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer "
                       onClick={() => handleSuggestionClick(c)}
                     >
                       {c}
@@ -122,18 +122,18 @@ export const VisaTypeSelect = () => {
             </div>
 
             {/* Processing Type */}
-            <div className='relative min-w-[239px]'>
+            <div className='relative min-w-[239px]  border bg-[white] border-[#0062CC] rounded-lg'>
             <select
               value={processingType}
               onChange={(e) => setProcessingType(e.target.value)}
-              className="px-4 py-4  border bg-[white] border-[#0062CC] rounded-lg "
+              className="px-2 py-2  min-w-[239px] focus:outline-0 "
             >
               <option value="">All Processing Types</option>
               <option value="standard">Standard</option>
               <option value="priority">Priority</option>
             </select>
             
-            <IoMdArrowDropdown className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-800 pointer-events-none" />
+            <IoMdArrowDropdown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-800 pointer-events-none" />
             </div>
             
 
@@ -146,7 +146,7 @@ export const VisaTypeSelect = () => {
           type="date"
           value={departDate}
           onChange={(e) => setDepartDate(e.target.value)}
-          className="text-gray-700 "
+          className="text-gray-700  focus:outline-0"
         />
       </div>
     </div>
@@ -160,7 +160,7 @@ export const VisaTypeSelect = () => {
           type="date"
           value={returnDateState}
           onChange={(e) => setReturnDateState(e.target.value)}
-          className="text-gray-700"
+          className="text-gray-700 focus:outline-0"
         />
       </div>
     </div>
