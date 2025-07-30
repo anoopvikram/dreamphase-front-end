@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PhotoUpload } from './PhotoUpload';
 import { countryCodes } from '../../api/visaApi';
+import { IoMdArrowDropdown } from "react-icons/io";
 
 export const TravelerForm = ({ index, onChange }) => {
   const [formData, setFormData] = useState({
@@ -132,19 +133,23 @@ export const TravelerForm = ({ index, onChange }) => {
           <div className="flex w-full flex-col md:w-[35%]">
             <label className="text-sm font-medium mb-1">Phone Number <span className="text-red-500">*</span></label>
             <div className='flex w-full'>
+              <div className='relative'>
               <select
                 value={formData.phoneCode}
                 onChange={(e) =>
                   setFormData((prev) => ({ ...prev, phoneCode: e.target.value }))
                 }
-                className="border px-2 py-2 rounded-l-full bg-gray-100"
+                className="border px-4 py-2 rounded-l-full bg-gray-100"
               >
                 {countryCodes.map(({ country, code }) => (
                   <option key={code} value={code}>
-                    {code} ({country})
+                    {code} 
                   </option>
                 ))}
               </select>
+              <IoMdArrowDropdown className="absolute right-1 top-1/2 transform -translate-y-1/2 text-gray-800 pointer-events-none" />
+              </div>
+
               <input
                 name="phoneNumber"
                 value={formData.phoneNumber}
