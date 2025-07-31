@@ -55,8 +55,8 @@ export const TourCard = ({ destination, isSelected, onSelect }) => {
   }, [showBox]);
 
   return (
-    <div className="relative text-black w-[320px] flex flex-col rounded-xl overflow-hidden shadow-md group">
-      <div className="h-[175px] relative overflow-hidden">
+    <div className="relative text-black  flex flex-col rounded-xl overflow-hidden shadow-md group">
+      <div className="h-[190px] w-[320px] relative overflow-hidden">
         <img
           src={destination.image}
           alt={destination.name}
@@ -70,8 +70,8 @@ export const TourCard = ({ destination, isSelected, onSelect }) => {
           onClick={onSelect}
         >
           <p
-            className={`text-2xl font-bold bg-black/50 p-6 rounded-xl mb-2 transition-all duration-300 ${
-              isSelected ? 'text-sm' : 'text-3xl'
+            className={`text-2xl font-bold bg-black/50  text-center rounded-xl mb-2 transition-all duration-300 ${
+              isSelected ? 'text-md min-h-[72px] min-w-[176px] p-5' : 'text-3xl min-h-[90px] min-w-[220px] p-6'
             }`}
           >
             {destination.name}
@@ -80,7 +80,7 @@ export const TourCard = ({ destination, isSelected, onSelect }) => {
           {showBox && (
             <div
               ref={featureBoxRef}
-              className="flex flex-wrap justify-center rounded-t-xl bg-[#FFFFFFB2] w-full h-full gap-2 py-2 px-2 my-1"
+              className="flex flex-wrap justify-center rounded-t-xl bg-[#FFFFFFB2] w-full h-full my-3 gap-2 py-3 px-2 "
             >
               {destination.features?.map((feet, i) => (
                 <div

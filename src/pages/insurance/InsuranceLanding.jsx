@@ -2,6 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LandingHero } from '../../components/common/LandingHero';
 import { IoMdArrowDropdown } from "react-icons/io";
+import { LuCirclePlus, LuCircleMinus  } from "react-icons/lu";
+import { GoPerson } from "react-icons/go";
+import { GrGroup } from "react-icons/gr";
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 export const InsuranceLanding = () => {
   const [startDate, setStartDate] = useState('');
@@ -20,6 +25,19 @@ export const InsuranceLanding = () => {
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState('');
   const [errors, setErrors] = useState({});
+  const imgRef = useRef(null);
+
+
+  useGSAP(() => {
+  if (!showSecondBox) return;
+
+  gsap.fromTo(
+    imgRef.current,
+    { x: -100, opacity: 0 },
+    { x: 0,  opacity: 1, delay: 0.5, duration: 0.9, ease: 'power3.out' }
+  );
+}, [showSecondBox]);
+
 
 useEffect(() => {
   const fetchRegions = async () => {
@@ -168,13 +186,13 @@ const handleSubmit = async () => {
 
 
   return (
-    <div className='insurance-landing flex flex-col text-black overflow-y-auto bg-white pb-10'>
+    <div className='insurance-landing flex flex-col  text-black overflow-y-auto bg-white pb-10'>
       <div className='relative z-10'>
         <LandingHero activeTab='Insurance' />
       </div>
-
+    <div className='z-20 w-[70%] flex flex-col justify-center items-start mx-auto'>
       {/* First Box */}
-      <div className="first-box z-20 w-[90%] max-w-5xl mx-auto -mt-10 bg-white border border-[#a9c6f5] rounded-2xl p-6 shadow-sm space-y-6">
+      <div className="first-box z-20 w-full -mt-10 bg-[#F0F6FF] border border-[#0062CC] rounded-2xl p-6 shadow-sm space-y-6">
         <div className="flex flex-row w-1/2 gap-10">
 
 
@@ -187,8 +205,8 @@ const handleSubmit = async () => {
     <select
       value={selectedRegion}
       onChange={(e) => setSelectedRegion(e.target.value)}
-      className={`appearance-none w-full border rounded-lg px-4 py-2 pr-10 text-sm text-black bg-white focus:outline-[#164B71] ${
-        errors.selectedRegion ? 'border-red-500' : 'border-[#a9c6f5]'
+      className={`appearance-none w-full border rounded-lg px-4 py-2 pr-10 text-sm text-black bg-[#f3f7fa] focus:outline-[#164B71] ${
+        errors.selectedRegion ? 'border-red-500' : 'border-[#0062CC]'
       }`}
     >
       <option value="">Select Travel Region</option>
@@ -212,8 +230,8 @@ const handleSubmit = async () => {
     <select
       value={selectedCountry}
       onChange={(e) => setSelectedCountry(e.target.value)}
-      className={`appearance-none w-full border rounded-lg px-4 py-2 pr-10 text-sm text-black bg-white focus:outline-[#164B71] ${
-        errors.selectedCountry ? 'border-red-500' : 'border-[#a9c6f5]'
+      className={`appearance-none w-full border rounded-lg px-4 py-2 pr-10 text-sm text-black bg-[#f3f7fa] focus:outline-[#164B71] ${
+        errors.selectedCountry ? 'border-red-500' : 'border-[#0062CC]'
       }`}
     >
       <option value="">Select Country</option>
@@ -224,7 +242,7 @@ const handleSubmit = async () => {
       ))}
     </select>
 
-    <IoMdArrowDropdown className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-white  text-gray-800 pointer-events-none" />
+    <IoMdArrowDropdown className="absolute right-3 top-1/2 transform -translate-y-1/2   text-gray-800 pointer-events-none" />
   </div>
 </div>
 
@@ -237,7 +255,7 @@ const handleSubmit = async () => {
             <button
               onClick={() => setIsMultiTrip((prev) => !prev)}
               className={`w-12 h-6 flex items-center rounded-full p-1 transition duration-300 ${
-                isMultiTrip ? 'bg-[#164B71]' : 'bg-gray-300'
+                isMultiTrip ? 'bg-[#0062CC]' : 'bg-gray-300'
               }`}
             >
               <div
@@ -257,8 +275,8 @@ const handleSubmit = async () => {
   type="date"
   value={startDate}
   onChange={(e) => handleDateChange('start', e.target.value)}
-  className={`border text-black rounded-lg px-4 py-2 text-sm ${
-    errors.startDate ? 'border-red-500' : 'border-[#a9c6f5]'
+  className={`border text-black bg-[#f3f7fa] rounded-lg px-4 py-2 text-sm ${
+    errors.startDate ? 'border-red-500' : 'border-[#0062CC]'
   }`}
 />
 
@@ -270,8 +288,8 @@ const handleSubmit = async () => {
   type="date"
   value={endDate}
   onChange={(e) => handleDateChange('end', e.target.value)}
-  className={`border text-black rounded-lg px-4 py-2 text-sm ${
-    errors.endDate ? 'border-red-500' : 'border-[#a9c6f5]'
+  className={`border text-black bg-[#f3f7fa] rounded-lg px-4 py-2 text-sm ${
+    errors.endDate ? 'border-red-500' : 'border-[#0062CC]'
   }`}
 />
 
@@ -283,7 +301,7 @@ const handleSubmit = async () => {
           </div>
 
           <div className="mt-6 md:mt-0">
-            <button onClick={handleContinue} className="bg-[#164B71] text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+            <button onClick={handleContinue} className="bg-[#0062CC] text-white px-6 py-2 rounded-lg hover:bg-blue-700">
               CONTINUE
             </button>
           </div>
@@ -294,18 +312,19 @@ const handleSubmit = async () => {
         </p>
       </div>
 
+      <div className='flex flex-row w-full'>
       {/* Second Box */}
       {showSecondBox && (
-        <div ref={secondBoxRef} className="second-box text-black z-20 w-[90%] max-w-5xl mx-auto bg-white border border-[#a9c6f5] rounded-2xl p-6 shadow-sm space-y-6 my-10">
+        <div ref={secondBoxRef} className="second-box text-black z-40 w-[80%] max-w-5xl  bg-[#F0F6FF] border border-[#0062CC] rounded-2xl p-6 shadow-sm space-y-6 my-10">
           <div className="sb-top flex flex-col">
             <label className="text-sm font-semibold mb-2">Number Of Traveller</label>
-            <div className="flex items-center gap-4 border border-[#a9c6f5] w-fit rounded-full px-4 py-2">
-              <button onClick={() => setTravelerCount(prev => Math.max(1, prev - 1))} className="text-lg font-bold">−</button>
+            <div className="flex items-center gap-4 bg-[#f3f7fa] border border-[#0062CC] w-fit rounded-full px-4 py-2">
+              <button onClick={() => setTravelerCount(prev => Math.max(1, prev - 1))} className=""><LuCircleMinus/></button>
               <div className="flex items-center gap-2 text-sm">
-                <span>👤</span>
+                {travelerCount >= 2 ? <GrGroup size={20}/> : <GoPerson size={20}/>}
                 <span>{travelerCount}</span>
               </div>
-              <button onClick={() => setTravelerCount(prev => prev + 1)} className="text-lg font-bold">+</button>
+              <button onClick={() => setTravelerCount(prev => prev + 1)} className=""><LuCirclePlus/></button>
             </div>
           </div>
 
@@ -313,16 +332,19 @@ const handleSubmit = async () => {
             {travelers.map((traveler, index) => (
               <div key={index} className="flex flex-col">
                 <label className="text-sm font-semibold mb-1">Traveller {index + 1} DOB<span className="text-red-500">*</span></label>
-                <input
-  type="date"
-  value={traveler.dob}
-  onChange={(e) => handleDOBChange(index, e.target.value)}
-  className={`border rounded-lg px-4 py-2 text-sm ${
-    errors[`dob-${index}`] ? 'border-red-500' : 'border-[#a9c6f5]'
-  }`}
-/>
+                <div className='flex flex-row items-center gap-2'>
+                  <input
+                    type="date"
+                    value={traveler.dob}
+                    onChange={(e) => handleDOBChange(index, e.target.value)}
+                    className={`border bg-[#f3f7fa] rounded-lg px-4 py-2 text-sm ${
+                      errors[`dob-${index}`] ? 'border-red-500' : 'border-[#0062CC]'
+                    }`}
+                  />
 
-                <p className="text-xs mt-1">Age: {calculateAge(traveler.dob)}</p>
+                  <p className="text-xs mt-1 self-end">Age: {calculateAge(traveler.dob)}</p>
+              </div>
+ 
               </div>
             ))}
           </div>
@@ -335,8 +357,8 @@ const handleSubmit = async () => {
   value={email}
   onChange={(e) => setEmail(e.target.value)}
   placeholder="Enter Email ID"
-  className={`border rounded-lg px-4 py-2 text-sm ${
-    errors.email ? 'border-red-500' : 'border-[#a9c6f5]'
+  className={`border bg-[#f3f7fa] rounded-lg px-4 py-2 text-sm ${
+    errors.email ? 'border-red-500' : 'border-[#0062CC]'
   }`}
 />
             </div>
@@ -347,20 +369,27 @@ const handleSubmit = async () => {
   value={mobile}
   onChange={(e) => setMobile(e.target.value)}
   placeholder="Enter Mobile Number"
-  className={`border rounded-lg px-4 py-2 text-sm ${
-    errors.mobile ? 'border-red-500' : 'border-[#a9c6f5]'
+  className={`border bg-[#f3f7fa] rounded-lg px-4 py-2 text-sm ${
+    errors.mobile ? 'border-red-500' : 'border-[#0062CC]'
   }`}
 />
             </div>
           </div>
 
           <div className="flex justify-center">
-            <button className="bg-[#164B71] text-white px-12 py-2 rounded-lg hover:bg-blue-700" onClick={handleSubmit}>
+            <button className="bg-[#0062CC] text-white px-12 py-2 rounded-lg hover:bg-blue-700" onClick={handleSubmit}>
               Submit
             </button>
           </div>
         </div>
       )}
+      {showSecondBox && (
+        <div className='relative z-30 flex items-center -mr-20'>
+          <img ref={imgRef} src='/images/insurance-landing.png' className='w-120 mx-10'/>
+        </div>
+      )}
+      </div>
+      </div>
     </div>
   );
 };

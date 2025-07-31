@@ -54,17 +54,19 @@ export const InsuranceAddon = () => {
         {['Travel Details', 'Choose Plan', 'Choose Add-ons', 'Traveller Details', 'Review and Payment'].map((step, i) => (
           <div key={i} className="relative flex-1 flex items-center justify-center">
             {i !== 0 && (
-              <div className={`absolute -translate-x-1/2 top-1/2 transform -translate-y-1/2 h-1 ${
-                i <= 2 ? 'bg-[#164B71]' : 'bg-gray-300'
+              <div className={`absolute z-30 -translate-x-13/32 md:-translate-x-14/32 lg:-translate-x-15/32 top-1/2 transform -translate-y-1/2 h-1 ${
+                i <= 2 ? 'bg-[#0068A3]' : 'bg-gray-300'
               } w-full z-0`}></div>
             )}
-            <div className={`relative z-10 w-5 h-5 rounded-full border-2 ${
+            
+            <div className={`relative z-10  rounded-full border-2 ${
               i === 2 
-              ? 'bg-white border-[#164B71]'
+              ? 'bg-[#0068A3] w-7 h-7 border-[#D9D9D9] border-8'
               : i < 2 
-              ? 'bg-[#164B71] border-[#164B71]'
-              : 'bg-gray-300 border-gray-300'
+              ? 'bg-[#0068A3] w-6 h-6 border-[#0068A3]'
+              : 'bg-gray-300 w-6 h-6 border-gray-300'
             }`}></div>
+            
             <div className="absolute top-8 text-[13px] font-semibold text-center w-max -translate-x-1/2 left-1/2">
               <p className={`${i <= 2 ? 'text-[#164B71]' : 'text-gray-500'}`}>{step}</p>
             </div>
@@ -77,7 +79,7 @@ export const InsuranceAddon = () => {
         {addons.map((addon, index) => (
           <div
             key={index}
-            className="addon-card flex flex-row border border-[#0062CC] rounded-xl p-4 m-4 justify-between items-center gap-4"
+            className="addon-card flex flex-row border bg-[#F0F6FF] border-[#0062CC] rounded-xl p-4 m-4 justify-between items-center gap-4"
           >
             <img
               src={`https://picsum.photos/300/200?random=${index + 1}`}
@@ -97,7 +99,7 @@ export const InsuranceAddon = () => {
                 className={`mt-2 px-3 py-1 rounded-lg border transition-all duration-300 ease-in-out ${
                   selectedAddons.includes(addon.rider_code)
                     ? 'bg-[#0E3755] text-white border-[#0E3755]'
-                    : 'bg-white text-[#0E3755] border-[#0E3755] hover:text-white hover:bg-[#0068A3]'
+                    : 'bg-[#f6faff] text-[#0E3755] border-[#0E3755] hover:text-white hover:bg-[#0068A3]'
                 }`}
                 onClick={() => handleSelectAddon(addon)}
               >
@@ -121,7 +123,7 @@ export const InsuranceAddon = () => {
         <button className="mt-2 px-4 py-1 rounded-lg bg-white border border-[#004c99] text-[#004c99] hover:text-white hover:bg-[#004c99]" onClick={() => navigate(-1)}>
           Go back
         </button>
-        <button className="mt-2 px-4 py-1 rounded-lg bg-white border border-[#004c99] text-[#004c99] hover:text-white hover:bg-[#004c99]" 
+        <button className="mt-2 px-4 py-1 rounded-lg bg-[#0062CC] border border-[#004c99] text-white hover:text-white hover:bg-[#004c99]" 
           onClick={() =>{
             
             console.log('Navigating with data:', {
