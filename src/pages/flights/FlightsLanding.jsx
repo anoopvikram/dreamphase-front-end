@@ -25,12 +25,12 @@ export const FlightsLanding = () => {
   };
 
   return (
-    <div className="flight-landing flex flex-col overflow-y-auto h-screen bg-white">
+    <div className="flight-landing flex flex-col overflow-y-auto  bg-white">
       <div className="relative z-10">
         <LandingHero activeTab="Flight"/>
       </div>
 
-      <div className="landing-options z-20  bg-opacity-40 backdrop-blur-sm rounded-xl p-5 w-11/12 max-w-6xl mx-auto -mt-16 text-white">
+      <div className="landing-options z-20  bg-opacity-40 backdrop-blur-sm rounded-xl p-5 w-11/12 max-w-6xl mx-auto mt-5 md:-mt-10 lg:-mt-16 text-white">
         {/* Trip Type */}
         <div className="selectors flex gap-4 mb-6">
           {['one-way', 'round-trip', 'multi-city'].map((type) => (

@@ -76,9 +76,7 @@ export const VisaApplicationForm = () => {
       <div className="flex flex-col items-center space-y-1">
         <p className="font-semibold">Processing Time</p>
         <p className="bg-[#164B71] text-white px-4 py-1 rounded-full text-xs">5–7 Business Days</p>
-        <div className="w-3/4 bg-gray-300 h-2 rounded-full mt-2">
-          <div className="bg-[#164B71] h-2 rounded-full w-3/4" />
-        </div>
+        
       </div>
 
       <div className="flex flex-wrap gap-6 justify-start">

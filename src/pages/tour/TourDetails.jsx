@@ -10,6 +10,7 @@
   import ImageCarousel from '../../components/tour/ImageCarousel';
   import { fetchDestinations } from '../../api/visaApi';
   import { useNavigate } from 'react-router-dom';
+  // import { ProgressBar } from '../../components/common/ProgressBar';
 
   export const TourDetails = () => {
     const navigate = useNavigate();
@@ -31,6 +32,8 @@
     const [addTransport, setAddTransport] = useState(false);
     const [landOnly, setLandOnly] = useState(false);
     const [needGuide, setNeedGuide] = useState(false);
+    // const steps = ['Trip Details', 'Trip Customization', 'Save Proposal', 'AI Suggestions', 'Review and Payment'];
+
 
 
     useEffect(() => {
@@ -180,21 +183,10 @@ const matched = allDestinations.find(dest => dest.name === cities[0]?.name);
           <ImageCarousel images={destination.images} />
         </div>
 
-        <div className="flex items-center justify-between w-full max-w-4xl mx-auto mb-15 px-0 -mt-20">
-          {['Trip Details', 'Trip Customization', 'Save Proposal', 'AI Suggestions', 'Review and Payment'].map((step, i, arr) => (
-            <div key={i} className="relative flex-1 flex items-center justify-center">
-              {i !== 0 && (
-                <div className={`absolute -translate-x-1/2 top-1/2 transform -translate-y-1/2 h-1 ${i <= 1 ? 'bg-[#164B71]' : 'bg-gray-300'} w-full z-0`}></div>
-              )}
-              <div className={`relative z-10 w-5 h-5 rounded-full border-2 ${i === 0 ? 'bg-[#164B71] border-[#164B71]' : i === 1 ? 'bg-white border-[#164B71]' : 'bg-gray-300 border-gray-300'}`}></div>
-              <div className="absolute top-8 text-[13px] font-semibold text-center w-max -translate-x-1/2 left-1/2">
-                <p className={`${i <= 1 ? 'text-[#164B71]' : 'text-gray-500'}`}>{step}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* <div className='-mt-35'><ProgressBar currentStepIndex={1} steps={steps} /></div> */}
+        
 
-        <div className='tour-details px-8 py-8 flex flex-col gap-5 text-black max-w-6xl mx-auto'>
+        <div className='tour-details px-8 py-8 -mt-25 flex flex-col gap-5 text-black max-w-6xl mx-auto'>
           <div className='tour-head mb-8'>
             <h2 className='text-4xl font-extrabold mb-2'>Destination</h2>
             <p className='text-gray-600 text-xl'>

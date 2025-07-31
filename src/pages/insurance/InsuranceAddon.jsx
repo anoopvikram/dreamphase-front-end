@@ -1,12 +1,14 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import { FaCheckCircle } from "react-icons/fa";
+import { ProgressBar } from '../../components/common/ProgressBar';
+
 
 export const InsuranceAddon = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const travelerCount = state?.travelerCount || 1;
   const riderList = state?.riderList || [];
+  const steps = ['Travel Details', 'Choose Plan', 'Choose Add-ons', 'Traveller Details', 'Review and Payment'];
 
   const fallbackAddons = [
     {
@@ -50,29 +52,7 @@ export const InsuranceAddon = () => {
     <div className='flex flex-col items-center py-50 md:py-30 w-3/4 text-black mx-auto'>
 
       {/* Progress bar remains unchanged */}
-      <div className="flex items-center justify-between w-full max-w-4xl mx-auto mb-15 px-4 mt-8">
-        {['Travel Details', 'Choose Plan', 'Choose Add-ons', 'Traveller Details', 'Review and Payment'].map((step, i) => (
-          <div key={i} className="relative flex-1 flex items-center justify-center">
-            {i !== 0 && (
-              <div className={`absolute z-30 -translate-x-13/32 md:-translate-x-14/32 lg:-translate-x-15/32 top-1/2 transform -translate-y-1/2 h-1 ${
-                i <= 2 ? 'bg-[#0068A3]' : 'bg-gray-300'
-              } w-full z-0`}></div>
-            )}
-            
-            <div className={`relative z-10  rounded-full border-2 ${
-              i === 2 
-              ? 'bg-[#0068A3] w-7 h-7 border-[#D9D9D9] border-8'
-              : i < 2 
-              ? 'bg-[#0068A3] w-6 h-6 border-[#0068A3]'
-              : 'bg-gray-300 w-6 h-6 border-gray-300'
-            }`}></div>
-            
-            <div className="absolute top-8 text-[13px] font-semibold text-center w-max -translate-x-1/2 left-1/2">
-              <p className={`${i <= 2 ? 'text-[#164B71]' : 'text-gray-500'}`}>{step}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <ProgressBar currentStepIndex={2} steps={steps} />
 
       {/* Addon cards */}
       <div>
@@ -99,7 +79,7 @@ export const InsuranceAddon = () => {
                 className={`mt-2 px-3 py-1 rounded-lg border transition-all duration-300 ease-in-out ${
                   selectedAddons.includes(addon.rider_code)
                     ? 'bg-[#0E3755] text-white border-[#0E3755]'
-                    : 'bg-[#f6faff] text-[#0E3755] border-[#0E3755] hover:text-white hover:bg-[#0068A3]'
+                    : 'bg-[#f6faff] text-[#0062CC] border-[#0062CC] hover:text-white hover:bg-[#0068A3]'
                 }`}
                 onClick={() => handleSelectAddon(addon)}
               >
