@@ -55,8 +55,8 @@ export const TourCard = ({ destination, isSelected, onSelect }) => {
   }, [showBox]);
 
   return (
-    <div className="relative text-black w-[280px] flex flex-col rounded-xl overflow-hidden shadow-md group">
-      <div className="h-[200px] relative overflow-hidden">
+    <div className="relative text-black w-[320px] flex flex-col rounded-xl overflow-hidden shadow-md group">
+      <div className="h-[175px] relative overflow-hidden">
         <img
           src={destination.image}
           alt={destination.name}
@@ -80,7 +80,7 @@ export const TourCard = ({ destination, isSelected, onSelect }) => {
           {showBox && (
             <div
               ref={featureBoxRef}
-              className="flex flex-wrap justify-center rounded-t-xl bg-[#FFFFFFB2] w-full h-full gap-1 py-2 px-2 mt-1"
+              className="flex flex-wrap justify-center rounded-t-xl bg-[#FFFFFFB2] w-full h-full gap-2 py-2 px-2 my-1"
             >
               {destination.features?.map((feet, i) => (
                 <div

@@ -56,6 +56,7 @@ export const LandingHero = ({ activeTab = 'Visa', animateOnLoad = false }) => {
     //   duration: 0.4,
     //   ease: 'power2.out',
     // }, '-=0.6');
+
   },  [animateOnLoad]);
 
   return (
@@ -91,9 +92,9 @@ export const LandingHero = ({ activeTab = 'Visa', animateOnLoad = false }) => {
                   case 'Insurance':
                     return <RiShieldCheckFill className={commonStyle} />;
                   case 'Travel Mart':
-                    return <MdShoppingCart className={commonStyle} />;
+                    return <MdShoppingCart className={commonStyle} id="cart-icon"/>;
                   case 'Flight':
-                    return <MdOutlineFlight className={`${commonStyle}  rotate-[45deg]`} />;
+                    return <MdOutlineFlight className={`${commonStyle}  rotate-[45deg]`} id="flight-icon"/>;
                   case 'Hotels':
                     return <BsBuilding className={commonStyle} />;
                   case 'Other':
