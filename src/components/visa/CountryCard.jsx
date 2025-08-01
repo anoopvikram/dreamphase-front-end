@@ -21,7 +21,7 @@ export const CountryCard = ({ data, onClick }) => {
       gsap.to(infoRef.current, {
         opacity: 0,
         scale: 0.98,
-        duration: 0.3,
+        duration: 0.3 ,
         ease: 'power2.in',
         pointerEvents: 'none'
       });

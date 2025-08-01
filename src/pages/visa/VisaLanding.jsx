@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getPopularCountries } from '../../api/visaApi';
-import { SearchBar } from '../../components/common/SearchBar';
+import { SearchBar } from '../../components/visa/SearchBar';
 import { CountryCard } from '../../components/visa/CountryCard';
 import { LandingHero } from '../../components/common/LandingHero';
 

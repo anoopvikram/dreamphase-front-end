@@ -36,7 +36,7 @@
 
 
 
-    useEffect(() => {
+useEffect(() => {
   async function loadCities() {
     const data = await fetchDestinations();
     setAllDestinations(data);
@@ -47,15 +47,14 @@
     setAllTripTypes(typesFromState);
     setTripType(selectedType);
 
-    // Setup default cities
     const matched = data.find(dest => dest.name === destination);
     const defaultCities = [
       {
         id: 'city-1',
         name: destination || '',
-        backendId: matched ? matched.id : null
+        backendId: matched ? matched.id : null,
       },
-      { id: 'city-2', name: '', backendId: null }
+      { id: 'city-2', name: '', backendId: null },
     ];
     setCities(defaultCities);
   }
@@ -66,21 +65,6 @@
 
 
     const [cities, setCities] = useState([]);
-
-    useEffect(() => {
-      const matched = allDestinations.find(dest => dest.name === destination);
-      const defaultCities = [
-        {
-          id: 'city-1',
-          name: destination || '',
-          backendId: matched ? matched.id : null
-        },
-        { id: 'city-2', name: '', backendId: null }
-      ];
-
-      setCities(defaultCities);
-    }, [destination]);
-
     const handleAddCity = () => {
       if (cities.length >= 5) return;
       setCities([...cities, { id: `city-${cities.length + 1}`, name: '' }]);
