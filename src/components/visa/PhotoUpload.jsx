@@ -1,29 +1,36 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import axios from 'axios';
 
 export const PhotoUpload = ({ onChange, onPassportExtracted, label = 'Upload Photo', name = 'photo' }) => {
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [fileName, setFileName] = useState('');
+  const [showMagnifier, setShowMagnifier] = useState(false);
+  const [magnifierPosition, setMagnifierPosition] = useState({ x: 0, y: 0 });
+  const [backgroundPosition, setBackgroundPosition] = useState('0% 0%');
+  const fileInputRef = useRef(null);
+  const imgRef = useRef(null);
+  const magnifierSize = 150; // diameter of the circle
+  const zoomLevel = 3;       // how much to zoom in
+
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    console.log('📤 Selected file:', file);
+    setFileName(file.name);
+    const previewURL = URL.createObjectURL(file);
+    setPreview(previewURL);
+    onChange(file);
 
-    setPreview(URL.createObjectURL(file));
-    onChange(file); // send file to parent
-
-    const formData = new FormData();    
-    formData.append('passport', file);  // ✅ backend expects this key
-
-    console.log('📦 FormData content:', formData.get('image'));
-
+    const formData = new FormData();
+    formData.append('passport', file);
 
     try {
       setLoading(true);
-      console.log('📡 Sending to OCR API...');
-
       const res = await axios.post(
         'https://website-0suz.onrender.com/api/extract-passport/',
         formData,
@@ -34,50 +41,99 @@ export const PhotoUpload = ({ onChange, onPassportExtracted, label = 'Upload Pho
         }
       );
 
-      console.log('✅ OCR success:', res.data);
-
       if (onPassportExtracted) {
         onPassportExtracted(res.data);
       }
     } catch (error) {
-      if (error.response) {
-        console.error('❌ OCR failed:', error.response.status, error.response.data);
-      } else {
-        console.error('❌ OCR failed:', error.message);
-      }
-
+      console.error('❌ OCR failed:', error.response?.data || error.message);
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="w-full max-w-md p-4 bg-white rounded-[20px] border border-black/10 shadow-sm">
-      <label className="block text-sm font-medium text-gray-700 mb-2">{label}</label>
+const handleMouseMove = (e) => {
+  const { top, left, width, height } = imgRef.current.getBoundingClientRect();
+  const x = e.clientX - left;
+  const y = e.clientY - top;
 
-      <input
-        type="file"
-        accept="image/*"
-        name={name}
-        onChange={handleFileChange}
-        className="block w-full text-sm text-gray-700 bg-white file:mr-4 file:py-1 file:px-4
-                   file:rounded-full file:border-0
-                   file:text-sm file:font-semibold
-                   file:bg-blue-50 file:text-[#164B71]
-                   hover:file:bg-blue-100"
-      />
+  // Percentage position for background
+  const posXPercent = (x / width) * 100;
+  const posYPercent = (y / height) * 100;
+
+  // Position magnifier offset by half its size so cursor is centered
+  setMagnifierPosition({
+    x: e.clientX + 20,
+    y: e.clientY - magnifierSize / 2,
+  });
+
+  setBackgroundPosition(`${posXPercent}% ${posYPercent}%`);
+};
+  
+
+  return (
+    <div className="w-full flex flex-col items-center max-w-md p-6 bg-white rounded-[20px] border border-black/10 shadow-sm relative">
+      <label className="block text-sm font-medium text-gray-700 mb-4">{label}</label>
+
+      <div className="flex flex-col items-center justify-center gap-2 text-center">
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          name={name}
+          onChange={handleFileChange}
+          className="hidden"
+        />
+
+        <button
+          type="button"
+          onClick={handleClick}
+          className="px-6 py-2 bg-[#0068A3] text-white text-sm font-semibold rounded-full hover:bg-blue-900"
+        >
+          Choose File
+        </button>
+
+        <p className="text-sm text-gray-500 mt-1">
+          {fileName || 'or drop a file'}
+        </p>
+
+        {loading && (
+          <p className="text-sm text-[#164B71] mt-2">Extracting passport data...</p>
+        )}
+      </div>
 
       {preview && (
-        <div className="mt-4">
+        <div className="mt-4 w-full relative">
           <img
+            ref={imgRef}
             src={preview}
             alt="Preview"
-            className="w-full h-40 object-cover rounded-[12px] border border-gray-200 shadow-sm"
+            onMouseEnter={() => setShowMagnifier(true)}
+            onMouseLeave={() => setShowMagnifier(false)}
+            onMouseMove={handleMouseMove}
+            className="w-full h-auto object-contain rounded-[12px] border border-gray-200 shadow-sm"
           />
+
+          {showMagnifier && (
+            <div
+  style={{
+    position: 'fixed',
+    top: magnifierPosition.y,
+    left: magnifierPosition.x,
+    width: `${magnifierSize}px`,
+    height: `${magnifierSize}px`,
+    pointerEvents: 'none',
+    borderRadius: '50%',
+    boxShadow: '0 0 8px rgba(0,0,0,0.5)',
+    backgroundImage: `url(${preview})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: `${imgRef.current?.width * zoomLevel}px ${imgRef.current?.height * zoomLevel}px`,
+    backgroundPosition: backgroundPosition,
+    zIndex: 999,
+  }}  
+            />
+          )}
         </div>
       )}
-
-      {loading && <p className="text-sm text-[#164B71] mt-2">Extracting passport data...</p>}
     </div>
   );
 };
