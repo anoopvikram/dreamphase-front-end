@@ -9,24 +9,23 @@ import { motion } from 'framer-motion';
 export const VisaLanding = () => {
   const blurVariants = {
   initial: {
-    opacity: 0,
-    filter: 'blur(10px)',
+    opacity: 1,
+    filter: 'blur(5px)',
     
   },
   animate: {
     opacity: 1,
     filter: 'blur(0px)',
     
-    transition: { duration: 0.3, ease: 'easeOut' },
+    transition: { duration: 0.6, ease: 'easeOut' },
   },
   exit: {
-    opacity: 0,
-    filter: 'blur(10px)',
+    opacity: 1,
+    filter: 'blur(5px)',
     
-    transition: { duration: 0.3, ease: 'easeIn' },
+    transition: { duration: 0.6, ease: 'easeIn' },
   },
 };
-
 
 
   const [countries, setCountries] = useState([]);

@@ -20,7 +20,8 @@ import { AuthPage } from './pages/login/Auth';
 import { InsuranceAddon } from './pages/insurance/InsuranceAddon';
 import { TravelerDetails } from './pages/insurance/TravelerDetails';
 import { InsurancePayment } from './pages/insurance/InsurancePayment';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -34,6 +35,26 @@ const ScrollToTop = () => {
 };
 
 export const App = () => {
+
+  const popupVariants = {
+  initial: {
+    y: '100%', // start offscreen right
+    opacity: 1,
+  },
+  animate: {
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.4, ease: 'easeOut' },
+  },
+  exit: {
+    y: '100%', // slide back to right
+    opacity: 1,
+    transition: { duration: 0.3, ease: 'easeIn' },
+  },
+};
+
+
+
   const [showPopup, setShowPopup] = useState(false);
 
   return (
@@ -66,13 +87,26 @@ export const App = () => {
           <Route path="/touritinerary" element={<TourItinerary />} />
         </Routes>
         </AnimatePresence>
-        {showPopup && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 bg-opacity-50">
-            <div className="relative z-50">
-              <AuthPage onClose={() => setShowPopup(false)} />
-            </div>
-          </div>
-        )}
+        <AnimatePresence>
+  {showPopup && (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 bg-opacity-50"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <motion.div
+        className="relative z-50"
+        variants={popupVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+      >
+        <AuthPage onClose={() => setShowPopup(false)} />
+      </motion.div>
+    </motion.div>
+  )}
+</AnimatePresence>
       </Router>
     </main>
   );
