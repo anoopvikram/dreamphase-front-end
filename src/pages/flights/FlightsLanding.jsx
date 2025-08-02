@@ -2,8 +2,31 @@ import React, { useState } from 'react';
 import { LandingHero } from '../../components/common/LandingHero';
 import { FaExchangeAlt, FaSearch, FaPlaneDeparture, FaPlaneArrival, FaDotCircle } from 'react-icons/fa';
 import { MdOutlineRadioButtonUnchecked } from 'react-icons/md';
+import { motion } from 'framer-motion';
 
 export const FlightsLanding = () => {
+  const blurVariants = {
+  initial: {
+    opacity: 0,
+    filter: 'blur(10px)',
+    
+  },
+  animate: {
+    opacity: 1,
+    filter: 'blur(0px)',
+    
+    transition: { duration: 0.3, ease: 'easeOut' },
+  },
+  exit: {
+    opacity: 0,
+    filter: 'blur(10px)',
+    
+    transition: { duration: 0.3, ease: 'easeIn' },
+  },
+};
+
+
+  
   const [tripType, setTripType] = useState('one-way');
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
@@ -25,6 +48,13 @@ export const FlightsLanding = () => {
   };
 
   return (
+    <motion.div
+      
+      variants={blurVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
     <div className="flight-landing flex flex-col overflow-y-auto  bg-white">
       <div className="relative z-10">
         <LandingHero activeTab="Flight"/>
@@ -150,5 +180,6 @@ export const FlightsLanding = () => {
         </div>
       </div>
     </div>
+    </motion.div>
   );
 };

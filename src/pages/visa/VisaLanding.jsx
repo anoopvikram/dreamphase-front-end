@@ -4,8 +4,31 @@ import { getPopularCountries } from '../../api/visaApi';
 import { SearchBar } from '../../components/visa/SearchBar';
 import { CountryCard } from '../../components/visa/CountryCard';
 import { LandingHero } from '../../components/common/LandingHero';
+import { motion } from 'framer-motion';
 
 export const VisaLanding = () => {
+  const blurVariants = {
+  initial: {
+    opacity: 0,
+    filter: 'blur(10px)',
+    
+  },
+  animate: {
+    opacity: 1,
+    filter: 'blur(0px)',
+    
+    transition: { duration: 0.3, ease: 'easeOut' },
+  },
+  exit: {
+    opacity: 0,
+    filter: 'blur(10px)',
+    
+    transition: { duration: 0.3, ease: 'easeIn' },
+  },
+};
+
+
+
   const [countries, setCountries] = useState([]);
   const [visible, setVisible] = useState(10);
   const containerRef = useRef(null);
@@ -50,6 +73,13 @@ export const VisaLanding = () => {
 };
 
   return (
+    <motion.div
+      
+      variants={blurVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
     <div
       className="visa-landing-wrapper overflow-y-auto"
       ref={containerRef}
@@ -64,5 +94,6 @@ export const VisaLanding = () => {
         ))}
       </div>
     </div>
+    </motion.div>
   );
 };

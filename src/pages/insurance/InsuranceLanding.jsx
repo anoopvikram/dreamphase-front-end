@@ -7,8 +7,31 @@ import { GoPerson } from "react-icons/go";
 import { GrGroup } from "react-icons/gr";
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { motion } from 'framer-motion';
 
 export const InsuranceLanding = () => {
+  const blurVariants = {
+  initial: {
+    opacity: 0,
+    filter: 'blur(10px)',
+    
+  },
+  animate: {
+    opacity: 1,
+    filter: 'blur(0px)',
+    
+    transition: { duration: 0.3, ease: 'easeOut' },
+  },
+  exit: {
+    opacity: 0,
+    filter: 'blur(10px)',
+    
+    transition: { duration: 0.3, ease: 'easeIn' },
+  },
+};
+
+
+
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [duration, setDuration] = useState(0);
@@ -186,6 +209,13 @@ const handleSubmit = async () => {
 
 
   return (
+    <motion.div
+      
+      variants={blurVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
     <div className='insurance-landing flex flex-col  text-black overflow-y-auto bg-white pb-10'>
       <div className='relative z-10'>
         <LandingHero activeTab='Insurance' />
@@ -391,5 +421,6 @@ const handleSubmit = async () => {
       </div>
       </div>
     </div>
+    </motion.div>
   );
 };

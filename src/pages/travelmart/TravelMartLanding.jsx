@@ -2,8 +2,31 @@ import React, { useEffect, useState } from 'react'
 import { fetchTravelMartData } from '../../api/visaApi'
 import { LandingHero } from '../../components/common/LandingHero'
 import { FaChevronDown } from "react-icons/fa6";
+import { motion } from 'framer-motion';
 
 export const TravelMartLanding = () => {
+  const blurVariants = {
+  initial: {
+    opacity: 0,
+    filter: 'blur(10px)',
+    
+  },
+  animate: {
+    opacity: 1,
+    filter: 'blur(0px)',
+    
+    transition: { duration: 0.3, ease: 'easeOut' },
+  },
+  exit: {
+    opacity: 0,
+    filter: 'blur(10px)',
+    
+    transition: { duration: 0.3, ease: 'easeIn' },
+  },
+};
+
+
+
   const [data, setData] = useState({ clothing: [], essentials: [] })
   const [activeFilter, setActiveFilter] = useState(null);
 
@@ -21,6 +44,13 @@ export const TravelMartLanding = () => {
   }, [])
 
   return (
+        <motion.div
+      
+      variants={blurVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
     <div className="travelmart-landing flex flex-col overflow-y-auto bg-white">
       <div className="relative z-10">
         <LandingHero activeTab="Travel Mart" />
@@ -108,5 +138,6 @@ export const TravelMartLanding = () => {
 
       </div>
     </div>
+    </motion.div>
   )
 }

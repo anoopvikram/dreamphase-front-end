@@ -153,7 +153,9 @@ navigate(`/visa/${matched.name.toLowerCase()}?from=${from}&depart=${depart}&retu
       </div>
 
       <button className="visa-search-button" onClick={handleSearch}>
-        <FaSearch />
+        <div className='flex flex-row gap-5 items-center font-medium text-xl'><p className='lg:hidden'>Search</p>
+        <FaSearch /></div>
+        
       </button>
     </div>
   );

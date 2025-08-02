@@ -4,8 +4,33 @@ import { LandingHero } from '../../components/common/LandingHero';
 import { fetchDestinations, tourSections } from '../../api/visaApi';
 import { TourCarousel } from '../../components/tour/TourCarousel';
 import { TourSearch } from '../../components/tour/TourSearch';
+import { motion } from 'framer-motion';
 
 export const TourLanding = () => {
+
+const blurVariants = {
+  initial: {
+    opacity: 0,
+    filter: 'blur(10px)',
+    
+  },
+  animate: {
+    opacity: 1,
+    filter: 'blur(0px)',
+    
+    transition: { duration: 0.3, ease: 'easeOut' },
+  },
+  exit: {
+    opacity: 0,
+    filter: 'blur(10px)',
+    
+    transition: { duration: 0.3, ease: 'easeIn' },
+  },
+};
+
+
+
+
   const [destinations, setDestinations] = useState([]);
   const [topTouristDestinations, setTopTouristDestinations] = useState([]);
   const [mostVisitedPackages, setMostVisitedPackages] = useState([]);
@@ -36,6 +61,13 @@ export const TourLanding = () => {
 
 
   return (
+    <motion.div
+      
+      variants={blurVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
     <div className="tour-landing flex flex-col overflow-y-auto bg-white">
       <div className="relative z-10">
         <LandingHero activeTab="Tour" animateOnLoad={true} />
@@ -64,5 +96,6 @@ export const TourLanding = () => {
         );
       })}
     </div>
+    </motion.div>
   );
 };

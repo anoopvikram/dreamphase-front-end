@@ -20,6 +20,7 @@ import { AuthPage } from './pages/login/Auth';
 import { InsuranceAddon } from './pages/insurance/InsuranceAddon';
 import { TravelerDetails } from './pages/insurance/TravelerDetails';
 import { InsurancePayment } from './pages/insurance/InsurancePayment';
+import { AnimatePresence } from 'framer-motion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,6 +41,7 @@ export const App = () => {
       <Router>
         <ScrollToTop />
         <Navbar setShowPopup={setShowPopup} />
+        <AnimatePresence mode="wait">
         <Routes>
           <Route path="/auth" element={<AuthPage />} />
 
@@ -63,7 +65,7 @@ export const App = () => {
           <Route path="/tourinclusion" element={<TourInclusions />} />
           <Route path="/touritinerary" element={<TourItinerary />} />
         </Routes>
-
+        </AnimatePresence>
         {showPopup && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 bg-opacity-50">
             <div className="relative z-50">
