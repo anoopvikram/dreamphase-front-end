@@ -68,7 +68,7 @@ export const TravelerForm = ({ index, onChange }) => {
         <div className="flex flex-wrap gap-10 mx-auto w-full">
           <div className="w-full md:w-[30%]">
             <label className="text-sm font-medium">Passport Number <span className="text-red-500">*</span></label>
-            <input name="passportNumber" value={formData.passportNumber} onChange={handleChange} type="number" required className="border px-4 py-2 rounded-full w-full" />
+            <input name="passportNumber" value={formData.passportNumber} onChange={handleChange} type="text" required className="border px-4 py-2 rounded-full w-full" />
           </div>
           <div className="w-full md:w-[30%]">
             <label className="text-sm font-medium">First Name <span className="text-red-500">*</span></label>

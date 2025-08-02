@@ -19,7 +19,7 @@ const TravelerCard = ({ index }) => {
       {/* Traveler Info */}
       <div className='flex flex-col md:flex-row justify-between gap-4 p-4'>
         <div className='flex flex-col'>
-          <Input type='number' label='Passport Number' />
+          <Input type='text' label='Passport Number' />
           <div className='flex flex-col'>
             <label className='block text-sm font-medium mb-1'>Address</label>
             <textarea className='w-full p-2 rounded-sm bg-[#FFFFFF] resize-none h-[60px]' />
