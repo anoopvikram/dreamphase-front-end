@@ -21,6 +21,7 @@ import { InsuranceAddon } from './pages/insurance/InsuranceAddon';
 import { TravelerDetails } from './pages/insurance/TravelerDetails';
 import { InsurancePayment } from './pages/insurance/InsurancePayment';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Footer } from './components/common/Footer';
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -38,7 +39,7 @@ export const App = () => {
 
   const popupVariants = {
   initial: {
-    y: '100%', // start offscreen right
+    y: '100%', 
     opacity: 1,
   },
   animate: {
@@ -47,7 +48,7 @@ export const App = () => {
     transition: { duration: 0.4, ease: 'easeOut' },
   },
   exit: {
-    y: '100%', // slide back to right
+    y: '100%',
     opacity: 1,
     transition: { duration: 0.3, ease: 'easeIn' },
   },
@@ -107,6 +108,7 @@ export const App = () => {
     </motion.div>
   )}
 </AnimatePresence>
+        <Footer/>
       </Router>
     </main>
   );
