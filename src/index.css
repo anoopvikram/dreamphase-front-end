@@ -220,6 +220,13 @@ h1, p {
   }
 
 
+/* global CSS or a css file included in your project */
+.insta-icon {
+  @apply transition-colors duration-300 fill-current text-gray-700;
+}
+.group:hover .insta-icon {
+  @apply text-transparent bg-clip-text bg-gradient-to-br from-yellow-400 via-pink-500 to-purple-600;
+}
 
   
 

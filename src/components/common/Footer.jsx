@@ -37,17 +37,17 @@ export const Footer = () => {
 
 
                 <div className="socials flex flex-row items-center lg:self-baseline self-center gap-2 lg:border-0 border-b lg:pb-0 pb-5">
-                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-                        <RiFacebookCircleLine size={40} />
+                    <a href="https://www.facebook.com/dreamphasetravel/" target="_blank" rel="noopener noreferrer">
+                        <RiFacebookCircleLine size={40} className='hover:scale-110 hover:text-blue-500 transition-all duration-300'/>
                     </a>
-                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-                        <IoLogoInstagram size={40} />
+                    <a href="https://www.instagram.com/dreamphasetravel/" target="_blank" rel="noopener noreferrer">
+                        <IoLogoInstagram size={40} className='hover:scale-110 hover:text-pink-500 transition-all duration-300'/>
                     </a>
                     <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-                        <FaXTwitter size={30} />
+                        <FaXTwitter size={30} className='hover:scale-110 hover:text-red-500 transition-all duration-300'/>
                     </a>
-                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
-                        <TiSocialLinkedinCircular size={40} />
+                    <a href="https://www.linkedin.com/company/dreamphasetravel/" target="_blank" rel="noopener noreferrer">
+                        <TiSocialLinkedinCircular size={40} className='hover:scale-110 hover:text-blue-500 transition-all duration-300'/>
                     </a>
                 </div>
             </div>
