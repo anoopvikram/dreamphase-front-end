@@ -198,7 +198,7 @@ h1, p {
   }
 
   .autocomplete-box {
-    @apply absolute top-full left-0 mt-1 w-full bg-white border rounded shadow z-30;
+    @apply absolute top-full left-0 mt-1 w-1/4 bg-white border rounded shadow z-30;
   }
 
   .autocomplete-box div {

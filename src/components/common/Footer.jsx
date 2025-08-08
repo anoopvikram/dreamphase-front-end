@@ -23,10 +23,6 @@ export const Footer = () => {
                         2nd Floor, UL Cyber Park, Calicut, Kerala
                         673016
                     </p>
-                    <p>Dreamphase Travel and Tours LLP, 58/167,
-                        Koyappathodi Building, South Beach Road,
-                        Calicut-673001
-                    </p>
                 </div>
 
                 <div className='flex flex-col gap-2 lg:self-baseline self-center lg:border-0 border-b lg:pb-0 pb-5'>

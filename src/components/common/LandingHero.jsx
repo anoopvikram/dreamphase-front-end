@@ -9,7 +9,7 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
 export const LandingHero = ({ activeTab = 'Visa', animateOnLoad = false }) => {
-  const tabs = ['Tour', 'Visa', 'Insurance', 'Travel Mart', 'Flight', 'Hotels', 'Other'];
+  const tabs = ['Tour', 'Visa', 'Insurance', 'Hotels', 'Flight', 'Other'];
   const navigate = useNavigate();
   const heroRef = useRef(null);
 

@@ -38,7 +38,7 @@ export const TravelerForm = ({ index, onChange }) => {
   }, [formData]);
 
   return (
-    <div className="w-full flex flex-col items-center gap-10 my-10 border-t pt-10">
+    <div className="w-full flex flex-col items-center gap-10 my-10 pt-10">
       {/* Passport Front Image Upload Section */}
       <div className="w-3/4 mx-auto flex flex-col items-center gap-5">
         <PhotoUpload

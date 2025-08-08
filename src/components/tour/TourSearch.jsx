@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
-import { fetchDestinations } from '../../api/visaApi'; // adjust path
+import { fetchDestinations } from '../../api/visaApi';
 
 export const TourSearch = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -11,6 +11,7 @@ export const TourSearch = () => {
   const [filteredCities, setFilteredCities] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
+  const containerRef = useRef(null); // added
 
   useGSAP(() => {
     gsap.from('.search-input', { x: 150, opacity: 0, duration: 1, ease: 'power3.out' });
@@ -22,6 +23,17 @@ export const TourSearch = () => {
       const cityNames = data.map(dest => dest.name);
       setAllCities(cityNames);
     });
+  }, []);
+
+  // close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleChange = (e) => {
@@ -48,14 +60,17 @@ export const TourSearch = () => {
     navigate('/tour-details', {
       state: {
         destination: searchTerm.trim(),
-        allTripTypes: ['Leisure', 'Business', 'Adventure'], // Example trip types
+        allTripTypes: ['Leisure', 'Business', 'Adventure'],
         tripType: 'Leisure',
       },
     });
   };
 
   return (
-    <div className="w-2/5 mx-auto text-black relative search-bar">
+    <div
+      ref={containerRef} // added
+      className="w-2/5 mx-auto text-black relative search-bar"
+    >
       <input
         type="text"
         placeholder="Search tours..."

@@ -30,7 +30,7 @@ export const CountryCard = ({ data, onClick }) => {
 
   return (
     <div
-      className="country-card relative"
+      className="country-card relative w-[340px] h-[175px]"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={() => onClick(data)}

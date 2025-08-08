@@ -55,7 +55,7 @@ export const FlightsLanding = () => {
       animate="animate"
       exit="exit"
     >
-    <div className="flight-landing flex flex-col overflow-y-auto  bg-white">
+    <div className="flight-landing flex flex-col overflow-y-auto mb-10  bg-white">
       <div className="relative z-10">
         <LandingHero activeTab="Flight"/>
       </div>

@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { FaPlane, FaShieldAlt, FaCalendarAlt, FaArrowRight, FaTimes } from 'react-icons/fa';
+import { FaPlane, FaCalendarAlt, FaArrowRight, FaTimes } from 'react-icons/fa';
+import { BiSolidCheckShield } from "react-icons/bi";  
 import { TravelerForm } from '../../components/visa/TravelerForm';
 import { useParams, useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { FaTablet } from "react-icons/fa6";
+import { MdTimer } from "react-icons/md";
 
 
 export const VisaApplicationForm = () => {
@@ -39,7 +42,7 @@ export const VisaApplicationForm = () => {
   }
 
   return (
-    <div className="w-full bg-white text-black px-6 pt-30 space-y-12 pb-12">
+    <div className="w-full bg-white text-black px-6 pt-30 space-y-8 pb-12">
       {/* Header From -> To */}
       <div className="flex justify-center items-center gap-3 text-xl font-bold bg-[#D9D9D9] py-2 px-6 w-fit mx-auto border-2 border-black rounded-full">
         <span>{from}</span>
@@ -67,28 +70,27 @@ export const VisaApplicationForm = () => {
       </div>
 
       {/* Authorization Note */}
-      <div className="flex justify-center items-center gap-3 text-sm text-gray-800">
-        <FaShieldAlt className="text-[#164B71]" />
+      <div className="flex justify-start w-4/5 mx-auto  items-center gap-3 text-md text-black">
+        <BiSolidCheckShield  className="text-[#164B71] text-2xl"/>
         <span>Dreamphase is authorized by the Government of {to?.charAt(0).toUpperCase() + to?.slice(1).toLowerCase()}.</span>
       </div>
 
       {/* Processing Time */}
-      <div className="flex flex-col items-center space-y-1">
-        <p className="font-semibold">Processing Time</p>
-        <p className="bg-[#164B71] text-white px-4 py-1 rounded-full text-xs">5–7 Business Days</p>
+      <div className="flex flex-row justify-between w-5/6 mx-auto items-center space-y-1 ">
+        <p className="font-semibold text-xl">Processing Time</p>
+        <p className="bg-[#164B71] text-white px-4 py-1 rounded-full text-sm">5–7 Business Days</p>
         
       </div>
 
-      <div className="flex flex-wrap gap-6 justify-start">
+<div className="flex flex-wrap gap-6 w-4/5 mx-auto justify-start">
   {[
-    { label: 'Visa Type', value: visa?.visa_type },
-    { label: 'Visa Term', value: visa?.validity_days, unit: 'days' },
-    { label: 'Visa Time', value: visa?.duration_days, unit: 'days' },
-    { label: 'Visa Stage', value: visa?.processing_time }
-  ].map(({ label, value, unit }, idx) => (
+    { label: 'Visa Type', value: visa?.visa_type, icon: <FaTablet className="text-black text-4xl" /> },
+    { label: 'Length of Stay', value: visa?.duration_days, unit: 'days', icon: <FaCalendarAlt className="text-black text-4xl" /> },
+    { label: 'Validity', value: visa?.validity_days, unit: 'days', icon: <MdTimer className="text-black text-4xl" /> }
+  ].map(({ label, value, unit, icon }, idx) => (
     value ? (
-      <div key={idx} className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-md">
-        <div className="w-6 h-6 bg-gray-400 rounded-full" />
+      <div key={idx} className="flex items-center gap-2 px-4 py-2 rounded-md">
+        {icon}
         <div>
           <p className="text-sm text-gray-600">{label}:</p>
           <p className="font-semibold">{value} {unit || ''}</p>
@@ -100,18 +102,18 @@ export const VisaApplicationForm = () => {
 
 
       {/* Passport Upload Section Info */}
-      <div>
+      <div className='w-5/6 mx-auto'>
         <h2 className="text-2xl font-bold">Upload Traveler's Passport (Front & Back Pages)</h2>
-        <p className="text-base">
-          {to?.charAt(0).toUpperCase() + to?.slice(1).toLowerCase()} requires a clear scan of your passport. Dreamphase uses OCR to autofill your info. Review before submitting.
+        <p className="text-base text-gray-600">
+          {to?.charAt(0).toUpperCase() + to?.slice(1).toLowerCase()} requires a clear scan of your passport (front and back). Dreamphase uses a highly accurate (99.9%) OCR system to autofill your information instantly. Review all details before submitting to avoid errors. Incorrect or unclear uploads may lead to visa rejection. For example here
         </p>
       </div>
 
       {/* Traveler Forms */}
-      <div className="space-y-10">
+      <div className="space-y-5">
         {travelers.map((_, i) => (
-          <div key={i} className="relative space-y-4">
-            <div className="flex items-center justify-between px-6 md:px-16">
+          <div key={i} className="relative space-y-2">
+            <div className="flex items-center w-5/6 border-b py-2 mx-auto justify-between  ">
               <h2 className="text-lg font-bold">Traveler {i + 1}</h2>
               {travelers.length > 1 && (
                 <button
