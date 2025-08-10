@@ -1,64 +1,72 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { ProgressBar } from '../../components/common/ProgressBar';
-
+import { saveFormData, getFormData } from '../../utils/formStorage';
 
 export const InsuranceAddon = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const travelerCount = state?.travelerCount || 1;
-  const riderList = state?.riderList || [];
+
+  // prefer persisted data, then navigation state, then default
+  const existing = getFormData();
+  const travelerCount = state?.travelerCount || existing.travelerCount || 1;
+  const incomingRiderList = state?.riderList || existing.riderList || [];
+
   const steps = ['Travel Details', 'Choose Plan', 'Choose Add-ons', 'Traveller Details', 'Review and Payment'];
 
   const fallbackAddons = [
-    {
-      id: 1,
-      name: 'Gadget Cover',
-      amount: 999,
-    },
-    {
-      id: 2,
-      name: 'Trip Delay Cover',
-      amount: 499,
-    },
-    {
-      id: 3,
-      name: 'Medical Emergency Cover',
-      amount: 1499,
-    },
+    { id: 1, name: 'Gadget Cover', amount: 999, rider_code: 'GADGET' },
+    { id: 2, name: 'Trip Delay Cover', amount: 499, rider_code: 'TRIP_DELAY' },
+    { id: 3, name: 'Medical Emergency Cover', amount: 1499, rider_code: 'MEDICAL' },
   ];
 
   const [addons, setAddons] = useState([]);
-  const [selectedAddons, setSelectedAddons] = useState([]);
+  const [selectedAddons, setSelectedAddons] = useState(existing.selectedRiderCodes || []);
 
   useEffect(() => {
-    if (riderList.length > 0) {
-      setAddons(riderList);
+    // normalize incoming riders to expected shape: { rider_code, name, amount, ... }
+    if (Array.isArray(incomingRiderList) && incomingRiderList.length > 0) {
+      const normalized = incomingRiderList.map((r, idx) => ({
+        ...r,
+        rider_code: r.rider_code || r.code || r.riderCode || r.riderId || `RIDER_${idx}`,
+        name: r.name || r.rider_name || r.title || `Rider ${idx + 1}`,
+        amount: r.amount ?? r.rider_amount ?? r.price ?? 0,
+      }));
+      setAddons(normalized);
+      // persist riderList shape so later pages can read if user refreshes
+      saveFormData({ riderList: normalized });
     } else {
       setAddons(fallbackAddons);
     }
-  }, [riderList]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [incomingRiderList]);
 
   const handleSelectAddon = (addon) => {
-  const isSelected = selectedAddons.includes(addon.rider_code);
-  if (isSelected) {
-    setSelectedAddons(selectedAddons.filter(code => code !== addon.rider_code));
-  } else {
-    setSelectedAddons([...selectedAddons, addon.rider_code]);
-  }
-};
+    const code = addon.rider_code;
+    setSelectedAddons(prev => {
+      if (prev.includes(code)) return prev.filter(c => c !== code);
+      return [...prev, code];
+    });
+  };
+
+  const handleContinue = () => {
+    // save merged data
+    saveFormData({
+      travelerCount,
+      selectedRiderCodes: selectedAddons,
+    });
+
+    navigate('/insurance/details');
+  };
 
   return (
     <div className='flex flex-col items-center py-50 md:py-30 w-3/4 text-black mx-auto'>
-
-      {/* Progress bar remains unchanged */}
       <ProgressBar currentStepIndex={2} steps={steps} />
 
-      {/* Addon cards */}
       <div>
         {addons.map((addon, index) => (
           <div
-            key={index}
+            key={addon.rider_code || index}
             className="addon-card flex flex-row border bg-[#F0F6FF] border-[#0062CC] rounded-xl p-4 m-4 justify-between items-center gap-4"
           >
             <img
@@ -86,44 +94,31 @@ export const InsuranceAddon = () => {
                 {selectedAddons.includes(addon.rider_code) ? (
                   <span className="flex items-center gap-1">
                     Selected
-                    <img src='/images/icons/check.png' className='w-6'/>
+                    <img src='/images/icons/check.png' className='w-6' alt="selected" />
                   </span>
                 ) : (
                   'Select'
                 )}
               </button>
-
             </div>
           </div>
         ))}
       </div>
 
-      {/* Navigation buttons */}
       <div className='buttons flex flex-row gap-5'>
-        <button className="mt-2 px-4 py-1 rounded-lg bg-white border border-[#004c99] text-[#004c99] hover:text-white hover:bg-[#004c99]" onClick={() => navigate(-1)}>
+        <button
+          className="mt-2 px-4 py-1 rounded-lg bg-white border border-[#004c99] text-[#004c99] hover:text-white hover:bg-[#004c99]"
+          onClick={() => navigate(-1)}
+        >
           Go back
         </button>
-        <button className="mt-2 px-4 py-1 rounded-lg bg-[#0062CC] border border-[#004c99] text-white hover:text-white hover:bg-[#004c99]" 
-          onClick={() =>{
-            
-            console.log('Navigating with data:', {
-            travelerCount,
-            selectedRiderCodes: selectedAddons,
-          });
-
-            navigate('/insurance/details', {
-              state: {
-                travelerCount,
-                selectedRiderCodes: selectedAddons, // array of rider_code strings
-              }
-            })
-          }
-            
-          }>
+        <button
+          className="mt-2 px-4 py-1 rounded-lg bg-[#0062CC] border border-[#004c99] text-white hover:text-white hover:bg-[#004c99]"
+          onClick={handleContinue}
+        >
           Continue
         </button>
       </div>
-
     </div>
   );
 };

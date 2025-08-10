@@ -8,79 +8,58 @@ import { GrGroup } from "react-icons/gr";
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { motion } from 'framer-motion';
+import { saveFormData, getFormData } from '../../utils/formStorage'; // <- necessary import
 
 export const InsuranceLanding = () => {
   const blurVariants = {
-  initial: {
-    opacity: 1,
-    filter: 'blur(5px)',
-    
-  },
-  animate: {
-    opacity: 1,
-    filter: 'blur(0px)',
-    
-    transition: { duration: 0.6, ease: 'easeOut' },
-  },
-  exit: {
-    opacity: 1,
-    filter: 'blur(5px)',
-    
-    transition: { duration: 0.6, ease: 'easeIn' },
-  },
-};
+    initial: { opacity: 1, filter: 'blur(5px)' },
+    animate: { opacity: 1, filter: 'blur(0px)', transition: { duration: 0.6, ease: 'easeOut' } },
+    exit: { opacity: 1, filter: 'blur(5px)', transition: { duration: 0.6, ease: 'easeIn' } },
+  };
 
+  const existing = getFormData(); // preload saved data if any
 
-
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [duration, setDuration] = useState(0);
-  const [isMultiTrip, setIsMultiTrip] = useState(false);
-  const [travelerCount, setTravelerCount] = useState(1);
-  const [travelers, setTravelers] = useState([{ dob: '' }]);
-  const [email, setEmail] = useState('');
-  const [mobile, setMobile] = useState('');
+  const [startDate, setStartDate] = useState(existing.startDate || '');
+  const [endDate, setEndDate] = useState(existing.endDate || '');
+  const [duration, setDuration] = useState(existing.duration || 0);
+  const [isMultiTrip, setIsMultiTrip] = useState(existing.isMultiTrip || false);
+  const [travelerCount, setTravelerCount] = useState(existing.travelerCount || 1);
+  const [travelers, setTravelers] = useState(existing.travelers || [{ dob: '' }]);
+  const [email, setEmail] = useState(existing.email || '');
+  const [mobile, setMobile] = useState(existing.mobile || '');
   const [showSecondBox, setShowSecondBox] = useState(false);
   const [regions, setRegions] = useState([]);
-  const [selectedRegion, setSelectedRegion] = useState('');
+  const [selectedRegion, setSelectedRegion] = useState(existing.selectedRegion || '');
   const secondBoxRef = useRef();
   const navigate = useNavigate();
   const [countries, setCountries] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState(existing.selectedCountry || '');
   const [errors, setErrors] = useState({});
   const imgRef = useRef(null);
 
-
   useGSAP(() => {
-  if (!showSecondBox) return;
+    if (!showSecondBox) return;
+    gsap.fromTo(
+      imgRef.current,
+      { x: -100, opacity: 0 },
+      { x: 0, opacity: 1, delay: 0.5, duration: 0.9, ease: 'power3.out' }
+    );
+  }, [showSecondBox]);
 
-  gsap.fromTo(
-    imgRef.current,
-    { x: -100, opacity: 0 },
-    { x: 0,  opacity: 1, delay: 0.5, duration: 0.9, ease: 'power3.out' }
-  );
-}, [showSecondBox]);
-
-
-useEffect(() => {
-  const fetchRegions = async () => {
-    try {
-      const res = await fetch('https://website-0suz.onrender.com/api/get_category/');
-      const data = await res.json();
-      console.log('API raw response:', data);
-      setRegions(data.categories || []);
-      setCountries(data.countries || []);
-
-    } catch (err) {
-      console.error('Fetch regions failed:', err);
-      setRegions([]); // fallback to empty array
-    }
-  };
-
-  fetchRegions();
-}, []);
-
-
+  useEffect(() => {
+    const fetchRegions = async () => {
+      try {
+        const res = await fetch('https://website-0suz.onrender.com/api/get_category/');
+        const data = await res.json();
+        setRegions(data.categories || []);
+        setCountries(data.countries || []);
+      } catch (err) {
+        console.error('Fetch regions failed:', err);
+        setRegions([]);
+      }
+    };
+    fetchRegions();
+  }, []);
 
   useEffect(() => {
     setTravelers((prev) => {
@@ -90,6 +69,11 @@ useEffect(() => {
       return updated;
     });
   }, [travelerCount]);
+
+  // keep duration in sync when dates change
+  useEffect(() => {
+    setDuration(calculateDuration(startDate, endDate));
+  }, [startDate, endDate]);
 
   const handleDOBChange = (index, value) => {
     const updated = [...travelers];
@@ -119,10 +103,9 @@ useEffect(() => {
   const handleDateChange = (type, value) => {
     if (type === 'start') {
       setStartDate(value);
-      setDuration(calculateDuration(value, endDate));
+      // duration updated by effect
     } else {
       setEndDate(value);
-      setDuration(calculateDuration(startDate, value));
     }
   };
 
@@ -133,294 +116,277 @@ useEffect(() => {
     }, 50);
   };
 
-const handleSubmit = async () => {
-  const newErrors = {};
+  const handleSubmit = async () => {
+    const newErrors = {};
 
-  if (!selectedRegion) newErrors.selectedRegion = true;
-  if (!selectedCountry) newErrors.selectedCountry = true;
-  if (!startDate) newErrors.startDate = true;
-  if (!endDate) newErrors.endDate = true;
-  if (!email.trim()) newErrors.email = true;
-  if (!mobile.trim()) newErrors.mobile = true;
-  travelers.forEach((trav, i) => {
-    if (!trav.dob) newErrors[`dob-${i}`] = true;
-  });
-
-  if (Object.keys(newErrors).length > 0) {
-    setErrors(newErrors);
-    return;
-  }
-
-  setErrors({}); // clear errors if valid
-
-  const age = calculateAge(travelers[0]?.dob);
-  const days = calculateDuration(startDate, endDate);
-
-  const payload = {
-    email,
-    phone_number: mobile,
-    category_code: selectedRegion,
-    dob: travelers[0]?.dob || '',
-    type_of_trip: isMultiTrip ? 'multi' : 'single',
-    from_date: startDate,
-    to_date: endDate,
-  };
-
-  try {
-    const res = await fetch('https://website-0suz.onrender.com/api/add_audience/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+    if (!selectedRegion) newErrors.selectedRegion = true;
+    if (!selectedCountry) newErrors.selectedCountry = true;
+    if (!startDate) newErrors.startDate = true;
+    if (!endDate) newErrors.endDate = true;
+    if (!email.trim()) newErrors.email = true;
+    if (!mobile.trim()) newErrors.mobile = true;
+    travelers.forEach((trav, i) => {
+      if (!trav.dob) newErrors[`dob-${i}`] = true;
     });
 
-    if (!res.ok) throw new Error(`Status: ${res.status}`);
-    const data = await res.json();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
 
-    const selectedRegionObj = regions.find(r => r.category_code === selectedRegion);
-    const selectedCountryObj = countries.find(c => c.country_code === selectedCountry);
+    setErrors({});
+    const age = calculateAge(travelers[0]?.dob);
+    const days = calculateDuration(startDate, endDate);
 
-    const formDataToSave = {
-      startDate,
-      endDate,
-      duration: days,
-      isMultiTrip,
-      travelers,
-      travelerCount,
+    const payload = {
       email,
-      mobile,
-      selectedRegion,
-      age,
-      days,
-      selectedCountry,
-      categoryLabel: selectedRegionObj?.description || '',
-      selectedCountryLabel: selectedCountryObj?.description || '',
+      phone_number: mobile,
+      category_code: selectedRegion,
+      dob: travelers[0]?.dob || '',
+      type_of_trip: isMultiTrip ? 'multi' : 'single',
+      from_date: startDate,
+      to_date: endDate,
     };
 
-    localStorage.setItem('insuranceForm', JSON.stringify(formDataToSave));
-    navigate('/insurance/plan');
-  } catch (err) {
-    console.error('Submission error:', err);
-    alert('Submission failed. Please try again.');
-  }
-};
+    try {
+      const res = await fetch('https://website-0suz.onrender.com/api/add_audience/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
 
+      if (!res.ok) throw new Error(`Status: ${res.status}`);
+      await res.json();
 
+      const selectedRegionObj = regions.find(r => r.category_code === selectedRegion);
+      const selectedCountryObj = countries.find(c => c.country_code === selectedCountry);
 
+      const formDataToSave = {
+        startDate,
+        endDate,
+        duration: days,
+        isMultiTrip,
+        travelers,
+        travelerCount,
+        email,
+        mobile,
+        selectedRegion,
+        age,
+        days,
+        selectedCountry,
+        categoryLabel: selectedRegionObj?.description || '',
+        selectedCountryLabel: selectedCountryObj?.description || '',
+      };
 
+      // merge and persist using shared helper
+      saveFormData(formDataToSave);
+
+      navigate('/insurance/plan');
+    } catch (err) {
+      console.error('Submission error:', err);
+      alert('Submission failed. Please try again.');
+    }
+  };
 
   return (
-    <motion.div
-      
-      variants={blurVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-    >
-    <div className='insurance-landing flex flex-col  text-black overflow-y-auto bg-white pb-10'>
-      <div className='relative z-10'>
-        <LandingHero activeTab='Insurance' />
-      </div>
-    <div className='z-20 w-[70%] flex flex-col justify-center items-start mx-auto'>
-      {/* First Box */}
-      <div className="first-box z-20 w-full -mt-10 bg-[#F0F6FF] border border-[#0062CC] rounded-2xl p-6 shadow-sm space-y-6">
-        <div className="flex flex-row w-1/2 gap-10">
-
-
-<div className="flex flex-col w-full md:w-1/2">
-  <label className="text-sm font-semibold text-[#4b4b4b] mb-1">
-    Travel Region<span className="text-red-500">*</span>
-  </label>
-
-  <div className="relative w-full">
-    <select
-      value={selectedRegion}
-      onChange={(e) => setSelectedRegion(e.target.value)}
-      className={`appearance-none w-full border rounded-lg px-4 py-2 pr-10 text-sm text-black bg-[#f3f7fa] focus:outline-[#164B71] ${
-        errors.selectedRegion ? 'border-red-500' : 'border-[#0062CC]'
-      }`}
-    >
-      <option value="">Select Travel Region</option>
-      {regions.map((region) => (
-        <option key={region.category_code} value={region.category_code}>
-          {region.description}
-        </option>
-      ))}
-    </select>
-
-    <IoMdArrowDropdown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-800 pointer-events-none" />
-  </div>
-</div>
-
-          <div className="flex flex-col w-full md:w-1/2">
-  <label className="text-sm font-semibold text-[#4b4b4b] mb-1">
-    Country of Visit<span className="text-red-500">*</span>
-  </label>
-
-  <div className="relative w-full">
-    <select
-      value={selectedCountry}
-      onChange={(e) => setSelectedCountry(e.target.value)}
-      className={`appearance-none w-full border rounded-lg px-4 py-2 pr-10 text-sm text-black bg-[#f3f7fa] focus:outline-[#164B71] ${
-        errors.selectedCountry ? 'border-red-500' : 'border-[#0062CC]'
-      }`}
-    >
-      <option value="">Select Country</option>
-      {countries.map((country) => (
-        <option key={country.country_code} value={country.country_code}>
-          {country.description}
-        </option>
-      ))}
-    </select>
-
-    <IoMdArrowDropdown className="absolute right-3 top-1/2 transform -translate-y-1/2   text-gray-800 pointer-events-none" />
-  </div>
-</div>
-
-
+    <motion.div variants={blurVariants} initial="initial" animate="animate" exit="exit">
+      <div className='insurance-landing flex flex-col text-black overflow-y-auto bg-white pb-10'>
+        <div className='relative z-10'>
+          <LandingHero activeTab='Insurance' />
         </div>
+        <div className='z-20 w-[70%] flex flex-col justify-center items-start mx-auto'>
+          {/* First Box */}
+          <div className="first-box z-20 w-full -mt-10 bg-[#F0F6FF] border border-[#0062CC] rounded-2xl p-6 shadow-sm space-y-6">
+            <div className="flex flex-row w-1/2 gap-10">
+              <div className="flex flex-col w-full md:w-1/2">
+                <label className="text-sm font-semibold text-[#4b4b4b] mb-1">
+                  Travel Region<span className="text-red-500">*</span>
+                </label>
 
-        <div>
-          <p className="font-semibold text-[#4b4b4b]">Do you travel multiple times a year?</p>
-          <div className="flex items-center gap-4 mt-2">
-            <button
-              onClick={() => setIsMultiTrip((prev) => !prev)}
-              className={`w-12 h-6 flex items-center rounded-full p-1 transition duration-300 ${
-                isMultiTrip ? 'bg-[#0062CC]' : 'bg-gray-300'
-              }`}
-            >
-              <div
-                className={`w-4 h-4 bg-white rounded-full shadow-md transform transition duration-300 ${
-                  isMultiTrip ? 'translate-x-5' : 'translate-x-0'
-                }`}
-              ></div>
-            </button>
-            <p className="text-xs text-gray-600">Note: The Multi-Trip Plan covers a maximum of 60 days per trip.</p>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap md:flex-nowrap items-end justify-between gap-6 w-full">
-          <div className="flex flex-col w-full md:w-1/3">
-            <label className="text-sm font-semibold text-[#4b4b4b] mb-1">Start Date<span className="text-red-500">*</span></label>
-            <input
-  type="date"
-  value={startDate}
-  onChange={(e) => handleDateChange('start', e.target.value)}
-  className={`border text-black bg-[#f3f7fa] rounded-lg px-4 py-2 text-sm ${
-    errors.startDate ? 'border-red-500' : 'border-[#0062CC]'
-  }`}
-/>
-
-          </div>
-
-          <div className="flex flex-col w-full md:w-1/3">
-            <label className="text-sm font-semibold text-[#4b4b4b] mb-1">End Date<span className="text-red-500">*</span></label>
-            <input
-  type="date"
-  value={endDate}
-  onChange={(e) => handleDateChange('end', e.target.value)}
-  className={`border text-black bg-[#f3f7fa] rounded-lg px-4 py-2 text-sm ${
-    errors.endDate ? 'border-red-500' : 'border-[#0062CC]'
-  }`}
-/>
-
-          </div>
-
-          <div className="flex flex-col w-full md:w-1/3">
-            <label className="text-sm font-semibold text-[#4b4b4b] mb-0">Duration</label>
-            <p className="text-sm py-2 px-1 text-black rounded-lg">{duration} {duration === 1 ? 'day' : 'days'}</p>
-          </div>
-
-          <div className="mt-6 md:mt-0">
-            <button onClick={handleContinue} className="bg-[#0062CC] text-white px-6 py-2 rounded-lg hover:bg-blue-700">
-              CONTINUE
-            </button>
-          </div>
-        </div>
-
-        <p className="text-xs text-center text-gray-500 mt-2">
-          Note: Overseas Travel Insurance is only valid for Indian passport holders, commencing their journey from India.
-        </p>
-      </div>
-
-      <div className='flex flex-row w-full'>
-      {/* Second Box */}
-      {showSecondBox && (
-        <div ref={secondBoxRef} className="second-box text-black z-40 w-[80%] max-w-5xl  bg-[#F0F6FF] border border-[#0062CC] rounded-2xl p-6 shadow-sm space-y-6 my-10">
-          <div className="sb-top flex flex-col">
-            <label className="text-sm font-semibold mb-2">Number Of Traveller</label>
-            <div className="flex items-center gap-4 bg-[#f3f7fa] border border-[#0062CC] w-fit rounded-full px-4 py-2">
-              <button onClick={() => setTravelerCount(prev => Math.max(1, prev - 1))} className=""><LuCircleMinus/></button>
-              <div className="flex items-center gap-2 text-sm">
-                {travelerCount >= 2 ? <GrGroup size={20}/> : <GoPerson size={20}/>}
-                <span>{travelerCount}</span>
-              </div>
-              <button onClick={() => setTravelerCount(prev => prev + 1)} className=""><LuCirclePlus/></button>
-            </div>
-          </div>
-
-          <div className="sb-middle flex flex-wrap gap-6">
-            {travelers.map((traveler, index) => (
-              <div key={index} className="flex flex-col">
-                <label className="text-sm font-semibold mb-1">Traveller {index + 1} DOB<span className="text-red-500">*</span></label>
-                <div className='flex flex-row items-center gap-2'>
-                  <input
-                    type="date"
-                    value={traveler.dob}
-                    onChange={(e) => handleDOBChange(index, e.target.value)}
-                    className={`border bg-[#f3f7fa] rounded-lg px-4 py-2 text-sm ${
-                      errors[`dob-${index}`] ? 'border-red-500' : 'border-[#0062CC]'
+                <div className="relative w-full">
+                  <select
+                    value={selectedRegion}
+                    onChange={(e) => setSelectedRegion(e.target.value)}
+                    className={`appearance-none w-full border rounded-lg px-4 py-2 pr-10 text-sm text-black bg-[#f3f7fa] focus:outline-[#164B71] ${
+                      errors.selectedRegion ? 'border-red-500' : 'border-[#0062CC]'
                     }`}
-                  />
+                  >
+                    <option value="">Select Travel Region</option>
+                    {regions.map((region) => (
+                      <option key={region.category_code} value={region.category_code}>
+                        {region.description}
+                      </option>
+                    ))}
+                  </select>
 
-                  <p className="text-xs mt-1 self-end">Age: {calculateAge(traveler.dob)}</p>
+                  <IoMdArrowDropdown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-800 pointer-events-none" />
+                </div>
               </div>
- 
+
+              <div className="flex flex-col w-full md:w-1/2">
+                <label className="text-sm font-semibold text-[#4b4b4b] mb-1">
+                  Country of Visit<span className="text-red-500">*</span>
+                </label>
+
+                <div className="relative w-full">
+                  <select
+                    value={selectedCountry}
+                    onChange={(e) => setSelectedCountry(e.target.value)}
+                    className={`appearance-none w-full border rounded-lg px-4 py-2 pr-10 text-sm text-black bg-[#f3f7fa] focus:outline-[#164B71] ${
+                      errors.selectedCountry ? 'border-red-500' : 'border-[#0062CC]'
+                    }`}
+                  >
+                    <option value="">Select Country</option>
+                    {countries.map((country) => (
+                      <option key={country.country_code} value={country.country_code}>
+                        {country.description}
+                      </option>
+                    ))}
+                  </select>
+
+                  <IoMdArrowDropdown className="absolute right-3 top-1/2 transform -translate-y-1/2   text-gray-800 pointer-events-none" />
+                </div>
               </div>
-            ))}
+            </div>
+
+            <div>
+              <p className="font-semibold text-[#4b4b4b]">Do you travel multiple times a year?</p>
+              <div className="flex items-center gap-4 mt-2">
+                <button
+                  onClick={() => setIsMultiTrip((prev) => !prev)}
+                  className={`w-12 h-6 flex items-center rounded-full p-1 transition duration-300 ${
+                    isMultiTrip ? 'bg-[#0062CC]' : 'bg-gray-300'
+                  }`}
+                >
+                  <div
+                    className={`w-4 h-4 bg-white rounded-full shadow-md transform transition duration-300 ${
+                      isMultiTrip ? 'translate-x-5' : 'translate-x-0'
+                    }`}
+                  ></div>
+                </button>
+                <p className="text-xs text-gray-600">Note: The Multi-Trip Plan covers a maximum of 60 days per trip.</p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap md:flex-nowrap items-end justify-between gap-6 w-full">
+              <div className="flex flex-col w-full md:w-1/3">
+                <label className="text-sm font-semibold text-[#4b4b4b] mb-1">Start Date<span className="text-red-500">*</span></label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => handleDateChange('start', e.target.value)}
+                  className={`border text-black bg-[#f3f7fa] rounded-lg px-4 py-2 text-sm ${
+                    errors.startDate ? 'border-red-500' : 'border-[#0062CC]'
+                  }`}
+                />
+              </div>
+
+              <div className="flex flex-col w-full md:w-1/3">
+                <label className="text-sm font-semibold text-[#4b4b4b] mb-1">End Date<span className="text-red-500">*</span></label>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => handleDateChange('end', e.target.value)}
+                  className={`border text-black bg-[#f3f7fa] rounded-lg px-4 py-2 text-sm ${
+                    errors.endDate ? 'border-red-500' : 'border-[#0062CC]'
+                  }`}
+                />
+              </div>
+
+              <div className="flex flex-col w-full md:w-1/3">
+                <label className="text-sm font-semibold text-[#4b4b4b] mb-0">Duration</label>
+                <p className="text-sm py-2 px-1 text-black rounded-lg">{duration} {duration === 1 ? 'day' : 'days'}</p>
+              </div>
+
+              <div className="mt-6 md:mt-0">
+                <button onClick={handleContinue} className="bg-[#0062CC] text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                  CONTINUE
+                </button>
+              </div>
+            </div>
+
+            <p className="text-xs text-center text-gray-500 mt-2">
+              Note: Overseas Travel Insurance is only valid for Indian passport holders, commencing their journey from India.
+            </p>
           </div>
 
-          <div className="sb-bottom flex justify-evenly flex-row gap-10">
-            <div className="flex flex-col w-full md:w-1/4">
-              <label className="text-sm font-semibold mb-1">Email ID<span className="text-red-500">*</span></label>
-              <input
-  type="email"
-  value={email}
-  onChange={(e) => setEmail(e.target.value)}
-  placeholder="Enter Email ID"
-  className={`border bg-[#f3f7fa] rounded-lg px-4 py-2 text-sm ${
-    errors.email ? 'border-red-500' : 'border-[#0062CC]'
-  }`}
-/>
-            </div>
-            <div className="flex flex-col w-full md:w-1/4">
-              <label className="text-sm font-semibold mb-1">Mobile Number<span className="text-red-500">*</span></label>
-              <input
-  type="tel"
-  value={mobile}
-  onChange={(e) => setMobile(e.target.value)}
-  placeholder="Enter Mobile Number"
-  className={`border bg-[#f3f7fa] rounded-lg px-4 py-2 text-sm ${
-    errors.mobile ? 'border-red-500' : 'border-[#0062CC]'
-  }`}
-/>
-            </div>
-          </div>
+          <div className='flex flex-row w-full'>
+            {/* Second Box */}
+            {showSecondBox && (
+              <div ref={secondBoxRef} className="second-box text-black z-40 w-[80%] max-w-5xl  bg-[#F0F6FF] border border-[#0062CC] rounded-2xl p-6 shadow-sm space-y-6 my-10">
+                <div className="sb-top flex flex-col">
+                  <label className="text-sm font-semibold mb-2">Number Of Traveller</label>
+                  <div className="flex items-center gap-4 bg-[#f3f7fa] border border-[#0062CC] w-fit rounded-full px-4 py-2">
+                    <button onClick={() => setTravelerCount(prev => Math.max(1, prev - 1))} className=""><LuCircleMinus/></button>
+                    <div className="flex items-center gap-2 text-sm">
+                      {travelerCount >= 2 ? <GrGroup size={20}/> : <GoPerson size={20}/>}
+                      <span>{travelerCount}</span>
+                    </div>
+                    <button onClick={() => setTravelerCount(prev => prev + 1)} className=""><LuCirclePlus/></button>
+                  </div>
+                </div>
 
-          <div className="flex justify-center">
-            <button className="bg-[#0062CC] text-white px-12 py-2 rounded-lg hover:bg-blue-700" onClick={handleSubmit}>
-              Submit
-            </button>
+                <div className="sb-middle flex flex-wrap gap-6">
+                  {travelers.map((traveler, index) => (
+                    <div key={index} className="flex flex-col">
+                      <label className="text-sm font-semibold mb-1">Traveller {index + 1} DOB<span className="text-red-500">*</span></label>
+                      <div className='flex flex-row items-center gap-2'>
+                        <input
+                          type="date"
+                          value={traveler.dob}
+                          onChange={(e) => handleDOBChange(index, e.target.value)}
+                          className={`border bg-[#f3f7fa] rounded-lg px-4 py-2 text-sm ${
+                            errors[`dob-${index}`] ? 'border-red-500' : 'border-[#0062CC]'
+                          }`}
+                        />
+                        <p className="text-xs mt-1 self-end">Age: {calculateAge(traveler.dob)}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="sb-bottom flex justify-evenly flex-row gap-10">
+                  <div className="flex flex-col w-full md:w-1/4">
+                    <label className="text-sm font-semibold mb-1">Email ID<span className="text-red-500">*</span></label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter Email ID"
+                      className={`border bg-[#f3f7fa] rounded-lg px-4 py-2 text-sm ${
+                        errors.email ? 'border-red-500' : 'border-[#0062CC]'
+                      }`}
+                    />
+                  </div>
+                  <div className="flex flex-col w-full md:w-1/4">
+                    <label className="text-sm font-semibold mb-1">Mobile Number<span className="text-red-500">*</span></label>
+                    <input
+                      type="tel"
+                      value={mobile}
+                      onChange={(e) => setMobile(e.target.value)}
+                      placeholder="Enter Mobile Number"
+                      className={`border bg-[#f3f7fa] rounded-lg px-4 py-2 text-sm ${
+                        errors.mobile ? 'border-red-500' : 'border-[#0062CC]'
+                      }`}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-center">
+                  <button className="bg-[#0062CC] text-white px-12 py-2 rounded-lg hover:bg-blue-700" onClick={handleSubmit}>
+                    Submit
+                  </button>
+                </div>
+              </div>
+            )}
+            {showSecondBox && (
+              <div className='relative z-30 flex items-center -mr-20'>
+                <img ref={imgRef} src='/images/insurance-landing.png' className='w-120 mx-10'/>
+              </div>
+            )}
           </div>
         </div>
-      )}
-      {showSecondBox && (
-        <div className='relative z-30 flex items-center -mr-20'>
-          <img ref={imgRef} src='/images/insurance-landing.png' className='w-120 mx-10'/>
-        </div>
-      )}
       </div>
-      </div>
-    </div>
     </motion.div>
   );
 };
