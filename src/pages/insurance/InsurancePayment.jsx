@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaWallet, FaCreditCard, FaGooglePay, FaApplePay, FaPaypal, FaCheckCircle } from 'react-icons/fa';
+import { FaWallet, FaCreditCard, FaCheckCircle } from 'react-icons/fa';
 import { IoMdCard } from "react-icons/io";
 import { TiDocumentText } from "react-icons/ti";
 import { ProgressBar } from '../../components/common/ProgressBar';
@@ -13,7 +13,9 @@ export const InsurancePayment = () => {
   const [selectedCard, setSelectedCard] = useState(null);
   const cards = ['**** **** 3535', '**** **** 9823'];
   const steps = ['Travel Details', 'Choose Plan', 'Choose Add-ons', 'Traveller Details', 'Review and Payment'];
-  const [formData, setFormData] = useState(() => getFormData());
+
+  // <-- minimal change: guard against null returned from getFormData()
+  const [formData, setFormData] = useState(() => getFormData() ?? {});
   const [showPayment, setShowPayment] = useState(false);
   const paymentRef = useRef(null);
 
@@ -25,29 +27,53 @@ export const InsurancePayment = () => {
     }, 80);
   };
 
+  // --- minimal copy of ReviewCard's extraction logic (so order summary matches exactly) ---
+  const formatCurrency = (n, symbol = '₹') => {
+    const num = Number(n) || 0;
+    return symbol + num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
+
+  const planName = formData?.selectedPlan || formData?.planName || formData?.plan_name || '—';
+  const planPremium = Number(formData?.planPremium ?? formData?.selectedPlanPremium ?? formData?.plan_premium ?? 0);
+
+  const riderList = formData?.riderList || formData?.riders || formData?.savedRiderList || [];
+  const selectedRiderCodes = formData?.selectedRiderCodes || formData?.selectedRiders || [];
+  const addons = (Array.isArray(selectedRiderCodes) && selectedRiderCodes.length)
+    ? selectedRiderCodes.map(code => {
+        const r = riderList.find(rr => rr.rider_code === code || rr.code === code) || {};
+        return { code, name: r.name || r.rider_name || r.title || code, amount: r.amount ?? r.rider_amount ?? r.price ?? 0 };
+      })
+    : [];
+
+  const addonsTotal = addons.reduce((s, a) => s + Number(a.amount || 0), 0);
+  const subTotal = planPremium + addonsTotal;
+  const gst = +(subTotal * 0.18);
+  const total = Number(formData?.totalAmount ?? (subTotal + gst));
+
   return (
     <div className='flex flex-col items-center gap-5 py-50 md:py-30 w-3/4 text-black mx-auto'>
       <ProgressBar currentStepIndex={4} steps={steps} />
 
-<div className='w-full bg-white rounded shadow-sm p-4'>
-  <ReviewCard data={formData} />
+      <div className='w-full bg-white p-4'>
+        {/* safe: formData is always an object now */}
+        <ReviewCard data={formData} />
 
-  <div className='w-1/2 mx-auto flex justify-evenly gap-2 my-14'>
-    <button
-      onClick={() => navigate(-1)}
-      className="px-4 py-2 rounded-md bg-white border border-[#004c99] text-[#004c99] hover:bg-[#004c99] hover:text-white"
-    >
-      Go back
-    </button>
+        <div className='w-1/2 mx-auto flex justify-evenly gap-2 my-14'>
+          <button
+            onClick={() => navigate(-1)}
+            className="px-4 py-2 rounded-md bg-white border border-[#004c99] text-[#004c99] hover:bg-[#004c99] hover:text-white"
+          >
+            Go back
+          </button>
 
-    <button
-      onClick={handleContinue}
-      className="px-4 py-2 rounded-md bg-[#0062CC] text-white hover:bg-[#005293]"
-    >
-      Continue
-    </button>
-  </div>
-</div>
+          <button
+            onClick={handleContinue}
+            className="px-4 py-2 rounded-md bg-[#0062CC] text-white hover:bg-[#005293]"
+          >
+            Continue
+          </button>
+        </div>
+      </div>
 
       {/* PAYMENT SECTION (hidden until continue) */}
       {showPayment && (
@@ -147,17 +173,36 @@ export const InsurancePayment = () => {
                 <h2>Order Summary</h2>
               </div>
 
-              <ul className='flex flex-col gap-1 text-sm'>
-                <li>Travel Insurance - Basic Plan</li>
-                <li>2 Travelers</li>
-                <li>10 Days Coverage</li>
+              <ul className='flex flex-col gap-2 text-sm'>
+                {/* Plan */}
+                <li className="flex justify-between">
+                  <span>Plan: {planName}</span>
+                  <span>{planPremium ? `₹${planPremium.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-'}</span>
+                </li>
+
+                {/* Add-ons */}
+                {addons.length > 0 && (
+                  <>
+                    <li className="font-semibold">Add-ons:</li>
+                    {addons.map((addon, idx) => (
+                      <li key={idx} className="flex justify-between">
+                        <span>{addon.name}</span>
+                        <span>₹{Number(addon.amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                      </li>
+                    ))}
+                  </>
+                )}
               </ul>
+
               <hr className='w-full mx-auto border-black' />
+
+              {/* Total */}
               <div className='flex justify-between font-semibold'>
-                <h2>Total</h2>
-                <p>$139.00</p>
+                <h2>Total Amount Payable (incl. 18% GST)</h2>
+                <p>₹{Number(total || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
               </div>
             </div>
+
           </div>
 
           <div className='w-full flex justify-center mt-6'>
