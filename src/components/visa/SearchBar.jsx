@@ -74,7 +74,7 @@ export const SearchBar = () => {
   };
 
   return (
-    <div className="visa-search-bar relative z-10 text-black" ref={containerRef}>
+    <div className="visa-search-bar relative z-[1000] text-black" ref={containerRef}>
       {/* FROM + TO */}
 <div className="flex items-center border bg-[#D9D9D9] text-black rounded-xl px-4 py-2 relative z-50">
   {/* FROM */}
