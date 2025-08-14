@@ -36,9 +36,14 @@ export const CountryCard = ({ data, onClick }) => {
       onClick={() => onClick(data)}
     >
       <img src={data.image} alt={data.name} className="country-image object-cover" />
-      <p className="absolute bottom-3 right-3 bg-[#455078] text-white text-base px-3 py-1 rounded-full">
-        {data.name}
-      </p>
+      <p
+  className={`absolute bottom-3 right-3 bg-[#455078] text-white text-base px-3 py-1 rounded-full transition-opacity duration-200 ${
+    hovered ? 'opacity-0' : 'opacity-100'
+  }`}
+>
+  {data.name}
+</p>
+
 
       <div
         ref={infoRef}
