@@ -5,8 +5,8 @@ import gsap from "gsap";
 
 const FINAL_TEXT = "DREAMPHASE";
 const LETTERS = FINAL_TEXT.split("");
-const REPEAT = 6; // how many times letters repeat inside each reel
-const SLOT_REM = 7; // match font-size 7rem so a letter row == 7rem
+const REPEAT = 1; // how many times letters repeat inside each reel
+const SLOT_REM = 10; // match font-size 7rem so a letter row == 7rem
 
 const Intro = ({ onFinish }) => {
   const circleRef = useRef(null);
@@ -19,6 +19,16 @@ const Intro = ({ onFinish }) => {
   // set ref for each reel track
   const setReelRef = (el, i) => {
     reelRefs.current[i] = el;
+  };
+
+  // (kept in case you still want it elsewhere)
+  const shuffle = (arr) => {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
   };
 
   useEffect(() => {
@@ -49,88 +59,101 @@ const Intro = ({ onFinish }) => {
     tl.add(() => {
       gsap.to(wrapperRef.current, {
         backgroundColor: "#0F3753",
-        duration: 0.25,
+        duration: 0.025,
         ease: "power1.out",
       });
     }, "+=0.03");
 
     // AFTER expand: show reels, wait a frame for DOM to render, then animate reels
     tl.add(() => {
-      // fade circle
-      gsap.to(circleRef.current, { opacity: 0, duration: 0.12 });
-
-      // reveal reels in DOM
+      gsap.to(circleRef.current, { opacity: 0, duration: 0.05 });
       setShowReels(true);
 
-      // wait next tick so refs are attached
-      gsap.delayedCall(0.04, () => {
+      gsap.delayedCall(0.009, () => {
         const tracks = reelRefs.current.slice(0, FINAL_TEXT.length);
-        const stagger = 0.12;
-        const baseDuration = 1.0;
+        const baseDuration = 0.5;
         let completed = 0;
 
-        // ensure we don't animate nulls — fallback to immediate completion
-        tracks.forEach((trackEl, i) => {
-          if (!trackEl) {
-            completed++;
-            return;
-          }
+        // bounce order: left -> right -> left
+        const n = FINAL_TEXT.length;
+        const forward = [...Array(n).keys()]; // [0,1,2,...,n-1]
+        const bounce = forward.concat(forward.slice(0, -1).reverse()); 
+        const totalAnimations = bounce.length;
 
-          // find target index in last repetition
-          const lastRepStart = (REPEAT - 1) * LETTERS.length;
-          const targetIndexInLastRep = LETTERS.indexOf(FINAL_TEXT[i]);
-          const targetIndex = lastRepStart + (targetIndexInLastRep === -1 ? 0 : targetIndexInLastRep);
+        bounce.forEach((reelIndex, idx) => {
+  const trackEl = tracks[reelIndex];
+  if (!trackEl) {
+    completed++;
+    return;
+  }
 
-          const yValue = `-${targetIndex * SLOT_REM}rem`;
-          const dur = baseDuration + Math.random() * 0.45 + i * 0.06;
+  const char = FINAL_TEXT[reelIndex];
 
-          // animate vertical slide of the track (slot reel)
-          gsap.fromTo(
-            trackEl,
-            { y: "0rem" },
-            {
-              y: yValue,
-              duration: dur,
-              ease: "power4.out",
-              delay: i * stagger,
-              onComplete: () => {
-                completed++;
-                // once all reels finished, show tagline, keep it 1.2s, then close
-                if (completed >= FINAL_TEXT.length) {
-                  // pull title down + back out
-                  gsap.fromTo(
-                    wrapperRef.current.querySelector("h1"),
-                    { y: 0 },
-                    { y: 22, duration: 0.6, ease: "back.out(6)" }
-                  );
+  const lastRepStart = (REPEAT - 1) * LETTERS.length;
+  const targetIndexInLastRep = LETTERS.indexOf(char);
+  const targetIndex =
+    lastRepStart + (targetIndexInLastRep === -1 ? 0 : targetIndexInLastRep);
 
-                  setShowTagline(true);
+  const yValue = `-${targetIndex * SLOT_REM}rem`;
+  const dur = baseDuration;
 
-                  setTimeout(() => {
-                    setFinished(true);
-                    if (typeof onFinish === "function") onFinish();
-                  }, 1200);
-                }
-              },
-            }
-          );
-        });
+  // ✅ Create timeline for each reel
+  const reelTl = gsap.timeline({
+    delay: idx * 0.06,
+    onComplete: () => {
+      completed++;
+      if (completed >= totalAnimations) {
+        gsap.fromTo(
+          wrapperRef.current.querySelector("h1"),
+          { y: 0 },
+          { y: 15, duration: 0.9, ease: "back.out(4)" }
+        );
+        setShowTagline(true);
+        setTimeout(() => {
+          setFinished(true);
+          if (typeof onFinish === "function") onFinish();
+        }, 1300);
+      }
+    }
+  });
 
-        // Edge: if there were no valid trackEls, still trigger tagline
+  // Phase 1: scroll into place
+  reelTl.to(trackEl, {
+    y: yValue,
+    duration: dur,
+    ease: "power3.out"
+  });
+
+  // Phase 2: small bounce backwards (only when coming from the right → left pass)
+  if (idx >= forward.length) {  
+    reelTl.to(trackEl, {
+      y: `calc(${yValue} + 1.2rem)`, // nudge
+      duration: 0.35,
+      ease: "power2.inOut"
+    });
+    reelTl.to(trackEl, {
+      y: yValue,
+      duration: 0.05,
+      ease: "back.out()"
+    });
+  }
+});
+
+
         if (tracks.length === 0) {
           setShowTagline(true);
           setTimeout(() => {
             setFinished(true);
             if (typeof onFinish === "function") onFinish();
-          }, 1200);
+          }, 1400);
         }
       });
-    }, "+=0.12");
+    }, "+=0.3");
 
     return () => tl.kill();
   }, [onFinish]);
 
-  // build repeated track array (letters repeated REPEAT times)
+  // build repeated track array
   const buildTrack = () => {
     const arr = [];
     for (let r = 0; r < REPEAT; r++) {
@@ -140,7 +163,6 @@ const Intro = ({ onFinish }) => {
   };
   const track = buildTrack();
 
-  // styles preserved from your code (font-size 7rem etc.)
   const styles = {
     wrapper: {
       position: "fixed",
@@ -170,16 +192,14 @@ const Intro = ({ onFinish }) => {
       textAlign: "center",
       color: "#ffffff",
       userSelect: "none",
-      padding: "10px 18px",
-      // reserve small space so tagline won't push title when it appears
-      minHeight: `calc(${SLOT_REM}rem + 52px)`, // 7rem + ~52px for tagline area
+      padding: "2px 18px",
+      minHeight: `calc(${SLOT_REM}rem + 52px)`,
     },
     title: {
       letterSpacing: "0.02rem",
       fontSize: "7rem",
-      fontWeight: 400,
+      fontWeight: 500,
       display: "inline-block",
-      // reserve small space under title so tagline won't shift layout
       paddingBottom: 0,
     },
     reelWrapper: {
@@ -202,17 +222,13 @@ const Intro = ({ onFinish }) => {
       minWidth: "0.8em",
     },
     tagline: {
-      marginTop: 1, // less gap
       fontFamily: "'Rage', serif",
       fontStyle: "italic",
       fontSize: "55px",
       color: "#1E7291",
-      position:"absolute",
+      position: "absolute",
       left: "14%",
-      transform: "translateX(-50%)",    
-      // keep tagline absolutely positioned so it visually overlays without reflow (optional)
-      // if you prefer removing position:absolute leave it out — we've reserved space above so shifting won't happen
-      // 
+      bottom: '-12%'
     },
   };
 
@@ -247,7 +263,7 @@ const Intro = ({ onFinish }) => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.45, ease: "backOut" }}
+              transition={{ duration: 1, ease: "backOut" }}
               style={styles.tagline}
             >
               Transforming Dreams into Journeys

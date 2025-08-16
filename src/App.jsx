@@ -61,7 +61,7 @@ export const App = () => {
     // match the intro duration — adjust 4800ms if your intro length differs
     const timer = setTimeout(() => {
       setShowIntro(false);
-    }, 5800);
+    }, 5200);
     return () => clearTimeout(timer);
   }, []);
   // -----------------------------------------------------------------------
