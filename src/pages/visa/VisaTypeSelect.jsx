@@ -23,14 +23,11 @@ export const VisaTypeSelect = () => {
   const [filteredVisas, setFilteredVisas] = useState([]);
   const [searchClicked, setSearchClicked] = useState(false);
 
-
-
   const from = location.state?.from || params.get('from') || 'India';
-const [departDate, setDepartDate] = useState(location.state?.depart || params.get('depart') || '');
-const [returnDateState, setReturnDateState] = useState(location.state?.return || params.get('return') || '');
+  const [departDate, setDepartDate] = useState(location.state?.depart || params.get('depart') || '');
+  const [returnDateState, setReturnDateState] = useState(location.state?.return || params.get('return') || '');
 
-
-  // ✅ Fetch all countries (for search suggestions)
+  // Fetch all countries (for search suggestions)
   useEffect(() => {
     const fetchCountries = async () => {
       try {
@@ -43,54 +40,90 @@ const [returnDateState, setReturnDateState] = useState(location.state?.return ||
     fetchCountries();
   }, []);
 
+  // When route param or location provides a country name, set selectedCountry
+  useEffect(() => {
+    const incomingCountry = location.state?.countryName || paramCountry;
+    if (incomingCountry) {
+      setSelectedCountry(incomingCountry);
+      setCountryQuery(incomingCountry);
+    }
+  }, [location.state, paramCountry]);
 
+  // If we have a country name but no countryId, try to resolve it from allCountries once they load
+  useEffect(() => {
+    if (!countryId && selectedCountry && allCountries.length) {
+      const matched = allCountries.find(
+        (c) => c.name.toLowerCase() === String(selectedCountry).toLowerCase()
+      );
+      if (matched) {
+        setCountryId(matched.id);
+      }
+    }
+  }, [countryId, selectedCountry, allCountries]);
 
+  // Helper: fetch visa options for a country id and set filtered/complete lists
+  const fetchVisasForCountry = async (cId) => {
+    try {
+      const res = await getVisaOptions(cId);
+      const allVisas = res.visa_options || [];
+      setVisaOptions(allVisas);
+      const filtered = allVisas.filter((visa) =>
+        !processingType || visa.processingTime === processingType
+      );
+      setFilteredVisas(filtered);
+    } catch (err) {
+      console.error("Failed to load visa options:", err);
+      setVisaOptions([]);
+      setFilteredVisas([]);
+    }
+  };
 
-useEffect(() => {
-  const incomingCountry = location.state?.countryName || paramCountry;
-  if (incomingCountry) {
-    setSelectedCountry(incomingCountry);
-    setCountryQuery(incomingCountry);
-  }
-}, [location.state, paramCountry]);
+  // If a countryId is present on page load (or becomes present), fetch visas immediately
+  useEffect(() => {
+    if (countryId) {
+      fetchVisasForCountry(countryId);
+      setSearchClicked(true);
+    }
+  }, [countryId]); // runs when countryId changes (including initial)
 
-    const handleSuggestionClick = (name, id) => {
-      setSelectedCountry(name);
-      setCountryQuery(name);
-      setSuggestions([]);
-      setCountryId(id); // ✅ Set correct country ID
-    };
+  // Update filteredVisas when processingType or visaOptions change
+  useEffect(() => {
+    if (visaOptions.length) {
+      const filtered = visaOptions.filter((visa) =>
+        !processingType || visa.processingTime === processingType
+      );
+      setFilteredVisas(filtered);
+    }
+  }, [processingType, visaOptions]);
 
-const handleSearch = async () => {
-  if (!selectedCountry || !countryId) {
-    alert("Please select a country");
-    return;
-  }
+  const handleSuggestionClick = (name, id) => {
+    setSelectedCountry(name);
+    setCountryQuery(name);
+    setSuggestions([]);
+    setCountryId(id); // triggers fetch via effect above
+  };
 
-  try {
-    const res = await getVisaOptions(countryId);
-    const allVisas = res.visa_options || [];
+  const handleSearch = async () => {
+    if (!selectedCountry || !countryId) {
+      alert("Please select a country");
+      return;
+    }
 
-    const filtered = allVisas.filter((visa) =>
-      !processingType || visa.processingTime === processingType
-    );
+    try {
+      await fetchVisasForCountry(countryId);
+      setSearchClicked(true);
 
-    setVisaOptions(allVisas);      // store full result
-    setFilteredVisas(filtered);    // store filtered list
-    setSearchClicked(true);
+      navigate(`/visa/${selectedCountry.toLowerCase()}?from=${from}&depart=${departDate}&return=${returnDateState}`, {
+        state: {
+          countryId,
+          countryName: selectedCountry,
+        },
+      });
 
-    navigate(`/visa/${selectedCountry.toLowerCase()}?from=${from}&depart=${departDate}&return=${returnDateState}`, {
-      state: {
-        countryId,
-        countryName: selectedCountry,
-      },
-    });
-
-  } catch (err) {
-    console.error("Failed to load visa options:", err);
-  }
-};
-
+    } catch (err) {
+      console.error("Failed to load visa options:", err);
+    }
+  };
 
   return (
     <div className="flex flex-col bg-white text-black px-6 py-8 space-y-6 pt-30">

@@ -1,7 +1,20 @@
 // components/insurance/TravelerCard.jsx
-import React from 'react';
+import React, { useState } from 'react';
 
-const Input = ({ type = 'text', label, name, value, onChange }) => (
+// Passport Regex Map by Country
+const passportRegexByCountry = {
+  IN: /^[A-PR-WYa-pr-wy][1-9]\d{6}$/, // India
+  US: /^[0-9]{9}$/,                   // USA
+  UK: /^\d{9}$/,                      // UK
+  CA: /^[A-Z]{2}\d{6}$/,              // Canada
+  AU: /^[N]\d{7}$/,                   // Australia
+  SG: /^[A-Z]\d{7}[A-Z]$/,            // Singapore
+  PH: /^[A-Z]\d{7}$/,                 // Philippines
+  PK: /^[A-Z]{2}\d{7}$/               // Pakistan
+  // Add more...
+};
+
+const Input = ({ type = 'text', label, name, value, onChange, error }) => (
   <div className='flex w-full mb-2 items-start flex-col'>
     <label className='text-sm text-black' htmlFor={name}>{label}</label>
     <input
@@ -12,11 +25,22 @@ const Input = ({ type = 'text', label, name, value, onChange }) => (
       onChange={(e) => onChange && onChange(e.target.value)}
       className="w-full px-4 py-1 my-1 bg-[#FFFFFF] rounded-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
     />
+    {error && <span className="text-red-500 text-xs">{error}</span>}
   </div>
 );
 
-const TravelerCard = ({ index, data = {}, onChange = () => {} }) => {
+const TravelerCard = ({ index, data = {}, onChange = () => {}, countryCode = 'IN' }) => {
+  const [passportError, setPassportError] = useState('');
+
   const handle = (field, value) => {
+    if (field === 'passport') {
+      const regex = passportRegexByCountry[countryCode];
+      if (regex && !regex.test(value.trim())) {
+        setPassportError('Invalid passport format for ' + countryCode);
+      } else {
+        setPassportError('');
+      }
+    }
     onChange({ [field]: value });
   };
 
@@ -33,6 +57,7 @@ const TravelerCard = ({ index, data = {}, onChange = () => {} }) => {
             name={`passport_${index}`}
             value={data.passport || ''}
             onChange={(val) => handle('passport', val)}
+            error={passportError}
           />
 
           <div className='flex flex-col'>
