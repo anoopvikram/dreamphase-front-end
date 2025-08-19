@@ -23,6 +23,7 @@ import { InsurancePayment } from './pages/insurance/InsurancePayment';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Footer } from './components/common/Footer';
 import Intro from './components/intro/Intro'; // <-- import Intro
+import { ReturnFlight } from './pages/returnflight/ReturnFlight';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -56,7 +57,7 @@ export const App = () => {
   const [showPopup, setShowPopup] = useState(false);
 
   // ---------- CHANGED: show intro on every refresh (for testing) ----------
-  const [showIntro, setShowIntro] = useState(true); // start true so it plays on each load
+  const [showIntro, setShowIntro] = useState(false); // start true so it plays on each load
   useEffect(() => {
     // match the intro duration — adjust 4800ms if your intro length differs
     const timer = setTimeout(() => {
@@ -99,6 +100,8 @@ export const App = () => {
             <Route path="/travel-mart" element={<TravelMartLanding />} />
             <Route path="/tourinclusion" element={<TourInclusions />} />
             <Route path="/touritinerary" element={<TourItinerary />} />
+
+            <Route path='/return-ticket-cancellation' element ={<ReturnFlight/>} />
           </Routes>
         </AnimatePresence>
         <AnimatePresence>

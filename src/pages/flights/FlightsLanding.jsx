@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { LandingHero } from '../../components/common/LandingHero';
-import { FaExchangeAlt, FaSearch, FaPlaneDeparture, FaPlaneArrival, FaDotCircle } from 'react-icons/fa';
+import { FaSearch, FaDotCircle } from 'react-icons/fa';
 import { MdOutlineRadioButtonUnchecked } from 'react-icons/md';
 import { motion } from 'framer-motion';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import ReactDOM from "react-dom";
 
 /**
  * FlightsLanding
@@ -39,13 +40,16 @@ export const FlightsLanding = () => {
   const [travelerPopupOpen, setTravelerPopupOpen] = useState(false);
   const travelerRef = useRef(null);
 
+  
+  const popupRef = useRef(null);
+
   const handleSwap = () => {
     const temp = from;
     setFrom(to);
     setTo(temp);
   };
 
-  // Format date to: 14 May ‘25  (uses left single quotation mark U+2018)
+  // Format date to: 27 Aug ‘25
   const formatDate = (date) => {
     if (!date) return '';
     const d = new Date(date);
@@ -58,7 +62,12 @@ export const FlightsLanding = () => {
   // Close popup on outside click
   useEffect(() => {
     const onDocClick = (e) => {
-      if (travelerRef.current && !travelerRef.current.contains(e.target)) {
+      if (
+        travelerRef.current &&
+        !travelerRef.current.contains(e.target) &&
+        popupRef.current &&
+        !popupRef.current.contains(e.target)
+      ) {
         setTravelerPopupOpen(false);
       }
     };
@@ -66,20 +75,41 @@ export const FlightsLanding = () => {
     return () => document.removeEventListener('mousedown', onDocClick);
   }, []);
 
-  // Custom input for react-datepicker to render styled clickable display
-  const DateDisplay = React.forwardRef(({ value, onClick, label }, ref) => (
+  // helper: format date into day, month, year
+const formatParts = (date) => {
+  if (!date) return null;
+  const optionsDay = { day: "2-digit" };
+  const optionsMonthYear = { month: "short", year: "numeric" };
+  return {
+    day: new Intl.DateTimeFormat("en-US", optionsDay).format(date),
+    monthYear: new Intl.DateTimeFormat("en-US", optionsMonthYear).format(date),
+  };
+};
+
+// Custom input for react-datepicker to render styled clickable display
+const DateDisplay = React.forwardRef(({ value, onClick, label, selected }, ref) => {
+  const parts = selected ? formatParts(selected) : null;
+
+  return (
     <div onClick={onClick} ref={ref} className="cursor-pointer">
       <label className="uppercase text-xl text-gray-300">{label}</label>
-      <div className="mt-1 bg-transparent border border-white/40 px-4 py-2 rounded-md min-w-[120px]">
-        {value ? (
-          <p className="text-white text-base">{value}</p>
+      <div className="mt-1 bg-transparent px-4 py-2 rounded-md min-w-[120px]">
+        {parts ? (
+          <div className="flex flex-row items-center gap-2 justify-start">
+            <span className="text-3xl font-bold text-white leading-tight">
+              {parts.day}
+            </span>
+            <span className="text-sm text-white/80">{parts.monthYear}</span>
+          </div>
         ) : (
           <p className="text-white/60">Select date</p>
         )}
       </div>
     </div>
-  ));
-  DateDisplay.displayName = 'DateDisplay';
+  );
+});
+DateDisplay.displayName = "DateDisplay";
+
 
   return (
     <motion.div variants={blurVariants} initial="initial" animate="animate" exit="exit">
@@ -110,7 +140,7 @@ export const FlightsLanding = () => {
           {/* Selection Area */}
           <div className="grid grid-cols-2 xl:grid-cols-5 bg-black/60 rounded-3xl px-5 py-10 gap-4 items-center text-sm">
             {/* From - To */}
-            <div className="col-span-2 flex items-center gap-10">
+            <div className="col-span-2 flex items-center gap-10 border-r-2 border-white/60 pr-6">
               <div className="flex flex-col gap-5">
                 <p className="text-xl">From</p>
                 <div className="flex flex-col">
@@ -150,120 +180,162 @@ export const FlightsLanding = () => {
             </div>
 
             {/* Departure */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 border-r-2 border-white/60 pr-6 justify-center items-center h-full">
               <DatePicker
                 selected={departureDate}
                 onChange={(date) => setDepartureDate(date)}
-                customInput={<DateDisplay label="Departure" />}
+                customInput={<DateDisplay label="Departure" selected={departureDate} />}
                 popperPlacement="bottom-start"
                 minDate={new Date()}
-                renderCustomHeader={({ date, decreaseMonth, increaseMonth, prevMonthButtonDisabled, nextMonthButtonDisabled }) => null}
               />
-              {departureDate && <p className="text-sm mt-2">{formatDate(departureDate)}</p>}
             </div>
 
             {/* Return */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 border-r-2 border-white/60 pr-6 justify-center items-center h-full">
               <DatePicker
                 selected={returnDate}
                 onChange={(date) => setReturnDate(date)}
-                customInput={<DateDisplay label="Return" />}
+                customInput={<DateDisplay label="Return" selected={returnDate} />}
                 popperPlacement="bottom-start"
                 minDate={departureDate || new Date()}
-                renderCustomHeader={({ date, decreaseMonth, increaseMonth, prevMonthButtonDisabled, nextMonthButtonDisabled }) => null}
               />
-              {returnDate && <p className="text-sm mt-2">{formatDate(returnDate)}</p>}
             </div>
 
-            {/* Travelers & Class */}
-            <div className="flex items-center justify-between relative">
+<div className="flex items-center justify-between relative">
+  <div>
+    <div
+      className="cursor-pointer"
+      onClick={() => setTravelerPopupOpen((s) => !s)}
+      ref={travelerRef}
+      
+    >
+      <p className="uppercase text-xl text-gray-300">
+        Travelers & Class {totalTravelers}
+      </p>
+      <p className="text-sm">{travelClass}</p>
+    </div>
+
+    {travelerPopupOpen &&
+      ReactDOM.createPortal(
+        <div
+          ref={popupRef}
+          className="absolute right-0 mt-3 bg-white text-black rounded-lg shadow-lg p-4 w-64 z-50"
+          style={{
+            position: "absolute",
+            top:
+              travelerRef.current?.getBoundingClientRect().bottom +
+              window.scrollY +
+              8,
+            left:
+              travelerRef.current?.getBoundingClientRect().right -
+              256 + // width of popup
+              window.scrollX,
+          }}
+        >
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
               <div>
-                <div
-                  className="cursor-pointer"
-                  onClick={() => setTravelerPopupOpen((s) => !s)}
-                  ref={travelerRef}
-                >
-                  <p className="uppercase text-xl text-gray-300">Travelers & Class {totalTravelers}</p>
-                  <p className="text-sm">{travelClass}</p>
-                </div>
-
-                {travelerPopupOpen && (
-                  <div className="absolute right-0 mt-3 bg-white text-black rounded-lg shadow-lg p-4 w-64 z-50">
-                    <div className="flex flex-col gap-3">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-xs text-gray-600">Adults</p>
-                          <p className="text-sm">Age 12+</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <button
-                            className="px-2 py-1 rounded-full border"
-                            onClick={() => setAdults((a) => Math.max(1, a - 1))}
-                          >
-                            -
-                          </button>
-                          <span className="w-6 text-center">{adults}</span>
-                          <button className="px-2 py-1 rounded-full border" onClick={() => setAdults((a) => a + 1)}>
-                            +
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-xs text-gray-600">Children</p>
-                          <p className="text-sm">Age 2-11</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <button className="px-2 py-1 rounded-full border" onClick={() => setChildren((c) => Math.max(0, c - 1))}>
-                            -
-                          </button>
-                          <span className="w-6 text-center">{children}</span>
-                          <button className="px-2 py-1 rounded-full border" onClick={() => setChildren((c) => c + 1)}>
-                            +
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-xs text-gray-600">Infants</p>
-                          <p className="text-sm">Under 2</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <button className="px-2 py-1 rounded-full border" onClick={() => setInfants((i) => Math.max(0, i - 1))}>
-                            -
-                          </button>
-                          <span className="w-6 text-center">{infants}</span>
-                          <button className="px-2 py-1 rounded-full border" onClick={() => setInfants((i) => i + 1)}>
-                            +
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="pt-2">
-                        <label className="block text-xs text-gray-600 mb-1">Class</label>
-                        <select className="w-full border px-2 py-1 rounded" value={travelClass} onChange={(e) => setTravelClass(e.target.value)}>
-                          <option>Economy</option>
-                          <option>Business</option>
-                          <option>First</option>
-                        </select>
-                      </div>
-
-                      <div className="flex justify-end pt-3">
-                        <button className="px-4 py-2 rounded bg-[#164B71] text-white" onClick={() => setTravelerPopupOpen(false)}>
-                          Done
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <p className="text-xs text-gray-600">Adults</p>
+                <p className="text-sm">Age 12+</p>
               </div>
+              <div className="flex items-center gap-2">
+                <button
+                  className="px-2 py-1 rounded-full border"
+                  onClick={() => setAdults((a) => Math.max(1, a - 1))}
+                >
+                  -
+                </button>
+                <span className="w-6 text-center">{adults}</span>
+                <button
+                  className="px-2 py-1 rounded-full border"
+                  onClick={() => setAdults((a) => a + 1)}
+                >
+                  +
+                </button>
+              </div>
+            </div>
 
-              <button className="bg-[#164B71] text-white p-3 rounded-full">
-                <FaSearch />
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600">Children</p>
+                <p className="text-sm">Age 2-11</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  className="px-2 py-1 rounded-full border"
+                  onClick={() =>
+                    setChildren((c) => Math.max(0, c - 1))
+                  }
+                >
+                  -
+                </button>
+                <span className="w-6 text-center">{children}</span>
+                <button
+                  className="px-2 py-1 rounded-full border"
+                  onClick={() => setChildren((c) => c + 1)}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-600">Infants</p>
+                <p className="text-sm">Under 2</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  className="px-2 py-1 rounded-full border"
+                  onClick={() =>
+                    setInfants((i) => Math.max(0, i - 1))
+                  }
+                >
+                  -
+                </button>
+                <span className="w-6 text-center">{infants}</span>
+                <button
+                  className="px-2 py-1 rounded-full border"
+                  onClick={() => setInfants((i) => i + 1)}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <label className="block text-xs text-gray-600 mb-1">
+                Class
+              </label>
+              <select
+                className="w-full border px-2 py-1 rounded"
+                value={travelClass}
+                onChange={(e) => setTravelClass(e.target.value)}
+              >
+                <option>Economy</option>
+                <option>Business</option>
+                <option>First</option>
+              </select>
+            </div>
+
+            <div className="flex justify-end pt-3">
+              <button
+                className="px-4 py-2 rounded bg-[#164B71] text-white"
+                onClick={() => setTravelerPopupOpen(false)}
+              >
+                Done
               </button>
             </div>
+          </div>
+        </div>,
+        document.body
+      )}
+  </div>
+
+  <button className="bg-[#164B71] text-white p-3 rounded-full">
+    <FaSearch />
+  </button>
+</div>
           </div>
         </div>
       </div>

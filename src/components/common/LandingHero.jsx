@@ -14,6 +14,7 @@ export const LandingHero = ({ activeTab = 'Visa', animateOnLoad = false }) => {
   const heroRef = useRef(null);
   const [showOtherMenu, setShowOtherMenu] = useState(false);
   const [otherMenuPos, setOtherMenuPos] = useState({ top: 0, left: 0, width: 0 });
+  const dropdownRef = useRef(null);
 
   const otherButtonRef = useRef(null);
 
@@ -50,13 +51,15 @@ export const LandingHero = ({ activeTab = 'Visa', animateOnLoad = false }) => {
     }
     setShowOtherMenu(prev => !prev);
   };
-
+  
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
-        otherButtonRef.current &&
-        !otherButtonRef.current.contains(e.target)
-      ) {
+      otherButtonRef.current &&
+      !otherButtonRef.current.contains(e.target) &&
+      dropdownRef.current &&
+      !dropdownRef.current.contains(e.target)
+    ){
         setShowOtherMenu(false);
       }
     };
@@ -131,6 +134,7 @@ export const LandingHero = ({ activeTab = 'Visa', animateOnLoad = false }) => {
                     {showOtherMenu &&
                       ReactDOM.createPortal(
                         <ul
+                          ref={dropdownRef}
                           className="absolute bg-white shadow-md rounded-lg border-2 border-[#0E3755] text-black z-[9999]"
                           style={{
                             position: 'absolute',
