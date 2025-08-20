@@ -5,7 +5,7 @@ import gsap from "gsap";
 
 const FINAL_TEXT = "DREAMPHASE";
 const LETTERS = FINAL_TEXT.split("");
-const REPEAT = 1; // how many times letters repeat inside each reel
+const REPEAT = 2; // increased so reels can spin and land back on same letter
 const SLOT_REM = 10; // match font-size 7rem so a letter row == 7rem
 
 const Intro = ({ onFinish }) => {
@@ -74,71 +74,83 @@ const Intro = ({ onFinish }) => {
         const baseDuration = 0.5;
         let completed = 0;
 
+        // build a repeated track array (same for all reels)
+        const repeatedTrack = buildTrack();
+
+        // --- IMPORTANT: set initial visible row for each reel so start shows FINAL_TEXT ---
+        tracks.forEach((trackEl, i) => {
+          const char = FINAL_TEXT[i];
+          if (!trackEl) return;
+          const initialIndex = LETTERS.indexOf(char);
+          // set the track to show the initialIndex row
+          gsap.set(trackEl, { y: `-${initialIndex * SLOT_REM}rem` });
+        });
+
         // bounce order: left -> right -> left
         const n = FINAL_TEXT.length;
         const forward = [...Array(n).keys()]; // [0,1,2,...,n-1]
-        const bounce = forward.concat(forward.slice(0, -1).reverse()); 
+        const bounce = forward.concat(forward.slice(0, -1).reverse());
         const totalAnimations = bounce.length;
 
         bounce.forEach((reelIndex, idx) => {
-  const trackEl = tracks[reelIndex];
-  if (!trackEl) {
-    completed++;
-    return;
-  }
+          const trackEl = tracks[reelIndex];
+          if (!trackEl) {
+            completed++;
+            return;
+          }
 
-  const char = FINAL_TEXT[reelIndex];
+          const char = FINAL_TEXT[reelIndex];
 
-  const lastRepStart = (REPEAT - 1) * LETTERS.length;
-  const targetIndexInLastRep = LETTERS.indexOf(char);
-  const targetIndex =
-    lastRepStart + (targetIndexInLastRep === -1 ? 0 : targetIndexInLastRep);
+          // compute final target index in the last repeat (so we land on same letter)
+          const lastRepStart = (REPEAT - 1) * LETTERS.length;
+          const targetIndexInLastRep = LETTERS.indexOf(char);
+          const targetIndex =
+            lastRepStart + (targetIndexInLastRep === -1 ? 0 : targetIndexInLastRep);
 
-  const yValue = `-${targetIndex * SLOT_REM}rem`;
-  const dur = baseDuration;
+          const yValue = `-${targetIndex * SLOT_REM}rem`;
+          const dur = baseDuration;
 
-  // ✅ Create timeline for each reel
-  const reelTl = gsap.timeline({
-    delay: idx * 0.06,
-    onComplete: () => {
-      completed++;
-      if (completed >= totalAnimations) {
-        gsap.fromTo(
-          wrapperRef.current.querySelector("h1"),
-          { y: 0 },
-          { y: 15, duration: 0.9, ease: "back.out(4)" }
-        );
-        setShowTagline(true);
-        setTimeout(() => {
-          setFinished(true);
-          if (typeof onFinish === "function") onFinish();
-        }, 1300);
-      }
-    }
-  });
+          // Create timeline for each reel
+          const reelTl = gsap.timeline({
+            delay: idx * 0.06,
+            onComplete: () => {
+              completed++;
+              if (completed >= totalAnimations) {
+                gsap.fromTo(
+                  wrapperRef.current.querySelector("h1"),
+                  { y: 0 },
+                  { y: 15, duration: 0.9, ease: "back.out(4)" }
+                );
+                setShowTagline(true);
+                setTimeout(() => {
+                  setFinished(true);
+                  if (typeof onFinish === "function") onFinish();
+                }, 1300);
+              }
+            }
+          });
 
-  // Phase 1: scroll into place
-  reelTl.to(trackEl, {
-    y: yValue,
-    duration: dur,
-    ease: "power3.out"
-  });
+          // Phase 1: scroll into place (animate towards the occurrence in last repeat)
+          reelTl.to(trackEl, {
+            y: yValue,
+            duration: dur,
+            ease: "power3.out"
+          });
 
-  // Phase 2: small bounce backwards (only when coming from the right → left pass)
-  if (idx >= forward.length) {  
-    reelTl.to(trackEl, {
-      y: `calc(${yValue} + 1.2rem)`, // nudge
-      duration: 0.35,
-      ease: "power2.inOut"
-    });
-    reelTl.to(trackEl, {
-      y: yValue,
-      duration: 0.05,
-      ease: "back.out()"
-    });
-  }
-});
-
+          // Phase 2: small bounce backwards (only when coming from the right → left pass)
+          if (idx >= forward.length) {
+            reelTl.to(trackEl, {
+              y: `calc(${yValue} + 1.2rem)`, // nudge
+              duration: 0.35,
+              ease: "power2.inOut"
+            });
+            reelTl.to(trackEl, {
+              y: yValue,
+              duration: 0.05,
+              ease: "back.out()"
+            });
+          }
+        });
 
         if (tracks.length === 0) {
           setShowTagline(true);
@@ -153,7 +165,7 @@ const Intro = ({ onFinish }) => {
     return () => tl.kill();
   }, [onFinish]);
 
-  // build repeated track array
+  // build repeated track array (non-rotated)
   const buildTrack = () => {
     const arr = [];
     for (let r = 0; r < REPEAT; r++) {
@@ -161,6 +173,7 @@ const Intro = ({ onFinish }) => {
     }
     return arr;
   };
+
   const track = buildTrack();
 
   const styles = {

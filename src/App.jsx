@@ -57,7 +57,7 @@ export const App = () => {
   const [showPopup, setShowPopup] = useState(false);
 
   // ---------- CHANGED: show intro on every refresh (for testing) ----------
-  const [showIntro, setShowIntro] = useState(false); // start true so it plays on each load
+  const [showIntro, setShowIntro] = useState(true); // start true so it plays on each load
   useEffect(() => {
     // match the intro duration — adjust 4800ms if your intro length differs
     const timer = setTimeout(() => {

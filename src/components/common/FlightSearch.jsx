@@ -37,7 +37,7 @@ const FlightSearch = ({
   const totalTravelers = adults + children + infants;
 
   const [travelClass, setTravelClass] = useState('Economy');
-  const [purpose, setPurpose] = useState('Travelling');
+  const [purpose, setPurpose] = useState('For Travel Requirement');
 
   const [travelerPopupOpen, setTravelerPopupOpen] = useState(false);
   const travelerRef = useRef(null);
@@ -46,6 +46,11 @@ const FlightSearch = ({
   // purpose dropdown state for return variant (inline)
   const [purposeOpen, setPurposeOpen] = useState(false);
   const purposeRef = useRef(null);
+
+    const bgImage =
+    variant === "return"
+      ? ""
+      : "/images/flight.png";
 
   const handleSwap = () => {
     const temp = from;
@@ -75,17 +80,17 @@ const FlightSearch = ({
         ref={ref}
         className="cursor-pointer w-full text-center"
       >
-        <label className=" text-xl text-gray-300">{label}</label>
+        <label className={` text-xl ${isReturn ? "text-black" : "text-gray-300"} `}>{label}</label>
         <div className="mt-1 bg-transparent px-4 py-2 rounded-md min-w-[120px]">
           {parts ? (
             <div className="flex flex-row items-center gap-2 justify-start">
-              <span className="text-3xl font-bold text-white leading-tight">
+              <span className={`text-3xl font-bold  leading-tight ${isReturn ? "text-black" : "text-white"} `}>
                 {parts.day}
               </span>
-              <span className="text-sm text-white/80">{parts.monthYear}</span>
+              <span className={`text-sm ${isReturn ? "text-black" : "text-white"} `}>{parts.monthYear}</span>
             </div>
           ) : (
-            <p className="text-white/60">Select date</p>
+            <p className={`${isReturn ? "text-black" : "text-white"} `}>Select date</p>
           )}
         </div>
       </button>
@@ -116,15 +121,20 @@ const FlightSearch = ({
   }, []);
 
   return (
-    <div className="landing-options z-20 bg-opacity-40 backdrop-blur-sm rounded-xl p-5 w-11/12 max-w-6xl mx-auto mt-5 md:-mt-10 lg:-mt-16 text-white">
+    <div className={`landing-options z-20 bg-opacity-40 backdrop-blur-sm ${
+        isReturn ? "bg-gray-400" : ""
+      } rounded-xl p-5 w-11/12 max-w-6xl mx-auto mt-5 md:-mt-10 lg:-mt-16 text-white`}
+      style={{ backgroundImage: `url(${bgImage})` }}
+      >
+      
       {/* Trip Type */}
       <div className="selectors flex gap-4 mb-6">
         {localTripOptions.map((type) => (
           <button
             key={type}
             onClick={() => setTripType(type)}
-            className={`text-sm px-4 py-2 rounded-full border flex items-center gap-2 ${
-              tripType === type ? 'bg-[#164B71] border-[#164B71]' : 'border-gray-400'
+            className={`text-sm px-4 py-2 rounded-lg border flex items-center gap-2 ${
+              tripType === type ? 'bg-[#0068A3] border-[#164B71]' : 'bg-[#0068A3] border-[#164B71]'
             }`}
           >
             <span>{tripType === type ? <FaDotCircle /> : <MdOutlineRadioButtonUnchecked />}</span>
@@ -138,19 +148,19 @@ const FlightSearch = ({
       </div>
 
       {/* Selection Area */}
-      <div className="grid grid-cols-2 xl:grid-cols-5 bg-black/60 rounded-3xl px-5 py-10 gap-4 items-center text-sm">
+      <div className={`grid grid-cols-2 xl:grid-cols-5 ${isReturn ? "text-black bg-white/50": "text-white bg-black/60"}  rounded-3xl px-5 py-10 gap-4 items-center text-sm`}>
         {/* From - To */}
-        <div className="col-span-2 flex items-center gap-10 border-r-2 border-white/60 pr-6">
+        <div className={`col-span-2 flex items-center gap-10 border-r-2 ${isReturn ? "border-black": "border-white/60"} pr-6`}>
           <div className="flex flex-col gap-5">
             <p className="text-xl">From</p>
             <div className="flex flex-col">
-              <span className="uppercase text-2xl text-gray-300">Departure</span>
+              <span className={`uppercase text-2xl ${isReturn ? "text-black": "text-gray-300"} `}>Departure</span>
               <input
                 type="text"
                 placeholder="Location, Country"
                 value={from}
                 onChange={(e) => setFrom(e.target.value)}
-                className="bg-transparent w-40 focus:outline-0 text-white"
+                className={`bg-transparent w-40 focus:outline-0 ${isReturn ? "text-black": "text-white"}`}
               />
             </div>
           </div>
@@ -167,20 +177,20 @@ const FlightSearch = ({
           <div className="flex flex-col gap-5">
             <p className="text-xl">To</p>
             <div className="flex flex-col">
-              <span className="uppercase text-2xl text-gray-300">Arrival</span>
+              <span className={`uppercase text-2xl ${isReturn ? "text-black": "text-gray-300"} `}>Arrival</span>
               <input
                 type="text"
                 placeholder="Location, Country"
                 value={to}
                 onChange={(e) => setTo(e.target.value)}
-                className="bg-transparent w-40 focus:outline-0 text-white"
+                className={`bg-transparent w-40 focus:outline-0 ${isReturn ? "text-black": "text-white"}`}
               />
             </div>
           </div>
         </div>
 
         {/* Departure */}
-        <div className="flex flex-col gap-2 border-r-2 border-white/60 pr-6 justify-center items-center h-full">
+        <div className={`flex flex-col gap-2 border-r-2 ${isReturn ? "text-black": "text-white"} ${isReturn ? "border-black": "border-white/60"} pr-6 justify-center items-center h-full`}>
           <DatePicker
             selected={departureDate}
             onChange={(date) => setDepartureDate(date)}
@@ -191,7 +201,7 @@ const FlightSearch = ({
         </div>
 
         {/* Return */}
-        <div className="flex flex-col gap-2 border-r-2 border-white/60 pr-6 justify-center items-center h-full">
+        <div className={`flex flex-col gap-2 border-r-2 ${isReturn ? "border-black": "border-white/60"} pr-6 justify-center items-center h-full`}>
           <DatePicker
             selected={returnDate}
             onChange={(date) => setReturnDate(date)}
@@ -221,28 +231,43 @@ const FlightSearch = ({
               // Return layout: show No. of Travelers (big) and Purpose selector inline
               <div className="w-full flex flex-col gap-4 ">
                 <div className="flex items-center justify-between">
-                  <p className=" text-xl text-gray-300">{localTravelerLabel}</p>
+                  <p className=" text-xl text-black">{localTravelerLabel}</p>
                   <p className="text-4xl font-bold">{totalTravelers}</p>
                 </div>
 
                 <div className="flex items-center gap-2 justify-between">
-                  <p className="uppercase text-sm text-gray-300">Purpose</p>
+                  <p className="uppercase text-sm text-black">Purpose</p>
 
                   <div className="relative" ref={purposeRef}>
                     <button
                       type="button"
                       onClick={() => setPurposeOpen((s) => !s)}
-                      className="bg-[#164B71] text-white px-4 py-2 rounded-md flex items-center gap-2"
+                      className="bg-[#164B71] text-white px-4 py-2 h-10 rounded-md flex items-center gap-2 max-w-[120px]" // control width
                     >
-                      <span className="capitalize">{purpose}</span>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="ml-1">
-                        <path d="M6 9l6 6 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <span className="capitalize truncate block whitespace-nowrap overflow-hidden text-ellipsis">
+                        {purpose}
+                      </span>
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        className="ml-1 flex-shrink-0"
+                      >
+                        <path
+                          d="M6 9l6 6 6-6"
+                          stroke="white"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </button>
 
+
                     {purposeOpen && (
-                      <div className="absolute right-0 mt-2 bg-white text-black rounded-lg shadow-lg w-44 z-50 overflow-hidden">
-                        {['Travelling', 'Business', 'Education', 'Other'].map((opt) => (
+                      <div className="absolute right-0 mt-1 bg-white text-black rounded-lg shadow-lg w-44 z-60 overflow-hidden">
+                        {['For Travel Requirement', 'For Office Leave Approval', 'For Visa / VFS Submission'].map((opt) => (
                           <div
                             key={opt}
                             onClick={() => { setPurpose(opt); setPurposeOpen(false); }}

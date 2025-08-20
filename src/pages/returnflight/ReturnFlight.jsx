@@ -64,7 +64,7 @@ export const ReturnFlight = () => {
       </div>
 
       {/* FlightSearch with custom props for Return Flight */}
-      <div className="relative z-20 mt-1 px-4">
+      <div className="relative z-20 mt-1 mb-15 px-4">
         <FlightSearch variant="return" />
       </div>
 
