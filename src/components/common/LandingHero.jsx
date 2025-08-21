@@ -9,7 +9,7 @@ import gsap from 'gsap';
 import ReactDOM from 'react-dom';
 
 export const LandingHero = ({ activeTab = 'Visa', animateOnLoad = false }) => {
-  const tabs = ['Tour', 'Visa', 'Insurance', 'Hotels', 'Flight', 'Other'];
+  const tabs = ['Tour', 'Visa', 'Insurance','Travel Mart', 'Hotels', 'Flight', 'Other'];
   const navigate = useNavigate();
   const heroRef = useRef(null);
   const [showOtherMenu, setShowOtherMenu] = useState(false);
